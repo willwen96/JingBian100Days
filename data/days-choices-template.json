@@ -1,0 +1,57 @@
+{
+  "_comment": "第10天起多数天数共用选项骨架。各天通过 special 字段覆盖/追加。实现时 merge 到 days.json。",
+  "standardChoices": [
+    { "id": "stay_home", "text": "苟在家里", "ref": "见各天 branches" },
+    { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+    { "id": "dawn_camp", "text": "前往黎明者营地", "requirements": { "dayRange": [20, 100] }, "goto": { "type": "event", "eventId": "dawn_camp" } },
+    { "id": "radio_airdrop", "text": "收音机的新内容（空投坐标）", "requirements": { "items": ["收音机"], "once": true, "dayRange": [35, 45] } },
+    { "id": "go_airdrop", "text": "前往空投坐标", "requirements": { "flags": ["airdropBroadcastHeard"], "flagsNot": ["airdropCompleted"], "dayRange": [35, 45] } },
+    { "id": "explore_with_evelyn", "text": "与伊芙琳一起探索物资", "requirements": { "partners": ["evelyn"] } },
+    { "id": "heating", "text": "加固庇护所（消耗10弹药）", "requirements": { "once": true, "dayRange": [55, 100] }, "cost": { "ammo": 10 }, "effects": { "addItem": "供暖装置" } }
+  ],
+  "dayOverrides": {
+    "10": {
+      "stay_home": {
+        "branches": [
+          { "when": { "shelter": "villa" }, "effects": { "ammo": 10, "supplies": 30 }, "followEvent": "blake_suspicion_if_partner" },
+          { "when": { "shelter": "bunker" }, "resultText": "打造培育室种植菌类", "followEvent": "luna_flirt_if_partner", "effects": { "humanity": 5 } }
+        ]
+      }
+    },
+    "15": {
+      "stay_home": {
+        "resultText": "休息一天",
+        "effects": { "humanity": 5 },
+        "partnerBranches": {
+          "luna": { "effects": { "humanity": 10 }, "resultText": "与露娜喝酒谈心" },
+          "blake": { "effects": { "humanity": -5 }, "resultText": "布莱克催促你外出" }
+        }
+      }
+    },
+    "20": {
+      "explore": { "requirements": { "partners": ["lime"], "dayRange": [20, 25] }, "goto": { "type": "event", "eventId": "lime" } }
+    },
+    "25": {
+      "explore": { "requirements": { "partners": ["lime"], "dayRange": [20, 25] }, "goto": { "type": "event", "eventId": "lime" } }
+    },
+    "30": { "replaceWith": "day30_truth event" },
+    "35": {
+      "openingModifier": "清理丧尸获得收音机；已有收音机则物资+15",
+      "explore": { "requirements": { "dayRange": [35, 45] }, "goto": { "type": "event", "eventId": "evelyn" } }
+    },
+    "38": {
+      "onlyShelter": "bunker",
+      "autoEvents": ["mushroom_harvest_if_planted", "luna_day38_if_luna"]
+    },
+    "55": { "stay_home": { "goto": { "type": "event", "eventId": "chris" }, "dayRange": [55, 60] } },
+    "60": {
+      "stay_home": { "goto": { "type": "event", "eventId": "chris" }, "dayRange": [55, 60] },
+      "explore_evelyn": { "goto": { "type": "explore", "areaId": "mall_heartbeat" }, "dayRange": [60, 65] }
+    },
+    "70": { "newChoice": { "id": "hero_camp", "text": "前往英雄营地", "goto": { "type": "event", "eventId": "hero_camp" } } },
+    "75": {
+      "explore": { "resultText": "发现破产超市，需找卡车搬运", "hostNote": "尽量保留30+弹药" }
+    },
+    "80": { "replaceWith": "day80_john event" }
+  }
+}

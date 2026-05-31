@@ -1,0 +1,884 @@
+[
+  {
+    "day": 1,
+    "title": "惊变第一天",
+    "suppliesCost": 0,
+    "openingText": "你在庇护所哪也没敢去。天黑了，你看着胳膊上的伤疤久久不能入睡——那是上一世躲避尸潮时划伤的。为什么重生后还会存在？面对接下来的末世，你陷入复杂的情绪。一个声音告诉你……",
+    "choices": [
+      { "id": "d1_c1", "text": "不择手段，活着比什么都重要", "effects": { "humanity": -10 }, "goto": { "type": "nextDay" } },
+      { "id": "d1_c2", "text": "不要丧失人性。那与动物有什么区别", "effects": { "humanity": 10 }, "goto": { "type": "nextDay" } },
+      { "id": "d1_c3", "text": "真相比什么都重要。我要调查原因", "resultText": "你记得上一世死亡是末世爆发的一个月整。你决定到时候一定要再去悬崖看看。", "goto": { "type": "nextDay" } }
+    ],
+    "hostNote": "主持人：接下来末世生存正式开始。物资为0则游戏结束。濒死消耗30物资跳过本天。"
+  },
+  {
+    "day": 2,
+    "title": "惊变第二天",
+    "suppliesCost": 5,
+    "openingText": "你决定……",
+    "choices": [
+      { "id": "stay_home", "text": "苟在家里", "resultText": "庇护所很安全。你给自己煮了一份红烧牛肉面。你感觉很幸福。", "effects": { "humanity": 5 }, "goto": { "type": "nextDay" } },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      { "id": "clear_zombies", "text": "清理附近丧尸（消耗5弹药）", "requirements": { "once": true }, "cost": { "ammo": 5 }, "resultText": "你清理掉附近的丧尸，在丧尸身上获得了一个收音机。", "effects": { "addItem": "收音机" }, "goto": { "type": "nextDay" } }
+    ]
+  },
+  {
+    "day": 3,
+    "title": "惊变第三天",
+    "suppliesCost": 5,
+    "openingText": "你决定……",
+    "choices": [
+      { "id": "stay_home", "text": "苟在家里", "resultText": "庇护所很安全。你给自己煮了一份老坛酸菜面。你感到很幸福。", "effects": { "humanity": 5 }, "goto": { "type": "nextDay" } },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      { "id": "clear_zombies", "text": "清理附近丧尸（消耗5弹药）", "requirements": { "once": true }, "cost": { "ammo": 5 }, "effects": { "addItem": "收音机" }, "resultText": "你在丧尸身上获得了一个收音机。", "goto": { "type": "nextDay" } },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 4,
+    "title": "惊变第四天",
+    "suppliesCost": 5,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "branches": [
+          { "when": { "shelter": "villa" }, "resultText": "通往布莱克事件", "goto": { "type": "event", "eventId": "blake" } },
+          { "when": { "shelter": "bunker" }, "resultText": "你看着防空洞的天花板，有些无聊，开始思考人生，结果emo了。心情沮丧。", "effects": { "humanity": -5 }, "goto": { "type": "nextDay" } }
+        ]
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      { "id": "clear_zombies", "text": "清理附近丧尸（消耗5弹药）", "requirements": { "once": true }, "cost": { "ammo": 5 }, "effects": { "addItem": "收音机" }, "goto": { "type": "nextDay" } },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 5,
+    "title": "惊变第五天",
+    "suppliesCost": 5,
+    "partnerCostNote": "若存在伙伴则另外计算",
+    "openingText": "你决定……",
+    "choices": [
+      { "id": "stay_home", "text": "苟在家里", "resultText": "你给自己做了一份珍藏的意大利面，美味在你口腔迸发。", "effects": { "humanity": 5 }, "goto": { "type": "nextDay" } },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          { "when": { "shelter": "villa" }, "goto": { "type": "explore" } },
+          { "when": { "shelter": "bunker" }, "goto": { "type": "event", "eventId": "luna" } }
+        ]
+      },
+      { "id": "clear_zombies", "text": "清理附近丧尸（消耗5弹药）", "requirements": { "once": true }, "cost": { "ammo": 5 }, "effects": { "addItem": "收音机" }, "goto": { "type": "nextDay" } },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 10,
+    "title": "惊变第十天",
+    "suppliesCost": 15,
+    "partnerCostNote": "从本轮开始物资消耗+10，期间共消耗15",
+    "openingText": "转眼间末世开启已经十天了。目前全球电力系统瘫痪，失去人类的操作。大部分地区发生了爆炸，甚至核泄漏等事件，这导致天空也变得异常起来。好在你的庇护所足够安全。只要物资充足，目前的生存就能得到保障。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "branches": [
+          {
+            "when": { "shelter": "villa", "partners": ["blake"] },
+            "specialEvent": true,
+            "resultText": "你今天不打算出门，仔细地检查了别墅内部构造。没有任何问题。但你在某个衣柜发现了暗格，里面有一把霰弹枪和一些压缩饼干。你扭头看向身旁的布莱克，他有些尴尬，你心中也开始若有所思。",
+            "effects": { "ammo": 10, "supplies": 30 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "when": { "shelter": "villa" },
+            "resultText": "你今天不打算出门，仔细地检查了别墅内部构造。没有任何问题。但你在某个衣柜发现了暗格，里面有一把霰弹枪和一些压缩饼干。",
+            "effects": { "ammo": 10, "supplies": 30 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "when": { "shelter": "bunker", "partners": ["luna"] },
+            "specialEvent": true,
+            "resultText": "你今天不打算出门，而是在防空洞打造了培育室。你种植了一些能快速生长的菌类，为接下来的物资储备做了准备。你一直在辛勤劳作，露娜见帮不上忙，只好偶尔帮你擦擦额头的汗水。你与她不经意地对视，她有些脸红。",
+            "effects": { "humanity": 5, "setFlag": "mushroomPlanted" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "when": { "shelter": "bunker" },
+            "resultText": "你今天不打算出门，而是在防空洞打造了培育室。你种植了一些能快速生长的菌类，为接下来的物资储备做了准备。",
+            "effects": { "setFlag": "mushroomPlanted" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 15,
+    "title": "惊变十五天",
+    "suppliesCost": 15,
+    "openingText": "末世仍在继续。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "你决定休息一天，睡了一个大觉，末世下紧张压抑的心情也有些放松了下来。",
+        "effects": { "humanity": 5 },
+        "branches": [
+          { "when": { "partners": ["luna"] }, "resultText": "你在防空洞发现了一瓶伏特加，你决定今天放松一下，你与露娜喝酒谈心，她对于末世的心态和理解调整的比你想象的要快，甚至反过来影响了你，你的心情得到了极大的舒缓。", "effects": { "humanity": 10 } },
+          { "when": { "partners": ["blake"] }, "resultText": "你今天打算好好放松一下。「伙计，忙起来！不要闲着，家里的物资不够了。」布莱克见你今天休息，急忙催促你。「艹，你不能自己去吗?」你怒道。「拜托，别墅可是我的，况且我不是早就把弹药都交给你了吗?」布莱克摊手。你不再理会，打算继续休息，但心情也没那么好了。", "effects": { "humanity": -5 } }
+        ],
+        "goto": { "type": "nextDay" }
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 20,
+    "title": "惊变二十天",
+    "suppliesCost": 15,
+    "openingText": "人类的适应速度总是很快的，根据前世记忆，你知道今天开始郊外会存在一个黎明者营地，那里面可以置换弹药或物资，甚至可以通过游戏赢得一些物资。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "你看着庇护所的天花板，有些无聊，开始思考人生，结果emo了，心情沮丧。",
+        "effects": { "humanity": -5 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          {
+            "when": { "partners": ["lime"], "flagsNot": ["limeEventDone"] },
+            "specialEvent": true,
+            "effects": { "setFlag": "limeEventDone" },
+            "goto": { "type": "event", "eventId": "lime" }
+          },
+          { "when": {}, "goto": { "type": "explore" } }
+        ]
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 25,
+    "title": "惊变二十五天",
+    "suppliesCost": 15,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "你在庇护所翻到了一部缓存了几部电视剧的手机，你看了一整天。",
+        "effects": { "humanity": 10 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          {
+            "when": { "partners": ["lime"], "flagsNot": ["limeEventDone"] },
+            "specialEvent": true,
+            "effects": { "setFlag": "limeEventDone" },
+            "goto": { "type": "event", "eventId": "lime" }
+          },
+          { "when": {}, "goto": { "type": "explore" } }
+        ]
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 30,
+    "title": "惊变三十天",
+    "suppliesCost": 15,
+    "openingText": "一个月了——上一世的你，正是死在今天。你决定去调查「重生」的真相。今天你决定……",
+    "choices": [
+      {
+        "id": "truth",
+        "text": "调查重生真相（惊变三十天）",
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "day30_truth" }
+      },
+      { "id": "stay_home", "text": "苟在家里", "resultText": "你选择暂时放下调查，先稳住阵脚。", "effects": { "humanity": 30 }, "goto": { "type": "nextDay" } },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio",
+        "text": "收听收音机",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_listen" },
+        "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 35,
+    "title": "惊变三十五天",
+    "suppliesCost": 15,
+    "onEnterBranches": [
+      {
+        "when": { "items": ["收音机"] },
+        "effects": { "supplies": 15 },
+        "resultText": "随着人类秩序的失控，污染导致天空下起了灰色的雪。丧尸也变得更加难以解决，似乎他们在进化。接下来的生存会变得更加艰难。你这几天清理了庇护所周围的丧尸，并在附近的工地寻找到一些方便食品。"
+      },
+      {
+        "when": {},
+        "effects": { "addItem": "收音机" },
+        "resultText": "随着人类秩序的失控，污染导致天空下起了灰色的雪。丧尸也变得更加难以解决，似乎他们在进化。接下来的生存会变得更加艰难。你这几天清理了庇护所周围的丧尸，获得了一个收音机。"
+      }
+    ],
+    "openingText": "今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "冥冥中有一个声音告诉你，不能再这么宅下去了，该努力了！！",
+        "effects": { "humanity": -5 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          {
+            "when": { "flagsNot": ["evelynEventDone"] },
+            "specialEvent": true,
+            "effects": { "setFlag": "evelynEventDone" },
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "mall" }
+          },
+          { "when": {}, "goto": { "type": "explore" } }
+        ]
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio_airdrop",
+        "text": "收音机的新内容",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_airdrop", "dayRange": [35, 45] },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "radio_airdrop_prompt" }
+      },
+      {
+        "id": "go_airdrop",
+        "text": "前往空投坐标",
+        "requirements": {
+          "flags": ["airdropBroadcastHeard"],
+          "flagsNot": ["airdropCompleted"],
+          "dayRange": [35, 45],
+          "hideWhenUnmet": true
+        },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "airdrop" }
+      }
+    ]
+  },
+  {
+    "day": 38,
+    "title": "惊变三十八天",
+    "suppliesCost": 0,
+    "onEnterBranches": [
+      {
+        "when": { "shelter": "bunker", "flags": ["mushroomPlanted"], "flagsNot": ["mushroomHarvested"] },
+        "effects": { "supplies": 40, "setFlag": "mushroomHarvested" },
+        "resultText": "你种的菌类已经长成，收割后获得物资+40。"
+      }
+    ],
+    "openingBranches": [
+      {
+        "when": { "shelter": "bunker", "partners": ["luna"] },
+        "openingText": "这天你打算去不远处的军事基地探索，那里丧尸密布，但可能获得很多弹药。由于有些危险，露娜也同你一起前往。你必须面对这一天——你无法把她留在身后。"
+      },
+      {
+        "when": { "shelter": "bunker" },
+        "openingText": "今日你留在防空洞，没有外出冒险。"
+      },
+      {
+        "when": {},
+        "openingText": "今日你没有外出，在庇护所平静地度过了一天。"
+      }
+    ],
+    "choices": [
+      {
+        "id": "luna_day38",
+        "text": "前往军事基地",
+        "requirements": { "shelter": "bunker", "partners": ["luna"], "hideWhenUnmet": true },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "luna_day38", "nodeId": "base" }
+      },
+      {
+        "id": "stay_peaceful_bunker",
+        "text": "在防空洞平稳度过这一天",
+        "requirements": { "shelter": "bunker", "partnersNot": ["luna"], "hideWhenUnmet": true },
+        "resultText": "你检查了一遍防空洞的储备与门窗，选择今天不冒险外出。",
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "stay_peaceful_villa",
+        "text": "平稳度过这一天",
+        "requirements": { "shelter": "villa", "hideWhenUnmet": true },
+        "resultText": "你留在别墅休整，没有外出。",
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 40,
+    "title": "惊变四十天",
+    "suppliesCost": 15,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "不要再休息了呀！动起来啊！你在末世呢！！",
+        "effects": { "humanity": -5 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          {
+            "when": { "flagsNot": ["evelynEventDone"] },
+            "specialEvent": true,
+            "effects": { "setFlag": "evelynEventDone" },
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "mall" }
+          },
+          { "when": {}, "goto": { "type": "explore" } }
+        ]
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio_airdrop",
+        "text": "收音机的新内容",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_airdrop", "dayRange": [35, 45] },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "radio_airdrop_prompt" }
+      },
+      {
+        "id": "go_airdrop",
+        "text": "前往空投坐标",
+        "requirements": {
+          "flags": ["airdropBroadcastHeard"],
+          "flagsNot": ["airdropCompleted"],
+          "dayRange": [35, 45],
+          "hideWhenUnmet": true
+        },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "airdrop" }
+      }
+    ]
+  },
+  {
+    "day": 45,
+    "title": "惊变四十五天",
+    "suppliesCost": 15,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "大哥，别睡了，出去探索一番吧……",
+        "effects": { "humanity": -5 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "branches": [
+          {
+            "when": { "flagsNot": ["evelynEventDone"] },
+            "specialEvent": true,
+            "effects": { "setFlag": "evelynEventDone" },
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "mall" }
+          },
+          { "when": {}, "goto": { "type": "explore" } }
+        ]
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "radio_airdrop",
+        "text": "收音机的新内容",
+        "requirements": { "items": ["收音机"], "once": true, "onceKey": "radio_airdrop", "dayRange": [35, 45] },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "radio_airdrop_prompt" }
+      },
+      {
+        "id": "go_airdrop",
+        "text": "前往空投坐标",
+        "requirements": {
+          "flags": ["airdropBroadcastHeard"],
+          "flagsNot": ["airdropCompleted"],
+          "dayRange": [35, 45],
+          "hideWhenUnmet": true
+        },
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "airdrop" }
+      },
+      {
+        "id": "explore_with_evelyn",
+        "text": "与伊芙琳一起探索物资",
+        "requirements": { "partners": ["evelyn"] },
+        "goto": { "type": "explore" }
+      }
+    ]
+  },
+  {
+    "day": 50,
+    "title": "惊变五十天",
+    "suppliesCost": 20,
+    "openingText": "不知何种原因，天空不间断的下着灰色的雪。本就残酷的末世被笼罩上一层灰色，天气越来越冷。室外温度达到了零下35°，外出行动变得更加艰难。好在庇护所的温度还算可以，但也增加了你的消耗。从今天起，生存难度提升。每开启新的天数消耗的物资+5。",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "物资还算充沛，你选择犒劳自己一次，吃了一顿火锅。看着外面异常且冰冷的天气，吃着热气腾腾的牛肉火锅，你心中不由得感觉到幸福。",
+        "effects": { "humanity": 15 },
+        "goto": { "type": "nextDay" }
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "explore_with_evelyn",
+        "text": "与伊芙琳一起探索物资",
+        "requirements": { "partners": ["evelyn"] },
+        "goto": { "type": "explore" }
+      }
+    ]
+  },
+  {
+    "day": 55,
+    "title": "惊变五十五天",
+    "suppliesCost": 20,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "branches": [
+          {
+            "when": { "flagsNot": ["chrisResolved"] },
+            "specialEvent": true,
+            "goto": { "type": "event", "eventId": "chris", "nodeId": "start" }
+          },
+          { "when": {}, "goto": { "type": "nextDay" } }
+        ]
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "explore_with_evelyn",
+        "text": "与伊芙琳一起探索物资",
+        "requirements": { "partners": ["evelyn"] },
+        "goto": { "type": "explore" }
+      },
+      {
+        "id": "heating",
+        "text": "加固庇护所（消耗10弹药）",
+        "requirements": { "once": true, "onceKey": "heating_device", "dayRange": [55, 65] },
+        "cost": { "ammo": 10 },
+        "resultText": "天越来越冷了，这样下去物资消耗太快。你用10颗弹药在某个幸存者手里交换到了自循环供暖装置，保证了庇护所的温度。",
+        "effects": { "addItem": "供暖装置" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 60,
+    "title": "惊变六十天",
+    "suppliesCost": 20,
+    "partnerCostNote": "若存在伙伴或供暖装置另外计算",
+    "openingText": "昨天你出去探索物资的时候，恍惚间好像看到了几个长得和你很像的丧尸，一恍又不见了。不知道是不是你的错觉。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "branches": [
+          {
+            "when": { "flagsNot": ["chrisResolved"] },
+            "specialEvent": true,
+            "goto": { "type": "event", "eventId": "chris", "nodeId": "start" }
+          },
+          {
+            "when": {},
+            "resultText": "你一个人在家，不知道接下来的日子该怎么度过。你开始emo。",
+            "effects": { "humanity": -5 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "explore_with_evelyn",
+        "text": "与伊芙琳一起探索物资",
+        "requirements": { "partners": ["evelyn"], "dayRange": [60, 65] },
+        "specialEvent": true,
+        "goto": { "type": "exploreArea", "areaId": "mall_heartbeat" }
+      },
+      {
+        "id": "heating",
+        "text": "加固庇护所（消耗10弹药）",
+        "requirements": { "once": true, "onceKey": "heating_device", "dayRange": [55, 65] },
+        "cost": { "ammo": 10 },
+        "resultText": "天越来越冷了。这样下去物资消耗太快。你用10颗弹药在某个幸存者手里交换到了自循环供暖装置。保证了庇护所的温度。",
+        "effects": { "addItem": "供暖装置" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 65,
+    "title": "惊变六十五天",
+    "suppliesCost": 20,
+    "openingText": "你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "你用火药与残留的弹壳等材料，制作出了弹药。",
+        "effects": { "ammo": 5 },
+        "goto": { "type": "nextDay" }
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      },
+      {
+        "id": "explore_with_evelyn",
+        "text": "与伊芙琳一起探索物资",
+        "requirements": { "partners": ["evelyn"], "dayRange": [60, 65] },
+        "specialEvent": true,
+        "goto": { "type": "exploreArea", "areaId": "mall_heartbeat" }
+      },
+      {
+        "id": "heating",
+        "text": "加固庇护所（消耗10弹药）",
+        "requirements": { "once": true, "onceKey": "heating_device", "dayRange": [55, 65] },
+        "cost": { "ammo": 10 },
+        "resultText": "天越来越冷了。这样下去物资消耗太快。你用10颗弹药在某个幸存者手里交换到了自循环供暖装置。保证了庇护所的温度。",
+        "effects": { "addItem": "供暖装置" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "day": 70,
+    "title": "惊变七十天",
+    "suppliesCost": 20,
+    "openingText": "“咚咚咚！”门被敲响了。外面没人，门口有一封信。【幸存者你好，我们是英雄营地。我们想邀请所有幸存者开一个会议，关乎人类的未来走向。愿你能来青鸟大厦楼顶参与会议。】英雄营地，你并没听说过。感觉好像挺强的。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "八十天将近，你哪里也不想去。心烦意乱的在家里宅了一天。",
+        "effects": { "humanity": -5 },
+        "goto": { "type": "nextDay" }
+      },
+      { "id": "explore", "text": "外出探索物资", "goto": { "type": "explore" } },
+      {
+        "id": "hero_camp",
+        "text": "前往英雄营地",
+        "specialEvent": true,
+        "goto": { "type": "event", "eventId": "hero_camp", "nodeId": "meeting" }
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      }
+    ]
+  },
+  {
+    "day": 75,
+    "title": "惊变七十五天",
+    "suppliesCost": 20,
+    "hostNote": "尽量保留三十颗以上的弹药",
+    "openingText": "马上就到八十天了，你紧张不已。总觉得有大事要发生。趁现在，你决定多储备一些弹药和物资。今天你决定……",
+    "choices": [
+      {
+        "id": "stay_home",
+        "text": "苟在家里",
+        "resultText": "你决定在家里享受最后的安静。你心中提醒自己，这次重生后，真相、结果或许都不重要。重要的是做事情要随着自己的内心。",
+        "effects": { "humanity": 20 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "explore",
+        "text": "外出探索物资",
+        "resultText": "你不敢懈怠，于是决定去寻找物资。你发现了一个大型超市，这家超市在末世前就破产关门了。冒险前去调查后发现里面并未被搜刮过。里面的物资足够养活一百人。你决定趁没人发现全部搬回营地。但这是一个大工程。需要先找一辆大卡车。",
+        "effects": { "setFlag": "bankruptSupermarket" },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "dawn_camp",
+        "text": "前往黎明者营地",
+        "requirements": { "dayRange": [20, 100], "fixedEventId": "dawn_camp" },
+        "goto": { "type": "event", "eventId": "dawn_camp" }
+      }
+    ]
+  },
+  {
+    "day": 80,
+    "title": "惊变八十天",
+    "suppliesCost": 20,
+    "hostNote": "警告：接下来的选择影响着结局",
+    "openingBranches": [
+      {
+        "when": { "partners": ["evelyn"] },
+        "openingText": "“滋滋，幸存者们你们好。我是约翰，科研基地遭到尸潮围攻，恐难抵挡。丧尸血清计划将会被搁置。请有能力的幸存者前往科研基地营救我。”收音机里传来了约翰博士慌张的声音。他在末世之前就是一个引领人类文明前进的科研人员，你知道，如果有人能解决末世危机的话，非他莫属，并且自身“重生”的秘密或许他也能帮忙调查。\n但你最近发现了一个未被探索的大型超市，这几天终于弄到了可以进行搬运物资的卡车。如果把物资全部拿回来，或许这个末世就再也不会挨饿了。但再晚几天可能就会被其他人发现。救，还是不救。\n\n“尼奥，我们应该去救博士。虽然你我合作不难生存，但人类文明恐怕难以延续。”伊芙琳恳请你一起前往营救博士。"
+      },
+      {
+        "when": {},
+        "openingText": "“滋滋，幸存者们你们好。我是约翰，科研基地遭到尸潮围攻，恐难抵挡。丧尸血清计划将会被搁置。请有能力的幸存者前往科研基地营救我。”收音机里传来了约翰博士慌张的声音。他在末世之前就是一个引领人类文明前进的科研人员，你知道，如果有人能解决末世危机的话，非他莫属，并且自身“重生”的秘密或许他也能帮忙调查。\n但你最近发现了一个未被探索的大型超市，这几天终于弄到了可以进行搬运物资的卡车。如果把物资全部拿回来，或许这个末世就再也不会挨饿了。但再晚几天可能就会被其他人发现。救，还是不救。"
+      }
+    ],
+    "choices": [
+      {
+        "id": "save",
+        "text": "救（影响结局，消耗30弹药）",
+        "cost": { "ammo": 30 },
+        "branches": [
+          {
+            "when": { "partners": ["evelyn"] },
+            "goto": { "type": "event", "eventId": "day80_john", "nodeId": "with_evelyn" }
+          },
+          {
+            "when": {},
+            "resultText": "你决定独自前往科研基地营救约翰博士。",
+            "goto": { "type": "route", "routeId": "savior" }
+          }
+        ]
+      },
+      {
+        "id": "dont_save",
+        "text": "不救",
+        "branches": [
+          {
+            "when": { "partners": ["evelyn"] },
+            "resultText": "「看来我看错人了，人各有志，没办法，我想我们的合作到此为止了。」伊芙琳有些失望，带着装备离开了庇护所。「抱歉，我重活一世，不想当什么圣母。」你看着伊芙琳走远，耸了耸肩，回到了庇护所。",
+            "effects": { "removePartner": "evelyn", "addTag": "自私的胆小鬼", "supplies": 10000, "setFlag": "day80Resolved" },
+            "goto": { "type": "route", "routeId": "lone_wolf" }
+          },
+          {
+            "when": {},
+            "resultText": "重活一世，生命显得更加可贵，整个人类的命运不该加到你自己身上，你想明白一切后，决定继续为了生存而战。",
+            "effects": { "supplies": 10000, "setFlag": "day80Resolved" },
+            "goto": { "type": "route", "routeId": "lone_wolf" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "day": 85,
+    "title": "惊变八十五天",
+    "suppliesCost": 20,
+    "routeOnly": true,
+    "openingBranches": [
+      {
+        "when": { "route": "savior_zombie" },
+        "openingText": "惊变八十五天\n「救……我……」你看着面前的约翰，忍住了撕咬的冲动。"
+      }
+    ],
+    "choicesByRoute": {
+      "savior_zombie": [
+        {
+          "id": "continue_85",
+          "text": "（继续）",
+          "goto": { "type": "nextDay" }
+        }
+      ],
+      "adam_eve": [
+        {
+          "id": "adam_eve_85",
+          "text": "搬空超市后的日子",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "adam_eve_85" }
+        }
+      ]
+    }
+  },
+  {
+    "day": 90,
+    "title": "惊变九十天",
+    "suppliesCost": 20,
+    "routeOnly": true,
+    "choicesByRoute": {
+      "savior": [
+        {
+          "id": "savior_day90",
+          "text": "与约翰博士对话",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "savior_day90", "nodeId": "wake" }
+        }
+      ],
+      "savior_zombie": [
+        {
+          "id": "savior_day90_z",
+          "text": "与约翰博士对话",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "savior_day90", "nodeId": "wake" }
+        }
+      ],
+      "adam_eve": [
+        {
+          "id": "adam_eve_90",
+          "text": "与伊芙琳的对话",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "adam_eve_90" }
+        }
+      ]
+    }
+  },
+  {
+    "day": 100,
+    "title": "惊变100天",
+    "suppliesCost": 0,
+    "routeOnly": true,
+    "choicesByRoute": {
+      "savior": [
+        {
+          "id": "savior_finale_note",
+          "text": "（已在第90天完成大结局）",
+          "disabled": true
+        }
+      ],
+      "savior_zombie": [
+        {
+          "id": "savior_finale_note_z",
+          "text": "（已在第90天完成大结局）",
+          "disabled": true
+        }
+      ],
+      "adam_eve": [
+        {
+          "id": "adam_eve_100",
+          "text": "回家",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "adam_eve_100" }
+        }
+      ],
+      "lone_wolf": [
+        {
+          "id": "lone_wolf_100",
+          "text": "面对最后的访客",
+          "specialEvent": true,
+          "goto": { "type": "event", "eventId": "lone_wolf_100", "nodeId": "fortress" }
+        }
+      ]
+    }
+  }
+]

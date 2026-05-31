@@ -1,0 +1,336 @@
+[
+  {
+    "id": "explore_fifth_avenue",
+    "title": "第五大道·物资真相",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "你清点着从那辆面包车上获取的物资，但起初的喜悦很快被一种莫名的不安取代，你发现这些「物资」不对劲。你决定：",
+        "choices": [
+          {
+            "id": "keep",
+            "text": "留下这些「物资」",
+            "resultText": "末世之中，道德与文明在死亡面前一文不值。你将这些物资放进冷库的最底层，它们成了你最后的底牌。从这一刻起，你的一部分人性已经和它们一起被封存了。",
+            "effects": { "humanity": -30, "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "bury",
+            "text": "安葬这些「物资」",
+            "resultText": "你将这些物资好好地埋葬了，并立下了墓碑，赋予了他们最后的尊严。虽然损失了珍贵的物资，但是你保住了你作为人类最后的底线。",
+            "effects": { "supplies": -30, "humanity": 15, "addTag": "人性的墓碑" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "这天你刚要外出探索时，庇护所周围突然出现了不同寻常的动静。大约六七个装备精良的人死死盯着你的庇护所入口。「里面的人听着！我是『黎明者营地』的队长。我们的一位兄弟在运送物资时失踪了，定位后发现是你拿走的物资。希望你能交还给我们，其他的事就不和你追究了！」",
+        "choices": [
+          {
+            "id": "fight",
+            "text": "「我要说不呢！」（消耗10弹药）",
+            "cost": { "ammo": 10 },
+            "resultText": "你依靠庇护所的防御进行反击，成功歼灭了几人，并在他们身上搜出了一些弹药。但这么做也让你与一个组织严密的幸存者团体结下死仇——你被黎明者营地拉入黑名单，再也无法踏足黎明者营地。",
+            "effects": { "ammo": 5, "disableFixedEvent": "dawn_camp" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "yield",
+            "text": "「好好好，我这就去拿。」",
+            "resultText": "你乖乖照做了。他们拿走物资便撤退了。可你不知道这是真的和解还是缓兵之计。你不仅损失了大量物资，还暴露了自己的位置，陷入了深深的不安。",
+            "effects": { "supplies": -30, "humanity": -5 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "explore_commercial",
+    "title": "商业街·后续",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "将婴儿安顿好后，你继续外出。你知道有两处地方可能有物资。",
+        "choices": [
+          {
+            "id": "fastfood",
+            "text": "快餐店（消耗5弹药）",
+            "cost": { "ammo": 5 },
+            "resultText": "你清理了附近的丧尸，在快餐店发现了大量土豆。土豆含有大量淀粉，这在末世中可是宝贵的财富！",
+            "effects": { "supplies": 20 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "ktv",
+            "text": "KTV",
+            "resultText": "你到了 KTV，地上有几具尸体，看来这里刚刚经历了一场恶战，物资应该已经被人抢走了。不过你还是在尸体上搜到了一把手枪和五发弹药。",
+            "effects": { "ammo": 5 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "explore_hospital",
+    "title": "医院·办公室",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "你让女人顶住大门，自己从窗口爬进隔壁办公室给孩子找水源泡奶粉。回来时，却发现女人正在偷你背包中的物资。",
+        "choices": [
+          {
+            "id": "forgive",
+            "text": "原谅她，分一半抗生素",
+            "resultText": "你很同情女人的遭遇，将刚刚找到的抗生素分给了她一半。婴儿喝完奶粉便睡着了，尸潮也逐渐散去。女人哭着向你道谢，将身上剩余的弹药送给了你，随后抱着孩子离开了医院。",
+            "effects": { "supplies": -15, "ammo": 10, "humanity": 20, "addTag": "宽恕之光" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "bait",
+            "text": "将母子推出门外当诱饵",
+            "resultText": "女人的行为让你非常气愤——如果她向你说明情况，你或许会分一些抗生素给她。你生气地将二人推出了门外，之后迅速顶住大门。过了很长一段时间，门口的尸潮才散去。",
+            "effects": { "humanity": -20 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "过了很长一段时间，外面的尸潮才散去。面对地上的母子二人，你决定怎么处理。",
+        "choices": [
+          {
+            "id": "bury",
+            "text": "埋葬",
+            "resultText": "你在医院附近找了一处空地埋葬了二人。你知道是因为自己操作失误才害了这两个人——但刚才如果不自保，恐怕大家都会变成行尸走肉。你向二人深深鞠躬，表示了歉意。",
+            "effects": { "humanity": 5 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "leave",
+            "text": "扔在这不管",
+            "resultText": "那对母子在末世中本就难以生存，你这么做起码没有让二人变为丧尸、沦为母子相残的结局。",
+            "effects": { "humanity": -10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "convert",
+            "text": "转化为物资",
+            "resultText": "「末世之下我必须要保住自己的性命。无论通过什么方法，我必须活下去。」",
+            "effects": { "supplies": 30, "humanity": -30, "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "explore_hope_bar",
+    "title": "希望酒吧·瑟琳娜",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "全部拿走无疑是要了她的性命。你决定拿走一半的物资。女人精神崩溃哭了起来。你无所适从。",
+        "choices": [
+          {
+            "id": "take_half",
+            "text": "依然拿走物资",
+            "resultText": "「别 TM 哭了，我好歹给你留了一半。换成别人谁管你的死活。」你并不觉得自己做错了什么，甚至觉得自己足够仁慈。",
+            "effects": { "supplies": 20, "humanity": -15, "setFlag": "serena_alive" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "invite",
+            "text": "邀请加入庇护所",
+            "resultText": "你实在听不了无助的哭声，无奈叹息，邀请她加入你的庇护所。她抬起头看向你：「谢谢，你能给我留下物资说明你是一个有底线的人。但我不能和你走，不然我的丈夫就找不到我了。丧尸病毒刚爆发时，我们约好了在这里汇合。」你摇了摇头：「末世已经爆发了一个月了，要来早就来了。他可能已经……」她打断了你：「我不能食言。他一定会来找我的。」你没再说话。见她不哭了你就撤离了，临走时帮她关好门窗。你清楚，她可能明白丈夫已经去了，但她不能熄灭心中这最后一丝光亮。",
+            "effects": { "supplies": 20, "humanity": 10, "addTag": "最后一丝光亮", "setFlag": "serena_invited" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "explore_convenience",
+    "title": "便利店·幸存者",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "他惊魂未定地向表达了感谢。你准备……",
+        "choices": [
+          {
+            "id": "rob",
+            "text": "举枪威胁，夺走全部物资",
+            "resultText": "你脸上的友善消失了。他彻底懵了：「你救我就是为了这个？」他已经没有武器了，只能咬着牙放下行李，充满怨恨地离开，消失在街角。",
+            "effects": { "supplies": 30, "humanity": -10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "escort",
+            "text": "开车送他回他的庇护所",
+            "resultText": "你开车将他送回了他的庇护所。为了表示对你的感谢，他将包里的物资分给了你。",
+            "effects": { "supplies": 20, "humanity": 10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "convert",
+            "text": "把他转化为物资（消耗1弹药）",
+            "cost": { "ammo": 1 },
+            "resultText": "你毫无征兆地对他开了枪，他还没反应过来发生了什么事，就倒下了。「别怪我。我从一开始盯上的就是一切能转化为物资的东西。」",
+            "effects": { "supplies": 50, "humanity": -30, "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "inn_evelyn",
+    "title": "旅店·伊芙琳",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "店主向你求饶：若能放过他，他可以将冰箱里剩下的所有「物资」都送给你。",
+        "choices": [
+          {
+            "id": "kill_shopkeeper",
+            "text": "结果眼前这个恶魔（消耗1弹药）",
+            "cost": { "ammo": 1 },
+            "resultText": "你开枪打死了眼前这个恶魔。",
+            "goto": { "type": "event", "eventId": "inn_evelyn", "nodeId": "B" }
+          },
+          {
+            "id": "take_bait",
+            "text": "收下他的「物资」",
+            "resultText": "你答应了店主的请求，但在他去取物资时从背后开枪结果了他。伊芙琳震惊了：「原来你只是假意放过他，实际上你想黑吃黑！」「末日之下生存才是王道，我必须保证我们能活下去！」你带走了店主的所有「物资」，包括他自己。伊芙琳也因此与你分道扬镳，你再也没有见过她。",
+            "effects": { "supplies": 50, "humanity": -50, "removePartner": "evelyn", "addTag": "更大的恶魔" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "看着被囚禁的三人，你决定……",
+        "choices": [
+          {
+            "id": "free",
+            "text": "解救他们",
+            "resultText": "三人向你道谢后便离开了。伊芙琳帮你在店主的仓库内发现了很多弹药还有几瓶好酒。你们二人非常开心，准备回庇护所庆祝。",
+            "effects": { "supplies": 10, "ammo": 10, "humanity": 20, "addTag": "猎魔人" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "convert_three",
+            "text": "把三人转化为物资",
+            "resultText": "「末日之下生存才是王道，我必须保证我们能活下去！」伊芙琳看到你的做法后震惊了，也因此与你分道扬镳，你再也没有见过她。",
+            "effects": { "supplies": 40, "humanity": -30, "removePartner": "evelyn", "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "library_evelyn",
+    "title": "图书馆·伊芙琳",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "图书馆内有很多丧尸，你们突破重围。伊芙琳发现了穿着校服的身影——那女人的孩子，半张脸已经腐烂，喉咙里发出「嗬嗬」的声音。",
+        "choices": [
+          {
+            "id": "disguise",
+            "text": "将她打扮成正常女孩带回去",
+            "resultText": "你将女孩腐烂的半张脸遮住，伊芙琳沉默地帮你用绳索将她捆绑起来。「我尊重你的选择，但无法认同你的做法。」回到门口，母亲看见你们的身影便迫不及待冲上来。「等等。」你伸手拦住她，「报酬，先给我。」女人将弹药袋塞进你手里。母亲立刻扑上去紧紧抱住孩子——女儿挣扎开来，狠狠咬住了母亲的脖颈！女人眼神里充满困惑、痛苦和怨恨，随后缓缓倒下。回去的路上，伊芙琳再也没有和你交流。你紧握着那袋沉甸甸的子弹，它们冰冷坚硬的触感，此刻比丧尸的利齿更让你感到刺痛。",
+            "effects": { "ammo": -10, "humanity": -20, "addTag": "沾血的报酬" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "mercy_kill",
+            "text": "结束她的痛苦（消耗1弹药）",
+            "cost": { "ammo": 1 },
+            "resultText": "「安息吧。」你低声说道，随后结束了孩子的痛苦。伊芙琳赞同了你的做法，她从孩子身上取下发卡，随后你们沉重地走出图书馆。",
+            "effects": { "humanity": -5 },
+            "goto": { "type": "event", "eventId": "library_evelyn", "nodeId": "B" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "女人急切地迎上来：「我的孩子呢？」你告知了残酷的真相，并将发卡递给了她。「不……你骗我！」她不顾阻拦，疯了一般跑进图书馆。里面还有零星的丧尸在游荡。",
+        "choices": [
+          {
+            "id": "rescue_mom",
+            "text": "冒险营救她（消耗5弹药）",
+            "cost": { "ammo": 5 },
+            "resultText": "你不忍看她送死，和伊芙琳再度折返。你们冒死在丧尸群内找到了她，但她已经被咬伤。临终前，她将剩余的弹药塞给你。你不忍看到她经历痛苦，于是送了她一程，并将她与女儿合葬在了一起。",
+            "effects": { "ammo": 10, "humanity": 10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "leave_mom",
+            "text": "太危险了，离开",
+            "resultText": "你知道此刻图书馆内危机四伏，选择离开。你也明白，在你说出真相的那一刻，她所有的希望就已经被无情的现实击碎了。她奔向的不是丧尸，而是她无法承受的结果。",
+            "effects": { "humanity": -5 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mall_heartbeat",
+    "title": "商场心动事件",
+    "nodes": [
+      {
+        "id": "A",
+        "narrative": "帐篷内极其狭窄。伊芙琳的背部紧贴着你的胸膛。认识了这么久，你还是第一次离伊芙琳这么近。不知过了多久，外面的声音才逐渐远去。危机解除了，伊芙琳向你表示了谢意。",
+        "choices": [
+          {
+            "id": "leave_tent",
+            "text": "轻笑离开帐篷：「安全了，拿上物资快离开。」",
+            "resultText": "「嗯，走吧。」伊芙琳眼里的光芒稍微黯淡了一下，但很快恢复如常。刚才帐篷里那片刻的悸动似乎从未发生。你们整理了一下散落的物资便回庇护所了。",
+            "effects": { "supplies": 30 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "gentle",
+            "text": "保持绅士距离",
+            "resultText": "「所以呢？你怕了吗?」她从不示弱，即使刚才已经心跳如雷，也要用挑衅掩饰。你意识到伊芙琳是在假装自己很坚强。平日里自己应该多照顾一下这个女孩。",
+            "effects": { "supplies": 40, "humanity": 10 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "narrative": "你成功引开了尸群（弹药-5），并在约定地点焦急等待。伊芙琳眉头紧锁地走来，语气带着压抑的怒火和后怕：「谁让你自作主张当英雄的！不是说好一起行动的嘛！」",
+        "choices": [
+          {
+            "id": "care",
+            "text": "「因为我不想让你陷入危险！你的命和我的一样重要！」",
+            "resultText": "伊芙琳揪着你衣领的手缓缓松开。她深深看了你一眼，拍了拍你的肩膀：「记住你说的话。不过：别再做这种事了。我可不想失去搭档。」",
+            "effects": { "supplies": 40, "humanity": 20, "addTag": "搭档" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "tactical",
+            "text": "「这是当时最合理的战术选择。」",
+            "resultText": "伊芙琳眼里的怒火变成了一种复杂的失望。语气恢复了平时的冷静与疏离：「明白。很出色的战术判断。回去吧。」",
+            "effects": { "supplies": 20, "addTag": "战略失误" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "sorry",
+            "text": "「对不起。让你担心了。」",
+            "resultText": "伊芙琳的眼里还有一丝后怕和责备：「我不是在担心。我是在警告你。你鲁莽的举动，可能会让我们更加危险。」说完她开始转身清点物资。",
+            "effects": { "supplies": 40, "humanity": 10 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  }
+]

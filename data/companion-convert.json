@@ -1,0 +1,73 @@
+{
+  "id": "companion_convert_night",
+  "title": "饥不择食的前夜",
+  "openingTemplate": "你的物资不足以继续生存了。夜色里，你饥肠辘辘，目光不由自主地落向同样饥饿的同伴……",
+  "selectPartnerPrompt": "你把目光看向——",
+  "choices": {
+    "convert": { "text": "将{partner}转化为物资" },
+    "endure": { "text": "忍着饥饿" }
+  },
+  "partners": {
+    "lime": {
+      "eligible": true,
+      "excludeIfTags": ["伙伴"],
+      "excludeReason": "莱姆曾为你献出一切，你无法对它下手",
+      "convert": {
+        "resultText": "莱姆眼巴巴地看着你，不明白你要做什么。「对不起。」你含泪对莱姆下了黑手。如果不是这种情况，你绝不会结果莱姆。你突然觉得自己和丧尸没什么区别。",
+        "effects": { "humanity": -50, "supplies": 10, "removePartner": "lime" },
+        "countsAsConvertChoice": true
+      },
+      "endure": {
+        "resultText": "你摸了摸莱姆的头，决定再撑一撑。明天必须找到更多物资。",
+        "after": "retryDayOrNearDeath"
+      }
+    },
+    "luna": {
+      "eligible": true,
+      "convert": {
+        "resultText": "你狠下心，决定了结露娜。你来到露娜房间，却发现她已经死了。她给你留了字条：「尼奥，食物不足以两个人生存，我不想让你饿下去，这样我们都会死，谢谢你对我的照顾，再见。」你看到这里，狠狠地给了自己几个巴掌，下定决心：宁可饿死，也不会吃露娜。你将她埋葬，躺在她的坟前等待死亡降临。",
+        "effects": { "humanity": 30, "removePartner": "luna" },
+        "after": "gameOver",
+        "gameOverReason": "饥饿与悔恨吞噬了你。你躺在露娜的坟前，再也没有起来。",
+        "countsAsConvertChoice": true
+      },
+      "endure": {
+        "resultText": "你不可能对露娜下手。还是明天再出去想想办法吧。",
+        "after": "retryDayOrNearDeath"
+      }
+    },
+    "blake": {
+      "eligible": true,
+      "convert": {
+        "resultText": "你狠下心来，趁布莱克不注意结果了他。他先要对你下手的，不是他死就是你亡。末世下，你必须想尽一切办法活下去，利用一切资源。你心中并无太多愧疚——活下去或许才是更重要的。",
+        "effects": { "supplies": 30, "humanity": -30, "removePartner": "blake", "addTagSilentIfDuplicate": "底线" },
+        "countsAsConvertChoice": true
+      },
+      "endure": {
+        "resultText": "你不可能对伙伴下手，还是明天再出去想想办法吧。你回房睡觉，指望饥饿能缓解一些。午夜，你感觉被什么蒙住了头，直到窒息——布莱克在午夜结束了你的生命。",
+        "after": "gameOver",
+        "gameOverReason": "布莱克在午夜结束了你的生命。"
+      }
+    },
+    "evelyn": {
+      "eligible": true,
+      "convert": {
+        "resultText": "你悄悄来到伊芙琳的房间，屋内空无一人。只有一张字条：「尼奥，你今天的眼神很不对。我的直觉可能出错了，你不是一个值得信赖的伙伴。我最后的物资给你放在门口了，希望你能活下去。」",
+        "effects": { "supplies": 20, "humanity": -50, "removePartner": "evelyn" },
+        "countsAsConvertChoice": true
+      },
+      "endure": {
+        "resultText": "你打消了对伊芙琳下手的念头，回房硬撑过这一夜。",
+        "after": "retryDayOrNearDeath"
+      }
+    },
+    "john": {
+      "eligible": false,
+      "note": "约翰无法选择转化"
+    },
+    "baby": {
+      "eligible": false,
+      "note": "婴儿无法选择转化"
+    }
+  }
+}

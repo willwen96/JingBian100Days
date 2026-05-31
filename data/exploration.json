@@ -1,0 +1,308 @@
+[
+  {
+    "id": "fifth_avenue",
+    "name": "第五大道",
+    "openingText": "外出探索时，你发现了一个受伤昏迷的司机，面包车上有着丰富的物资，车身上写着「黎明者营地」。你决定：",
+    "choices": [
+      {
+        "id": "help",
+        "text": "救助他",
+        "resultText": "你带他回庇护所救治，可在回去的路上司机还是没能挺住。你将司机好好安葬，并留下了那批物资。",
+        "effects": { "supplies": 30, "humanity": 10 },
+        "goto": { "type": "event", "eventId": "explore_fifth_avenue", "nodeId": "A" }
+      },
+      {
+        "id": "loot",
+        "text": "将他扔下车，带物资回庇护所",
+        "resultText": "你冷酷地将他扔下车，任由他自生自灭。你认为如果今天你没有碰到他，恐怕他也已经凶多吉少了。",
+        "effects": { "supplies": 30, "humanity": -10 },
+        "goto": { "type": "event", "eventId": "explore_fifth_avenue", "nodeId": "B" }
+      }
+    ]
+  },
+  {
+    "id": "cannery",
+    "name": "罐头加工厂",
+    "openingText": "你发现了一个罐头加工厂。工厂内有一个衣衫褴褛、眼窝深陷的男人，正将罐头喂给一个被铁链锁住的丧尸女人。男人虽然很狼狈，但看着女人时，脸上还是露出一丝幸福的微笑。你决定：",
+    "choices": [
+      {
+        "id": "kill",
+        "text": "武力突破，占有这里的物资（消耗2弹药）",
+        "cost": { "ammo": 2 },
+        "resultText": "你没有废话，直接从他身后开枪，终结了二人。工厂里所有的罐头都归你了。可看着他们手上戴着的对戒，你感到了一丝空虚。",
+        "effects": { "supplies": 30, "humanity": -20 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "lie",
+        "text": "欺骗男人，用希望换物资（消耗1弹药）",
+        "cost": { "ammo": 1 },
+        "resultText": "你自称是某机构的医生，告诉他有一个隔离观察项目可以收容并治疗像他妻子这样的「患者」，但需要大量罐头作为经费。男人的眼里有了光，并主动帮你将罐头装上了车。你驱车离开后，解决掉了尸化的妻子。但男人那双充满信任的眼睛，总会浮现在你眼前，让你感到自我厌恶。",
+        "effects": { "supplies": 30, "humanity": -15, "addTag": "希望的盗贼" },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "help",
+        "text": "帮助他们",
+        "resultText": "你带着一个更坚固的狗笼和几条新锁链回来。「这个……更安全。」男人愣住了，随即明白了你的用意，并送了你一些物资作为感激。在这末世之中，居然还有人依旧坚守着他的爱情。",
+        "effects": { "humanity": 20, "supplies": 20, "addTag": "超越生死的爱恋" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "id": "farmhouse",
+    "name": "农户家",
+    "openingText": "你在外出探索时，在一个农户家发现了一对老夫妻。他们老旧冰箱里存放着为数不多的食物。老妇人颤抖着跪下：「求求你，这是我们最后的东西，拿走它们，我们只能等死……」老头紧紧搂着她：「我们……我们可以和你分享我们的晚餐，只求能留下我们的命，和我们这点希望。」",
+    "choices": [
+      {
+        "id": "rob",
+        "text": "冷酷掠夺",
+        "resultText": "「末世之中，没有仁慈。」你清空了他们的冰箱。在老妇人绝望的哭泣中，你带着物资转身离开。",
+        "effects": { "supplies": 15, "humanity": -15 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "dinner",
+        "text": "接受善意，共进晚餐",
+        "resultText": "你动了恻隐之心，坐了下来。老夫妻千恩万谢。你与二人共进了晚餐。然而不久后，你感到一阵剧烈的头晕目眩，四肢无力地瘫倒在地。「又一个……看来这法子还能用。」老汉喃喃道。你意识到，这顿「最后的晚餐」是一个精心布置的陷阱，而你即将变成他们新的「物资」。",
+        "effects": { "nearDeath": true, "addTag": "最后的晚餐" },
+        "goto": { "type": "nearDeath" }
+      }
+    ]
+  },
+  {
+    "id": "commercial_street",
+    "name": "商业街",
+    "openingText": "你刚出门就在门口看到了一个破旧的襁褓，里面是一个看起来刚满月的婴儿。襁褓中塞着一张纸条：「我知道你可能不会救他，但外面太危险了，求求你，给他一条生路。愿神保佑你。」",
+    "choices": [
+      {
+        "id": "adopt",
+        "text": "收养",
+        "resultText": "你无法眼睁睁看着一个无辜的生命在眼前消逝，迅速将婴儿抱回屋内，并小心翼翼地喂养他。将婴儿哄睡之后，你决定继续外出探索。",
+        "effects": { "humanity": 20, "addPartner": "baby", "addTag": "婴儿" },
+        "goto": { "type": "event", "eventId": "explore_commercial", "nodeId": "A" }
+      },
+      {
+        "id": "leave",
+        "text": "不收养",
+        "resultText": "末世的第一法则就是生存，任何的仁慈都是对自己的残忍。不过你还是将孩子放在了相对安全的地方，至于他能否活下来，只能交给命运。之后你决定继续外出探索。",
+        "effects": { "humanity": -10 },
+        "goto": { "type": "event", "eventId": "explore_commercial", "nodeId": "A" }
+      }
+    ]
+  },
+  {
+    "id": "kindergarten",
+    "name": "幼儿园",
+    "openingText": "你在外出探索时，意外撞见黑压压的尸潮正分两路前进——一路朝向东侧的医院，一路涌向西侧的幼儿园。你背包里有一颗声波手雷，引爆后会将尸潮引向爆炸位置，另一处的人就可以获救。",
+    "choices": [
+      {
+        "id": "hospital",
+        "text": "医院（消耗1弹药）",
+        "cost": { "ammo": 1 },
+        "resultText": "「孩子才是未来！」你将手雷奋力掷向医院，丧尸群疯狂转向。医院瞬间被淹没，你趁机赶往幼儿园，迅速带着园长和孩子撤离。园长为了感谢你，赠送了你一些物资。第二天你听说医院内驻扎有一队装备精良的队伍，他们拼命守护住了病人和医生。你心中对他们产生了敬意与愧疚。",
+        "effects": { "supplies": 20, "humanity": 10 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "kindergarten",
+        "text": "幼儿园（消耗1弹药）",
+        "cost": { "ammo": 1 },
+        "resultText": "「对不起了，孩子们……」你将手雷扔向幼儿园，巨大的声波炸开，尸潮如黑色洪流般涌向幼儿园方向。你听见玻璃破碎声和短暂的哭喊声。医疗人员为了感谢你，送给你一些药品。三天后，你在幼儿园废墟中发现一个破碎的玩具熊。你为不能救下所有人而感到难过。",
+        "effects": { "supplies": 30, "humanity": 10 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "self",
+        "text": "自己（消耗1弹药）",
+        "cost": { "ammo": 1 },
+        "resultText": "你转身朝完全相反的方向全力奔跑。「来啊！我在这里！」尸潮被你的声响吸引，随后你引爆了手雷。你知道这是绝路，但医院和幼儿园的方向已经恢复了安静——你的牺牲换来了更多人生存的希望。",
+        "effects": { "nearDeath": true, "humanity": 50, "addTag": "殉道者" },
+        "goto": { "type": "nearDeath" }
+      },
+      {
+        "id": "walk_away",
+        "text": "转身离开",
+        "resultText": "末世之中，你无法做出抉择，也无法承担风险。不如选择自保。于是你转身离开了这里。",
+        "effects": { "humanity": -20 },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "id": "hospital",
+    "name": "医院",
+    "onEnterEffects": { "supplies": 30 },
+    "onEnterResultText": "你在药局找到了一些抗生素与药品。",
+    "openingText": "你外出探索到了一家医院。正要离开时，发现游荡的丧尸群向你的方向走来。你急忙躲进医生办公室，发现还有一个抱着婴儿的女人。婴儿啼哭不止，门外的丧尸越来越多。",
+    "choices": [
+      {
+        "id": "feed",
+        "text": "给婴儿分一些食物（消耗5物资）",
+        "cost": { "supplies": 5 },
+        "resultText": "为了保住你们几人的性命，你将随身携带的奶粉分给了婴儿。",
+        "goto": { "type": "event", "eventId": "explore_hospital", "nodeId": "A" }
+      },
+      {
+        "id": "kill",
+        "text": "结果掉这两个陌生人（消耗2弹药）",
+        "cost": { "ammo": 2 },
+        "resultText": "你担心孩子的哭声会引来更多的丧尸。为了自保，你准备解决掉二人。女人哭着向你磕头，但你没有给她留任何情面。",
+        "effects": { "humanity": -20 },
+        "goto": { "type": "event", "eventId": "explore_hospital", "nodeId": "B" }
+      }
+    ]
+  },
+  {
+    "id": "church",
+    "name": "教堂",
+    "openingText": "外出探索时，你在教堂中发现了奄奄一息的神父。",
+    "choices": [
+      {
+        "id": "treat",
+        "text": "治疗他（消耗10物资）",
+        "cost": { "supplies": 10 },
+        "resultText": "你打算帮助神父治疗，他谢绝了你的好意，并告诉你他被丧尸咬伤了。他看着你，眼中发出光芒：「孩子，你的体内有上帝的能力，在危难之中，或许你是唯一的希望，你一定要带领人类走下去。」随后他请求你帮助结束痛苦。「重新开始了，这次要好好珍惜……」临死前，神父喃喃道。",
+        "effects": { "ammo": -1, "humanity": 20, "addTag": "神谕" },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "mercy",
+        "text": "帮他结束痛苦（消耗1弹药）",
+        "cost": { "ammo": 1 },
+        "resultText": "你不打算救助他，但出于人道主义，你帮他结束了痛苦。他很感谢你。「孩子，咬伤我的丧尸你也认识，他虽然现在浑浊不清，但他是被上帝选中的孩子，早晚有一天，他会带领人类走向光明。」临死前，神父喃喃道，并告诉了你他藏物资的位置。",
+        "effects": { "supplies": 20 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "convert",
+        "text": "转化为物资",
+        "resultText": "你冷漠无比，并不觉得这是你的同类，眼中只有对物资的渴望。他还没来得及说什么，你就结果了他——随后才发现他身上被丧尸咬过的伤口，竹篮打水。",
+        "effects": { "humanity": -20, "ammo": -1, "addTagSilentIfDuplicate": "底线" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "id": "hope_bar",
+    "name": "希望酒吧",
+    "openingText": "你在外出探索时发现了一个名为「希望」的酒吧。酒吧内居然有一个女人——这是她的庇护所。她说她叫瑟琳娜，在这里等她的丈夫，祈求你不要拿走太多物资。",
+    "choices": [
+      {
+        "id": "take40",
+        "text": "拿走40物资",
+        "resultText": "你决定全部拿走。这无疑是要了女人的命。她悲痛欲绝，打开了无线音响，引来了尸潮。你狼狈逃走，什么都没拿到。女人也因为尸潮结束了生命。",
+        "effects": { "setFlag": "serena_dead" },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "take20",
+        "text": "拿走20物资",
+        "resultText": "你决定拿走一半的物资。女人精神崩溃哭了起来。",
+        "goto": { "type": "event", "eventId": "explore_hope_bar", "nodeId": "A" }
+      },
+      {
+        "id": "take0",
+        "text": "不拿",
+        "resultText": "女人很感激你。末世之下，人性反而成了最稀有的东西。她没有枪，于是把子弹全部送给了你。",
+        "effects": { "ammo": 10, "humanity": 15, "setFlag": "serena_spared" },
+        "goto": { "type": "nextDay" }
+      }
+    ],
+    "hostNote": "克里斯事件结束后删除此区域"
+  },
+  {
+    "id": "convenience",
+    "name": "便利店",
+    "openingText": "你在外出探索时，听到便利店门口传来激烈的搏斗声。你仔细观察，发现有一个幸存者被几只丧尸包围了，他的弹药似乎已经耗尽。你注意到他的行李包塞得异常满。",
+    "choices": [
+      {
+        "id": "watch",
+        "text": "静观其变，坐收渔利",
+        "resultText": "你眼睁睁看着他被丧尸分食。他看到了你，向你投来求救的目光，但你依旧无动于衷。在尸潮散去后，你小心翼翼地捡走了行李包。里面有一些罐头和压缩饼干，不过有一些已经被丧尸踩坏不能食用了。",
+        "effects": { "supplies": 20, "humanity": -20 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "help",
+        "text": "出手相助（消耗5弹药）",
+        "cost": { "ammo": 5 },
+        "resultText": "你瞄准尸群开了枪，吸引了大部分丧尸的注意力，为他争取到逃跑的机会。",
+        "goto": { "type": "event", "eventId": "explore_convenience", "nodeId": "A" }
+      }
+    ]
+  },
+  {
+    "id": "inn_evelyn",
+    "name": "旅店（与伊芙琳）",
+    "requirements": { "partners": ["evelyn"], "dayRange": [45, 55] },
+    "openingText": "你们外出探索来到一家旅店。伊芙琳发现了一个上锁的房间，门上写着「物资」。她听到里面传来微弱的呼救声，于是把你叫了过来。你透过缝隙看到三名被铁链锁住的人。「砰！」一声枪响打断了你的思考——旅店店主正拿着枪站在你的身后，脸上挂着扭曲的笑容。",
+    "choices": [
+      {
+        "id": "fight",
+        "text": "挺身而出，保护三人（消耗5弹药）",
+        "cost": { "ammo": 5 },
+        "resultText": "一场激烈的枪战在狭窄的走廊内爆发了。店主的枪法虽然很好，但是你和伊芙琳完美的配合还是成功制服了他，使他失去了行动能力。",
+        "goto": { "type": "event", "eventId": "inn_evelyn", "nodeId": "A" }
+      },
+      {
+        "id": "leave",
+        "text": "不多管闲事，离开此地",
+        "resultText": "末世中，多一事不如少一事。你决定离开旅店。伊芙琳急忙上前拦住了你：「回来，他不会让目击者离开的！」果然，还没等伊芙琳说完，店主便开枪射中了你。你倒了下去。恍惚间你看到伊芙琳疯了一样冲向了店主……",
+        "effects": { "nearDeath": true },
+        "goto": { "type": "nearDeath" }
+      }
+    ]
+  },
+  {
+    "id": "library_evelyn",
+    "name": "图书馆（与伊芙琳）",
+    "requirements": { "partners": ["evelyn"], "dayRange": [45, 55] },
+    "openingText": "你们今天外出探索时来到一个图书馆，被一个绝望的母亲拦住。「求求你们！救救我的女儿！那些东西把她困在里面了！」她颤抖着掏出一个弹药袋子。「一共十五发，只要你们能带她回来，全都给你们！我可以先给你们预付一些弹药！」",
+    "choices": [
+      {
+        "id": "accept",
+        "text": "接受请求",
+        "resultText": "你们拿上女人预付的弹药，准备救下她的女儿。",
+        "goto": { "type": "event", "eventId": "library_evelyn", "nodeId": "A" }
+      },
+      {
+        "id": "scam",
+        "text": "拿上预付的弹药，然后消失",
+        "resultText": "为了一个几乎必死无疑的孩子，闯入危险的丧尸巢穴？这简直太愚蠢了。你的脸上伪装出了沉重和同情：「这些弹药我先收下，情况很危险，我先去补充一些装备。你先找个安全的地方，等我们回来。」女人像是抓住了救命稻草，毫不犹豫地将 5 发子弹塞到你手里。「我就在这里等你！快点回来！」你和伊芙琳头也没回地驶离了这条街道。「尼奥，我们并不缺弹药，为什么要骗她。」回去的路上，伊芙琳不解地问你。你没有做出回应。那女人最后充满信任的眼神，像一根刺，扎在了你的心底。伊芙琳不同意你的做法，因此离开了你。",
+        "effects": { "ammo": 5, "humanity": -15, "removePartner": "evelyn", "addTag": "希望的盗贼" },
+        "goto": { "type": "nextDay" }
+      }
+    ]
+  },
+  {
+    "id": "mall_heartbeat",
+    "name": "商场",
+    "requirements": { "partners": ["evelyn"], "dayRange": [60, 65] },
+    "openingText": "天气越来越冷了，你和伊芙琳决定到商场搞一些取暖设备。然而等你们返回时，你们听到丧尸低沉的嘶吼和杂乱的脚步声向你们逼近。「糟了！」伊芙琳脸色一变。",
+    "choices": [
+      {
+        "id": "guard",
+        "text": "守护伊芙琳",
+        "resultText": "你将伊芙琳护在你的身后，环顾四周，发现了商场内的帐篷。你带着伊芙琳迅速躲了进去。",
+        "goto": { "type": "event", "eventId": "mall_heartbeat", "nodeId": "A" }
+      },
+      {
+        "id": "fight_together",
+        "text": "并肩作战（消耗10弹药）",
+        "cost": { "ammo": 10 },
+        "resultText": "你们默契的配合，就像一场双人舞。解决掉最后一只丧尸，你们背靠背坐了下来。伊芙琳侧过头，汗水沿着她的下颌线滑落。「刚才那枪怎么样，是不是救了你一命？」伊芙琳笑着问道。你也用同样的笑容回应：「那当然，我们是最佳组合。」她没有回应你的调侃，只是轻轻握住你的手说：「走吧，搭档。」",
+        "effects": { "supplies": 40, "humanity": 10 },
+        "goto": { "type": "nextDay" }
+      },
+      {
+        "id": "lure",
+        "text": "冒险引开（消耗5弹药）",
+        "cost": { "ammo": 5 },
+        "resultText": "你拿起附近货架上的铁盆。「你从后窗走！我去把它们引开！咱们老地方汇合！」说完，你不等她回应，便制造出声响，准备引开丧尸。",
+        "goto": { "type": "event", "eventId": "mall_heartbeat", "nodeId": "C" }
+      }
+    ]
+  }
+]

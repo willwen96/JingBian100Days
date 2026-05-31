@@ -1,0 +1,40 @@
+{
+  "_comment": "结局评分模板。带 null 的字段请按手册《判定与结局评分》补全。",
+  "humanityInitial": 50,
+  "formulaDescription": "【（人性值×10）+ 结局词条分数之和】× 大结局词条分数 = 结局分数",
+  "formula": {
+    "baseExpression": "((humanity * humanityMultiplier) + tagScoreSum) * finaleMultiplier",
+    "humanityMultiplier": 10,
+    "finaleMultiplierWhenNone": 1,
+    "tagScoreSum": "sum_of_player_tags"
+  },
+  "grades": [
+    { "rank": "X", "min": null, "max": -1, "label": "负数" },
+    { "rank": "C", "min": 0, "max": 999, "label": "1000以下" },
+    { "rank": "B", "min": 1000, "max": 1999, "label": "1000~1999" },
+    { "rank": "A", "min": 2000, "max": 2999, "label": "2000~2999" },
+    { "rank": "S", "min": 3000, "max": 4999, "label": "3000~4999" },
+    { "rank": "SS", "min": 5000, "max": 6999, "label": "5000~6999" },
+    { "rank": "SSS", "min": 7000, "max": null, "label": "7000以上" }
+  ],
+  "autoTags": [
+    {
+      "tagId": "尽头",
+      "condition": "物资不足以复活且游戏结束",
+      "score": -300
+    },
+    {
+      "tagId": "人性的光芒",
+      "condition": "通关时从未选择「转化为物资」类选项",
+      "score": 450
+    },
+    {
+      "tagId": "末世之王",
+      "condition": "进行过七次随机探索事件",
+      "score": 300
+    }
+  ],
+  "manualScoresPending": [
+    "部分大结局词条分数为乘数（如 2、1.7、1.5、1.2），请在 tags.json 中 isFinale=true 且 score 字段填写"
+  ]
+}

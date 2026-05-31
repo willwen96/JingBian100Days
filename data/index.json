@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "gameId": "jingbian-100-days",
+  "description": "《惊变100天》互动文字游戏数据包（由主持人手册 + 外出探索手册转换）",
+  "files": {
+    "meta": "meta.json",
+    "rules": "rules.json",
+    "companionConvert": "companion-convert.json",
+    "scoring": "scoring.json",
+    "partners": "partners.json",
+    "tags": "tags.json",
+    "preOutbreak": "pre-outbreak.json",
+    "days": "days.json",
+    "daysChoicesTemplate": "days-choices-template.json",
+    "events": "events.json",
+    "exploration": "exploration.json",
+    "endings": "endings.json"
+  },
+  "schema": "../schema/game-schema.ts",
+  "documentation": "../DATA_FORMAT.md",
+  "sourceManuals": [
+    "《惊变100天》主持人手册.docx.md",
+    "外出探索.docx.md"
+  ],
+  "coverageNotes": [
+    "已转换：开局三阶段、第1-75天、第80-100天三条结局线（救世/亚当夏娃/独狼）及穿越者因果支线",
+    "已转换：外出探索9个区域 + 伊芙琳专属探索骨架",
+    "已转换：三条结局线结构 + 全部结局词条与分数（手册已写明）",
+    "待你补全：第6-9天若手册有单独剧情；days.json 中 day 10+ 需与 days-choices-template 合并实现",
+    "待你补全：scoring.json 中未在手册出现的中间公式变量；骰子/赌命等 minigame 的随机逻辑"
+  ]
+}

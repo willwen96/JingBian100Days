@@ -1,0 +1,1180 @@
+[
+  {
+    "id": "blake",
+    "title": "布莱克事件",
+    "shelter": "villa",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "你打算犒劳自己，煎了一份牛排。别墅房门突然被打开，一个陌生的男人惊讶地看着正在吃牛排的你。他有些狼狈，略微紧张地问你：「伙计，这是我的房子，你怎么在这里？」\n\n你有些尴尬。他急忙善意地说道：「你可以留在这里，毕竟物资是你带来的」你听出他的意图——他邀你在庇护所共同生存，但物资也要与他分享。",
+        "choices": [
+          {
+            "id": "agree",
+            "text": "同意——虽然物资是我的，但庇护所毕竟是他的",
+            "resultText": "你同意了，他友好地与你握手，并告诉了你他的名字——布莱克，为了表示诚意，他把所有弹药与物资交由你保管。",
+            "effects": { "ammo": 5, "supplies": 10, "humanity": 5, "addPartner": "blake" },
+            "goto": { "type": "nextDay" }
+          },
+          { "id": "refuse", "text": "不同意", "goto": { "type": "event", "eventId": "blake", "nodeId": "B" } }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "你摇了摇头：「抱歉，我无法归还房子。如果末世结束，我愿意承担一切后果，但现在请你离开」。陌生的男人摇了摇头，声音逐渐变冷，手摸向后腰：「真的没得商量了吗？」",
+        "choices": [
+          {
+            "id": "fight",
+            "text": "与其进行搏斗",
+            "resultText": "你在他掏枪之前扔出了牛排，转移了他的注意力，你趁机与其扭打在一起。最终你制服了他，没收了他的枪，但你也受了很严重的伤。",
+            "effects": { "supplies": -10, "ammo": 5 },
+            "goto": { "type": "event", "eventId": "blake", "nodeId": "C" }
+          },
+          {
+            "id": "fight_lime",
+            "text": "叫莱姆一起战斗",
+            "requirements": { "partners": ["lime"] },
+            "resultText": "你吹了个口哨。男人有些疑惑之时，莱姆扑到了他的身上。你趁机制服了他，没收了他的枪。",
+            "effects": { "ammo": 5 },
+            "goto": { "type": "event", "eventId": "blake", "nodeId": "C" }
+          },
+          {
+            "id": "shoot",
+            "text": "掏枪（消耗8弹药）",
+            "cost": { "ammo": 8 },
+            "resultText": "你先他一步掏出随身携带的枪，一枪结果了他。他没想到你如此狠辣与果决，带着怨恨的眼神看着你，缓缓地倒了下去。你在他身上搜索到一把枪。",
+            "effects": { "humanity": -20, "ammo": 5 },
+            "goto": { "type": "event", "eventId": "blake", "nodeId": "E" }
+          },
+          {
+            "id": "surrender_joke",
+            "text": "投降——大哥我闹玩呢，欢迎回家",
+            "resultText": "气氛缓和下来，你同意了共同生活的提议。他友好地与你握手，并告诉了你他的名字——布莱克，为了表示诚意，他把所有弹药与物资交由你保管。",
+            "effects": { "ammo": 5, "supplies": 10, "humanity": 5, "addPartner": "blake" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "narrative": "你看着被你制服的男人，得知了他的名字叫做布莱克。他连连求饶，并发誓不会再来打扰你，求你放过他。",
+        "choices": [
+          { "id": "spare", "text": "得饶人处且饶人——放他一马", "goto": { "type": "event", "eventId": "blake", "nodeId": "D" } },
+          {
+            "id": "kill",
+            "text": "绝不给自己留后患",
+            "resultText": "你决定绝不给自己留后患。",
+            "effects": { "humanity": -20 },
+            "goto": { "type": "event", "eventId": "blake", "nodeId": "E" }
+          }
+        ]
+      },
+      {
+        "id": "D",
+        "narrative": "你放过了他。晚上休息时突然头晕目眩——布莱克用新风系统迷烟暗算你。「砰砰砰砰」",
+        "choices": [
+          { "id": "near_death", "text": "（自动）", "effects": { "nearDeath": true }, "goto": { "type": "nearDeath" }, "hostNote": "濒死，消耗30物资跳过" }
+        ]
+      },
+      {
+        "id": "E",
+        "narrative": "他失去了生命体征，你叹息一声，甩出脑中那些复杂的道德情绪。看着他，你决定：",
+        "choices": [
+          {
+            "id": "bury",
+            "text": "在院中安葬",
+            "resultText": "你将他安葬在院中，鞠了一躬。你觉得自己这种形式主义有些虚伪，但这些也提醒着你：你是一名人类。",
+            "effects": { "humanity": 10, "addTag": "别墅的主人" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "convert",
+            "text": "转化为30点物资",
+            "resultText": "「他先要对我下手的，不是他死就是我亡。末世下，我必须想尽一切办法活下去，利用一切资源。」",
+            "effects": { "supplies": 30, "humanity": -30, "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "luna",
+    "title": "露娜事件",
+    "shelter": "bunker",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "今天外面正下着冰冷的雨，你正打算出门，金属门外传来了急促，且微弱的哀求声：「救命啊，我知道里面有人…有东西在追我们！」你用防空洞的潜望镜看到门外是一对母女。老母亲浑身湿透，脸色惨白。她倒在女儿的怀里已经奄奄一息，不知道是否被感染，她的女儿看起来和你差不多年纪，长得很漂亮，正跪在那里哭着向你求救。远处似乎有黑色的身影在朝这里蹒跚而来。你知道开门会意味着风险，于是你决定……",
+        "choices": [
+          {
+            "id": "open",
+            "text": "开门接纳",
+            "resultText": "你无法对一对无助的母女硬起心肠，迅速开门让二人进入防空洞避难。女生不断向你道谢，你决定赶紧查看她母亲的伤势……",
+            "effects": { "humanity": 20 },
+            "goto": { "type": "event", "eventId": "luna", "nodeId": "A" }
+          },
+          {
+            "id": "reject",
+            "text": "冷酷驱逐",
+            "cost": { "ammo": 1 },
+            "effects": { "humanity": -10 },
+            "resultText": "你用对讲机冷冰冰地告诉她们：「立刻离开，否则我将采取极端措施！」你朝外面空地开了一枪，枪声在雨夜中格外刺耳，门外的哀求声似乎变成了绝望的哭泣和渐行渐远的脚步声。你知道，迎接她们的结局注定是死亡。但末世中，死亡的人可并不止这对母女。你整理了心情，随后继续出门探索物资。",
+            "goto": { "type": "explore" }
+          }
+        ]
+      },
+      {
+        "id": "A",
+        "narrative": "老母亲此刻双眼浑浊，呼吸急促，她的左臂有一处被衣物简单包扎着伤口。伤口边缘泛着不自然的黑青色，凭着上一世的经验，你知道这是感染的晚期症状，变异即将发生。眼前这位老母亲马上就会变成一具行尸走肉。此时，你必须立刻做出决定……",
+        "choices": [
+          {
+            "id": "kill_mother",
+            "text": "当机立断，在变异前终结老母亲（消耗1弹药）",
+            "cost": { "ammo": 1 },
+            "resultText": "你一把推开哭泣的女子，对准老母亲的额头，在她还未变异之前结果了她。",
+            "goto": { "type": "event", "eventId": "luna", "nodeId": "B" }
+          },
+          {
+            "id": "isolate",
+            "text": "时间还够，先将母亲隔离",
+            "resultText": "你看着泪眼婆娑的女生说道：「你母亲很快就会变异，我们需要把她隔离在这里，这也是我能给她最后的尊严，也是我们能活下去的办法。」你不顾女孩的哀求，将老母亲关到防空洞的密室里，将她绑住后锁上了门。",
+            "goto": { "type": "event", "eventId": "luna", "nodeId": "C" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "可你刚刚在一个女儿面前杀死她的母亲，她愤怒的掏出身后的匕首对准了你。「她已经没救了。下一秒就可能变成丧尸攻击我们，你也想死吗?」可眼前的女生已经歇斯底里了，根本不听你的解释。",
+        "choices": [
+          {
+            "id": "kill_daughter_1",
+            "text": "不识好歹，陪你妈妈去吧（消耗1弹药）",
+            "cost": { "ammo": 1 },
+            "effects": { "humanity": -10 },
+            "resultText": "你明明救了她，她居然还这样做。于是你一枪结果了她的生命，你甚至认为自己一时心软放她们进来都是错的，平白给自己增加了麻烦。",
+            "goto": { "type": "event", "eventId": "luna", "nodeId": "D" }
+          },
+          {
+            "id": "kill_daughter_3",
+            "text": "越想越气，连开三枪（弹药-3）",
+            "cost": { "ammo": 3 },
+            "effects": { "humanity": -10, "ammo": 5 },
+            "resultText": "「砰砰砰」你连开三枪，结果了她的生命，随后把她与她妈妈的尸体扔到了外面。任由冷冽的雨点拍在她们的身上，你心里发誓，再遇到这种情况绝不心软了。回来的路上你捡到了一些弹药。",
+            "goto": { "type": "event", "eventId": "luna", "nodeId": "D" }
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "narrative": "你将母亲隔离后，年轻女子告诉你她叫露娜，此刻她正瘫坐在密室门外，无声地流泪。此时密室内传来令人毛骨悚然的抓挠声和低沉的嘶吼声。她的母亲开始向丧尸转化了，此刻露娜才相信了你的说法。「你说得对…」她的声音沙哑而平静，「她…已经不存在了。」露娜希望能亲自送她妈妈最后一程，你答应了她的要求。随后和露娜一起埋葬了她的母亲。而关于露娜…",
+        "choices": [
+          {
+            "id": "accept_luna",
+            "text": "接纳她作为同伴",
+            "resultText": "露娜深深的看了你一眼，她心中暗自发誓，绝不会辜负你这么善良的人。",
+            "effects": { "humanity": 10, "addPartner": "luna" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "send_away",
+            "text": "物资不够，送她离开（消耗物资10）",
+            "cost": { "supplies": 10 },
+            "resultText": "你坦言自己的物资并不够两个人生存，她在这里躲了一夜后你送她离开了。临走时，你给她拿了一些物资。她感激地看着你，随后启程。她的脚步很坚毅，但一个女孩在这末世又能坚持多久呢。",
+            "effects": { "addTag": "末世女王" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "D",
+        "narrative": "看着躺在地上的母女二人，你心中不免有些感慨，怎么处理呢。",
+        "choices": [
+          {
+            "id": "throw",
+            "text": "扔出去",
+            "resultText": "你把母女二人安放在远处。回来的路上你捡到了一些弹药，意外之喜减少了你心中的不愉快。",
+            "effects": { "ammo": 5 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "bury",
+            "text": "埋葬",
+            "resultText": "防空洞很大，你找了一处将二人埋葬。你不知道她们的名字，于是在碑文上写下了【一对可怜的母女。】",
+            "effects": { "humanity": 10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "convert",
+            "text": "转化为物资",
+            "resultText": "「不识好歹的女人，死了活该。末世下，我必须想尽一切办法活下去，利用一切资源。」",
+            "effects": { "supplies": 30, "humanity": -30, "addTagSilentIfDuplicate": "底线" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lime",
+    "title": "莱姆事件",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "你最近探查到两处物资偏多的地点，但有一些危险，你决定带着莱姆一同前往。",
+        "choices": [
+          {
+            "id": "police",
+            "text": "偏远的警局",
+            "resultText": "终于到了警察局。莱姆好像对这里特别熟悉，你在警局搜索到 5 发弹药。你还看到了一张照片：一名警长与莱姆的合影。原来莱姆之前居然是……你想起撞到它那天，它脖子上似乎就带着项圈。",
+            "effects": { "ammo": 5 },
+            "goto": { "type": "event", "eventId": "lime", "nodeId": "A" }
+          },
+          {
+            "id": "supermarket",
+            "text": "丧尸偏多的超市（消耗5弹药）",
+            "cost": { "ammo": 5 },
+            "resultText": "你猜得没错，超市里面果然有几只丧尸。你解决掉它们，并在超市里搜索到一些水果罐头，这可是硬货！",
+            "effects": { "supplies": 30 },
+            "goto": { "type": "event", "eventId": "lime", "nodeId": "A" }
+          }
+        ]
+      },
+      {
+        "id": "A",
+        "narrative": "回去的路上，你发现某住宅区燃起了大火，并传来了小女孩的哭声。你停下车打算观察一下。这时莱姆跳下了车，冲进了火海。看着莱姆本能的救人反应，你确定了莱姆之前的身份。附近一个丧尸都没有，于是你急忙跟了过去。\n\n大堂里有一个八九岁的小女孩，莱姆也被困在某处火海中，火势蔓延得很快，你只能救一个。你毫不犹豫地选择……",
+        "choices": [
+          {
+            "id": "save_lime",
+            "text": "莱姆",
+            "effects": { "humanity": 15, "addTag": "伙伴" },
+            "resultText": "你快速冲向莱姆，带着它逃离了火海。女孩突然怒吼起来。你回头一看，它张开了血盆大口，不甘心地怒瞪着你。你心中大惊，丧尸居然会利用人性布置陷阱！你加速逃离。回去的路上，你看着莱姆，心中不禁想到如果你当时放弃了它将会面临什么后果……你与莱姆的感情更好了。",
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "save_girl",
+            "text": "小女孩",
+            "effects": { "humanity": 10, "ammo": -5, "removePartner": "lime", "setFlag": "limeSacrificed" },
+            "resultText": "人命关天，你快速冲向小女孩并抱起了她。至于莱姆，你相信它能自己逃出来。可小女孩被你抱起后就没了哭声，你好奇地看了一眼，它竟诡异地盯着你，忽然张开了血盆大口。你来不及反应，好在莱姆飞扑过来，撞开了你怀中的小丧尸。你暗暗心惊，这丧尸怎么这么聪明！这在前一世从未遇到过。莱姆与小丧尸撕咬在一起，但逐渐不敌。你急忙补枪，终于解决了小丧尸，但莱姆也咽气了。这是你在两次末世中第一次流泪。你很自责。你安葬了莱姆，回到了避难所。",
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dawn_camp",
+    "title": "黎明者营地",
+    "nodes": [
+      {
+        "id": "hub",
+        "narrative": "由十多名幸存者在某个天台上组成的交易点，易守难攻。很多幸存者都会来此置换弹药或物资，甚至可以通过游戏赢得一些物资。你可以反复交易，选「回家」结束本次前往。",
+        "choices": [
+          {
+            "id": "supplies_to_ammo",
+            "text": "物资交换弹药（10:5）",
+            "resultText": "你拿出 10 点物资，换得 5 发弹药。",
+            "effects": { "supplies": -10, "ammo": 5 },
+            "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" }
+          },
+          {
+            "id": "ammo_to_supplies",
+            "text": "弹药交换物资（5:10）",
+            "resultText": "你拿出 5 发弹药，换得 10 点物资。",
+            "effects": { "ammo": -5, "supplies": 10 },
+            "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" }
+          },
+          {
+            "id": "dice_game",
+            "text": "「以大搏小」游戏",
+            "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "dice_intro" }
+          },
+          {
+            "id": "russian_roulette",
+            "text": "「我和你赌命！」",
+            "requirements": { "dayRange": [50, 100] },
+            "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "roulette_intro" }
+          },
+          { "id": "home", "text": "回家", "goto": { "type": "retryChoices" } }
+        ]
+      },
+      {
+        "id": "dice_intro",
+        "narrative": "玩法：押注最低 10 物资（须为 10 的倍数）。连续掷 4 次骰子。若无重复点数，获得押注的一半奖励并返还押注；若出现重复，扣除全部押注。",
+        "choices": [
+          { "id": "dice_bet_10", "text": "押注 10 物资", "minigame": "dice", "bet": 10, "cost": { "supplies": 10 }, "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } },
+          { "id": "dice_bet_20", "text": "押注 20 物资", "minigame": "dice", "bet": 20, "cost": { "supplies": 20 }, "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } },
+          { "id": "dice_bet_30", "text": "押注 30 物资", "minigame": "dice", "bet": 30, "cost": { "supplies": 30 }, "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } },
+          { "id": "dice_back", "text": "返回", "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } }
+        ]
+      },
+      {
+        "id": "roulette_intro",
+        "narrative": "双方各持一把左轮，弹夹内只有一发子弹。依次对自己开枪——若掷出 4 则命中，直接死亡且无法濒死跳过。若非活不下去，建议不要尝试。获胜奖励 100 物资；失败获得词条《我不是主角》。",
+        "choices": [
+          { "id": "roulette_play", "text": "扣下扳机", "minigame": "russian_roulette", "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } },
+          { "id": "roulette_back", "text": "算了，返回", "goto": { "type": "event", "eventId": "dawn_camp", "nodeId": "hub" } }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "day30_truth",
+    "title": "惊变三十天·真相调查",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "一个月，上一世的你物资紧缺，也死在了今天。你心中一直有颗怀疑的种子，你的「重生」到底是怎么回事。你决定去探索一番，调查真相。",
+        "choices": [
+          { "id": "cliff", "text": "前往悬崖（消耗弹药5）", "cost": { "ammo": 5 }, "goto": { "type": "event", "eventId": "day30_truth", "nodeId": "cliff_scene" } },
+          {
+            "id": "old_home",
+            "text": "前往上一世的家（消耗弹药3）",
+            "cost": { "ammo": 3 },
+            "resultText": "你回到上一世的家中，坑害你的三个亲人不可置信地看着你。在你心中疑惑之时，他们忽地向你发起攻击。你匆忙回应，用枪结果了三人。其中一人临亡前呢喃：「你不是……应该在……」你一头雾水，这一世为什么他们会突然对你动手。你在房间内调查了好久，并没有发现什么线索，但你带走了所有的物资。",
+            "effects": { "supplies": 25, "addTag": "复仇者" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "cliff_scene",
+        "narrative": "你驾车来到上一世跳崖的位置，发现有很多丧尸正在追赶一个人。你定睛一看那人居然是「你」。「你」绝望地看着尸群，随后跳下悬崖。你大声呐喊想要阻止，但「你」还是跳了下去。呐喊声吸引了一部分丧尸，你废了好大力气才解决掉它们，但后方的尸潮又即将涌来。看着跳崖的自己，你突然想到了什么……",
+        "choices": [
+          {
+            "id": "under_cliff",
+            "text": "躲避尸潮，前往悬崖下调查（消耗10物资）",
+            "cost": { "supplies": 10 },
+            "resultText": "你为了躲避尸潮，废了很大力气来到悬崖下方，但并没有发现你的尸体。按照正常逻辑来讲，这个「你」应该是回到丧尸爆发的 6 小时前了。这就是你之前所谓的「重生」。你在悬崖下方休息了一夜，等尸潮散去，才返回了庇护所。",
+            "effects": { "addTag": "穿越者" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "through_horde",
+            "text": "穿越尸潮，回上一世家中调查（消耗5弹药）",
+            "cost": { "ammo": 5 },
+            "resultText": "你冒险穿过尸潮，回到上一世的家中。坑害你的亲人不可置信地看着你，似乎不敢相信你还活着，话都没说便直接朝你动手。你怕错失线索，没有直接结果他们，而是用枪让他们失去了行动能力，而后逼问事情的经过。和上一世如出一辙——他们为了物资坑害你，引来了尸潮。他们认为你现在本应正在被尸潮追赶，十死无生，不知道为什么会突然出现在这里。你心中明悟：刚才见到的跳崖的「你」，现在应该是穿越回到丧尸爆发的 6 小时前了。这就是你之前所谓的「重生」。你还是结果了他们，给自己报了仇，并带走了所有的物资。",
+            "effects": { "supplies": 25, "addTags": ["复仇者", "穿越者"] },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "evelyn",
+    "title": "伊芙琳事件",
+    "nodes": [
+      {
+        "id": "mall",
+        "narrative": "你认为目前弹药充沛，实力足够，于是决定去最危险的商场探索物资。果然，你得到了大量的物资与药品。临走时，你不慎弄响了商场的警报器，大量丧尸被声音吸引。你飞速逃离，但商场内的另一处传来了枪响：一个女人被大群丧尸围在绝境。你知道，是因为你弄响警报器害的。",
+        "onEnterEffects": { "supplies": 30 },
+        "onEnterResultText": "你得到了大量的物资与药品。",
+        "choices": [
+          {
+            "id": "rescue",
+            "text": "前往营救",
+            "requirements": { "minAmmo": 1, "hideWhenUnmet": true },
+            "resultText": "你暗叹倒霉。但还是过去帮忙，刚搜刮的物资也遗失了不少。",
+            "effects": { "supplies": -10, "setFlag": "evelyn_rescued" },
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "rescue_zombies" }
+          },
+          {
+            "id": "ignore",
+            "text": "视而不见",
+            "branches": [
+              {
+                "when": { "minAmmo": 5 },
+                "resultText": "那女人注意到了你，见你准备逃离，把丧尸引到了你这面，你只好帮忙击杀丧尸。",
+                "effects": { "ammo": -5, "clearFlag": "evelyn_rescued" },
+                "goto": { "type": "event", "eventId": "evelyn", "nodeId": "after_rescue" }
+              },
+              {
+                "when": {},
+                "effects": { "nearDeath": true },
+                "resultText": "那女人注意到了你，见你准备逃离，把丧尸引到了你这面，随后自己逃离。“周末愉快。”临走时，她对你说道。你无力面对尸群，死在了这里。",
+                "goto": { "type": "nearDeath" }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rescue_zombies",
+        "narrative": "面前还有至少10只丧尸，你看了看自己的弹药，你决定帮助她击杀……（每只消耗1弹药，击杀后获得弹药=击杀数×2）",
+        "choices": [
+          {
+            "id": "kill_custom",
+            "text": "输入要击杀的丧尸数量",
+            "requirements": { "minAmmo": 1, "hideWhenUnmet": true },
+            "input": {
+              "type": "number",
+              "min": 1,
+              "max": 10,
+              "step": 1,
+              "defaultValue": 5,
+              "label": "击杀数量",
+              "submitText": "确认击杀",
+              "perUnitCost": { "ammo": 1 },
+              "perUnitEffects": { "ammo": 2 },
+              "resultTextTemplate": "「感谢帮忙。」解决了最后的 {{value}} 只丧尸后，女人给你扔过来几个弹夹，并感谢了你。（弹药+{{ammoDelta}}）"
+            },
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "after_rescue" }
+          },
+          {
+            "id": "retreat_no_ammo",
+            "text": "弹药用尽，拖着她强行突围",
+            "requirements": { "maxAmmo": 0, "hideWhenUnmet": true },
+            "resultText": "弹药已经见底，你只能护着那女人且战且退，勉强冲出包围圈。",
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "after_rescue" }
+          }
+        ]
+      },
+      {
+        "id": "after_rescue",
+        "narrative": "「感谢帮忙了。」商场安全区外，女人感谢道。\n你们交谈后得知，女人名叫伊芙琳，是一名流浪者，也就是开车到处搜刮物资，吃住全在车上的人。你见女人身手了得，于是……",
+        "choices": [
+          {
+            "id": "invite",
+            "text": "邀请成为伙伴",
+            "goto": { "type": "event", "eventId": "evelyn", "nodeId": "invite_talk" }
+          },
+          {
+            "id": "ask_gear",
+            "text": "问她要一些装备",
+            "resultText": "她很豪爽，大方的答应了你的请求，送了你一把自动步枪。「周末愉快。」临走时，伊芙琳和你打招呼，随后开着她的改装越野车扬长而去。你认为她是一个可靠的人，但总感觉不会再见面了。",
+            "effects": { "ammo": 20, "addTag": "错过的伙伴", "clearFlag": "evelyn_rescued" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "invite_talk",
+        "narrative": "「成为你的伙伴吗？这能为我带来什么好处?」",
+        "choices": [
+          {
+            "id": "equal",
+            "text": "没有人真的喜欢当一名流浪者。不是吗?",
+            "resultText": "「但也没人真的喜欢寄人篱下。不是吗?」伊芙琳反问。「我保证，我们的一切都是平等的。」你向伊芙琳承诺。伊芙琳犹豫了一会，点了点头。\n「希望我的直觉没出错，你是一个可靠的伙伴。」她同意了。",
+            "effects": { "addPartner": "evelyn", "supplies": 10, "ammo": 20, "clearFlag": "evelyn_rescued" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "protect",
+            "text": "我不会让你死在我前面（可能影响结局走向）",
+            "branches": [
+              {
+                "when": { "flags": ["evelyn_rescued"] },
+                "resultText": "伊芙琳诧异的看着你，显然没想到你能做出这么大的承诺。「那可一言为定了。」伊芙琳把物资交给你，与你一同回到庇护所。",
+                "effects": { "addPartner": "evelyn", "supplies": 10, "ammo": 20, "addTag": "承诺", "clearFlag": "evelyn_rescued" },
+                "goto": { "type": "nextDay" }
+              },
+              {
+                "when": {},
+                "resultText": "听你这么说，伊芙琳笑了：「可刚才如果不是我急中生智，可能就已经死在你前面了。」「刚才还不了解……」你尴尬补救。「算了吧。还是谢谢你，但我不喜欢与同伴勾心斗角，毕竟末世之下，同伴这个词也只是利益共同体，一但存在冲突，觉都睡不安稳。」伊芙琳说完便上车了。「周末愉快，再次感谢你的出手相助。」临走时，伊芙琳和你打招呼，随后开着她的改装越野车扬长而去。你认为她是一个可靠的人，但总感觉不会再见面了。",
+                "effects": { "addTag": "错过的伙伴", "clearFlag": "evelyn_rescued" },
+                "goto": { "type": "nextDay" }
+              }
+            ]
+          },
+          {
+            "id": "reborn_joke",
+            "text": "我是重生者",
+            "resultText": "「噗嗤！」你语出惊人，伊芙琳被你逗笑了。你无奈耸耸肩，表示你说的是事实。「还是算了吧，流浪的生活挺好的。」伊芙琳拒绝了你。「你不相信吗？」你不甘心的问。「我相信，但重生者这三个字，听起来就很危险，小说里的重生者，身边总会死掉一些配角。感觉我会成为其中之一呢！」伊芙琳说完，便上了车。「周末愉快，再次感谢你的出手相助。」临走时，伊芙琳和你打招呼，随后开着她的改装越野车扬长而去。你认为她是一个可靠的人，但总感觉不会再见面了。",
+            "effects": { "addTag": "错过的伙伴", "clearFlag": "evelyn_rescued" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "luna_day38",
+    "title": "惊变三十八天·军事基地",
+    "shelter": "bunker",
+    "noSuppliesCost": true,
+    "nodes": [
+      {
+        "id": "base",
+        "narrative": "这天你打算去不远处的军事基地探索，那里丧尸密布，但可能获得很多弹药。由于有些危险，露娜也同你一起前往。大部分丧尸都处于休眠状态，只需要小心翼翼的不发出声音，就没问题。你们在仓库里发现了一些子弹，甚至还有一颗手雷。（弹药+30）\n你们没注意到的角落，一只身体很小但嘴巴却异常巨大的丧尸不知何时惊醒。它用巨大的嘴巴发出了刺耳的尖叫声，响彻整个基地。“跑！”你当机立断，全力奔跑。基地内丧尸的密度很大，这一嗓子与尸潮无异。露娜速度没有你快，被你拉在了后面。再这样下去，迟早被丧尸追上。",
+        "choices": [
+          { "id": "cover_fire", "text": "开枪吸引火力，保护露娜（消耗20弹药）", "cost": { "ammo": 20 }, "goto": { "type": "event", "eventId": "luna_day38", "nodeId": "A" } },
+          { "id": "carry", "text": "抱着露娜逃跑（消耗10弹药）", "cost": { "ammo": 10 }, "goto": { "type": "event", "eventId": "luna_day38", "nodeId": "B" } },
+          {
+            "id": "abandon",
+            "text": "不管了",
+            "resultText": "你知道回去可能两个人都跑不掉，只好自顾自的继续撤离。你越过基地的铁丝网，到达了安全的位置后回头查看。露娜的生存意志很强，距离你也不算太远，但一只速度异常的丧尸逐渐逼近露娜。“露娜！快点！！加油！！”你着急呐喊，并用枪试图逼退丧尸。在距离你10米左右的范围时，露娜脸上露出了一丝放松。\n突然，后面一只丧尸像蜥蜴一样吐出超长的舌头，缠绕住露娜的脚踝。露娜摔倒，随后被向后拖拽。\n“露娜！！”你无力的嘶吼！\n“好好活着。”露娜勉强挤出一丝微笑，强装镇定的交代你。随后，被丧尸分食。",
+            "effects": { "humanity": -10, "ammo": -5, "removePartner": "luna", "addTag": "好好活着" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "A",
+        "narrative": "你停下逃跑的脚步，回头开枪。「快跑！我掩护你！」你大声朝露娜喊道。露娜也不矫情，没一会就超过了你。丧尸越聚越多，其中一只丧尸吐出了一条长长的舌头，缠绕住你的脚踝，你猝不及防，失去重心摔倒在地，你即将被丧尸围起来。「轰~」一颗手雷炸响，是露娜回来救你了。「今天真的差点栽在这里了。」你们劫后余生，回去的路上你不禁感叹。「尼奥，我们这也算同生共死了，对嘛？」露娜坐在副驾驶看着窗外那已经不能称为风景的「风景」。「当然了，露娜，多亏了你救了我。」你感激道。「尼奥，我想求你一件事情。」你知道露娜有些喜欢你，可能是要说一些奇怪的话，不由紧张起来。「什么事情?」「能不能把我和妈妈葬在一起，我想妈妈了。」你这才注意到，露娜的肩膀一直在流血，还有丧尸的咬痕。……",
+        "choices": [
+          {
+            "id": "promise_bury",
+            "text": "（答应合葬）",
+            "resultText": "“好……”",
+            "effects": { "humanity": 50, "removePartner": "luna", "addTag": "露娜和妈妈" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "narrative": "你抱起露娜，但想法过于天真了。你也只是勉强比丧尸快一点，更何况抱着一个人了，你们逐渐被丧尸追上。露娜焦急的说：「快放下我自己逃走，不然都走不了了！」",
+        "choices": [
+          {
+            "id": "drop",
+            "text": "放下露娜自己逃走",
+            "resultText": "你知道现在不是客气的时候了，不然都走不了，于是你放下了露娜。「露娜，对不起。」你内疚道。「从我和妈妈来到防空洞开始，你已经为我做了很多了。」露娜摸了摸你的脸庞。\n你不再理会，忍痛头也不回的逃走了。「尼奥，一直以来谢谢你。好好活着。」露娜看着你走远的身影，喃喃道。",
+            "effects": { "humanity": 10, "removePartner": "luna", "addTag": "好好活着" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "die_together",
+            "text": "要死一起死",
+            "resultText": "「要死一起死，我不会丢下你的。」你坚定的告诉露娜，并做好了赴死的准备。\n露娜见你如此坚定，眼角有些湿润。\n「尼奥，从相识到现在，你为我做的够多了。」随即摇了摇头用力的挣脱了你的怀抱。\n她不顾你的阻拦，跑向尸群的方向，拉开了刚搜到那颗手雷的保险栓。\n「轰！」巨大的爆炸声吸引了尸群的注意，你得以逃脱。「尼奥，我喜欢你。」你仿佛听到了露娜在你耳边低语。",
+            "effects": { "humanity": 30, "removePartner": "luna", "addTag": "露娜的低语" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "airdrop",
+    "title": "空投事件",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "你按照收音机播报的坐标位置，前往了物资投放处。这里聚集了大量的丧尸，有一只丧尸眼睛里甚至闪烁着红光。看来想把物资全部拿走可能不是特别容易。",
+        "choices": [
+          {
+            "id": "partial",
+            "text": "量力而行（消耗弹药10）",
+            "cost": { "ammo": 10 },
+            "branches": [
+              {
+                "when": { "partners": ["blake"] },
+                "resultText": "小命要紧。你谋定而动，快速的解决了几只丧尸后，在空投中摸了一些物资，随后从容逃离。没成想那只红色眼睛的丧尸居然喷射出一种粘液击中了你。你的皮肤快速被腐蚀。疼的你冷汗直冒。好在你没有被贪婪冲昏头脑。",
+                "effects": { "supplies": 30, "setFlag": "airdropCompleted" },
+                "goto": { "type": "event", "eventId": "airdrop", "nodeId": "blake_after_partial" }
+              },
+              {
+                "when": {},
+                "resultText": "小命要紧。你谋定而动，快速的解决了几只丧尸后，在空投中摸了一些物资，随后从容逃离。没成想那只红色眼睛的丧尸居然喷射出一种粘液击中了你。你的皮肤快速被腐蚀。疼的你冷汗直冒。好在你没有被贪婪冲昏头脑。",
+                "effects": { "supplies": 30, "setFlag": "airdropCompleted" },
+                "goto": { "type": "nextDay" }
+              }
+            ],
+            "hostNote": "若存在布莱克则触发照顾/背叛支线"
+          },
+          {
+            "id": "all_in",
+            "text": "不计后果，拿走全部（消耗弹药20）",
+            "cost": { "ammo": 20 },
+            "branches": [
+              {
+                "when": { "partners": ["blake"] },
+                "resultText": "撑死胆大的饿死胆小的，你直接开枪扫射，打算解决掉所有丧尸，没成想那只红色眼睛的丧尸居然喷射出一种粘液击中了你，你的皮肤快速被腐蚀，疼的你冷汗直冒。你不甘心，冒着死亡的风险把空投箱放在了车上，又是一阵枪声过后，你惊险逃离。但全身大面积的伤痕让你无法进行下一次的行动。",
+                "effects": { "supplies": 60, "skipNextDayActions": true, "setFlag": "airdropCompleted" },
+                "goto": { "type": "event", "eventId": "airdrop", "nodeId": "blake_after_all_in" }
+              },
+              {
+                "when": {},
+                "resultText": "撑死胆大的饿死胆小的，你直接开枪扫射，打算解决掉所有丧尸，没成想那只红色眼睛的丧尸居然喷射出一种粘液击中了你，你的皮肤快速被腐蚀，疼的你冷汗直冒。你不甘心，冒着死亡的风险把空投箱放在了车上，又是一阵枪声过后，你惊险逃离。但全身大面积的伤痕让你无法进行下一次的行动。",
+                "effects": { "supplies": 60, "skipNextDayActions": true, "setFlag": "airdropCompleted" },
+                "goto": { "type": "nextDay" }
+              }
+            ]
+          },
+          {
+            "id": "later",
+            "text": "改天再来",
+            "resultText": "你决定先放弃这批空投，重新进行本天其他选择。",
+            "goto": { "type": "retryChoices" }
+          }
+        ]
+      },
+      {
+        "id": "blake_after_partial",
+        "narrative": "回到家后，布莱克见你伤势严重，便打算主动照顾你。\n你决定……",
+        "choices": [
+          {
+            "id": "trust",
+            "text": "同意",
+            "branches": [
+              {
+                "when": { "humanityAbove": 50 },
+                "resultText": "你的确需要照顾。布莱克帮你上药，并主动揽下明天外出探索物资的任务。你感动不已，心想这小子并不是一无是处。上完药后你感到特别疲惫，没一会就睡着了。\n等你醒来，你发现伤势已经差不多痊愈了。你的身上有一张字条。“尼奥，你是一个善良的人。我本来想直接结果你，但你对我这么信任，我心软了。我拿走了一半的物资，也找好了新的庇护所，别墅留给你了。最后奉劝你：末世之下还是要多一些心机，不要当一个善良的圣母。愿你我接下来都能在末世活下去且再无相见之日。”",
+                "effects": { "humanity": 20, "suppliesHalve": true, "removePartner": "blake", "addTag": "布莱克" },
+                "goto": { "type": "nextDay" }
+              },
+              { "when": { "humanityBelow": 50 }, "effects": { "gameOver": true }, "resultText": "尼奥睡得很香，一直也没有醒过来。" }
+            ]
+          },
+          {
+            "id": "refuse",
+            "text": "拒绝",
+            "resultText": "你谢绝了布莱克的好意，心中感到奇怪，他怎么突然这么殷勤。于是有所防备。果然，晚上你的房门被悄悄打开了。布莱克拿着枪二话不说对着床上进行扫射，好在机敏的你提前躲在了衣柜。趁布莱克没回过神，你一枪击中了他的心脏。“尼奥，对不起。你善良地接纳了我，而我却背叛了你。没想到你一直对我有所防备，那为什么当初还要留下我呢？你真是一个矛盾的人。呵呵。”说完这些，布莱克咽气了。如果再一次重生，尼奥还会选择留下布莱克吗？应该不会了。",
+            "effects": { "removePartner": "blake", "addTag": "布莱克之死" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      },
+      {
+        "id": "blake_after_all_in",
+        "narrative": "碍于尼奥看起来很强大，布莱克“委曲求全”的与尼奥一同生活在别墅里。但布莱克一直在等机会，等一个可以杀死尼奥夺回本就属于自己的别墅的机会。终于，他在阳台上看着远处奄奄一息往家赶的尼奥，知道自己的机会来了。“砰！”一声枪响打破了山腰的宁静。尼奥不可置信的看着自己的肩膀处，又看向了阳台上的布莱克，急忙重新上车，驾车逃离。“可惜了，没能杀死他。”布莱克暗叹。等尼奥养好伤势，重新回到别墅时，布莱克与物资早已不见了踪影。",
+        "choices": [
+          {
+            "id": "auto_blake_leaves",
+            "text": "（自动）",
+            "effects": { "removePartner": "blake", "addTag": "布莱克", "setSupplies": 60 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "radio_airdrop_prompt",
+    "title": "收音机·空投坐标",
+    "nodes": [
+      {
+        "id": "broadcast",
+        "narrative": "滋滋，有关部门在坐标192.163处投放了物资空投。幸存者可前往获取，前往时请务必备好弹药。市民们请努力生存。约翰博士正在研发血清。",
+        "onEnterEffects": { "setFlag": "airdropBroadcastHeard" },
+        "choices": [
+          {
+            "id": "yes",
+            "text": "是（消耗10~20弹药）",
+            "specialEvent": true,
+            "goto": { "type": "event", "eventId": "airdrop" }
+          },
+          {
+            "id": "no",
+            "text": "否",
+            "goto": { "type": "retryChoices" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chris",
+    "title": "克里斯事件",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "「咚咚咚。」清早，庇护所的门被敲响了。你谨慎起来。拿着枪前往探查，门外是一个有些狼狈但很坚毅的男人。\n\n「有什么事吗?」你在门内询问。\n\n「你好兄弟，我叫克里斯。我在寻找我的妻子，但物资不够充足了。希望问你借20物资，我保证一定会加倍还给你。」外面的人虽然在乞求，但声音很从容冷静。",
+        "choices": [
+          {
+            "id": "refuse",
+            "text": "我这里不是慈善机构，请你快点离开",
+            "resultText": "「对不起，打扰了。」他说完便走了。",
+            "effects": { "humanity": -5, "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "lend",
+            "text": "好吧，给你（消耗20物资）",
+            "cost": { "supplies": 20 },
+            "branches": [
+              {
+                "when": { "flags": ["serena_dead"] },
+                "resultText": "第二天早上，克里斯面容憔悴的来到了你的庇护所，他归还了你的物资。「对不起，我没办法双倍给你了，我的妻子死了。」",
+                "effects": { "supplies": 20, "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+                "goto": { "type": "event", "eventId": "chris", "nodeId": "guilt" }
+              },
+              {
+                "when": { "flags": ["serena_invited"] },
+                "resultText": "第二天早上，克里斯带着你曾经在酒吧见过的瑟琳娜一起来到庇护所。你神色复杂的看着瑟琳娜：「你有一个遵守约定的丈夫。」瑟琳娜笑了：「也谢谢你，给我留下了足够等到他的物资。」「兄弟，谢谢你曾邀请过我妻子来你的庇护所，你是一个善良的人。」克里斯由衷的感谢。他们临走时，给你留下了60物资。",
+                "effects": { "supplies": 60, "addTag": "约定", "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+                "goto": { "type": "nextDay" }
+              },
+              {
+                "when": { "flags": ["serena_spared"] },
+                "resultText": "第二天早上，克里斯带着你曾经在酒吧见过的瑟琳娜一起来到庇护所。「兄弟，真不敢相信末世之下有你这样善良的人。」克里斯由衷的感谢。「谢谢你，不然我不可能活下来。」瑟琳娜也跟着感谢。「我不能让善良的人没有回报。」他们临走时，给你留下了60物资，20弹药。",
+                "effects": { "supplies": 60, "ammo": 20, "addTag": "约定", "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+                "goto": { "type": "nextDay" }
+              },
+              {
+                "when": { "flags": ["serena_alive"] },
+                "resultText": "第二天早上，克里斯带着你曾见过的瑟琳娜一起来到庇护所！克里斯很感激你当时给妻子留下了一些物资。「换做是我，可能会拿走全部物资的。」克里斯由衷的说。「谢谢你！」瑟琳娜也跟着感谢。他们临走时，给你留下了60物资，20弹药。",
+                "effects": { "supplies": 60, "ammo": 20, "addTag": "约定", "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+                "goto": { "type": "nextDay" }
+              },
+              {
+                "when": {},
+                "resultText": "「谢谢你，兄弟。我叫克里斯。我保证明早之前回来。」男人冷清的面容终于露出一丝笑意。第二天早上，克里斯带着一个女人又回到庇护所，并给你带来了40物资。",
+                "effects": { "supplies": 40, "closeExploreArea": "hope_bar", "setFlag": "chrisResolved" },
+                "goto": { "type": "nextDay" }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "guilt",
+        "narrative": "克里斯和你讲述了他与妻子的事迹，你心中有些愧疚，知道是你害死了瑟琳娜。",
+        "choices": [
+          {
+            "id": "confess",
+            "text": "如实告知瑟琳娜死因",
+            "resultText": "「对不起，我探索过希望酒吧，我抢走了瑟琳娜的物资。」你不忍心，道出了实情。克里斯面容不断变化，最终狰狞起来。「如果你说的是真的，那你就去死吧！」你与克里斯扭打在一起，最终他快你一步拔出枪，结果了你。",
+            "effects": { "nearDeath": true },
+            "goto": { "type": "nearDeath" }
+          },
+          {
+            "id": "silent",
+            "text": "沉默",
+            "resultText": "他自责地说：「都怪我没能遵守约定，被带去了外市。」「那就不打扰你了，还是谢谢你。」克里斯勉强的和你道了谢，随后渐行渐远。「喂，尼奥，如果瑟琳娜遇见你这么善良的人就好了。」克里斯由衷的说。",
+            "effects": { "humanity": -30, "addTag": "善良的人" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hero_camp",
+    "title": "英雄营地事件",
+    "nodes": [
+      {
+        "id": "meeting",
+        "narrative": "「幸存者们，你们好。我是英雄营地的领袖，卡尔。」你关心人类的未来，还是前往了英雄营地。「为了人类的未来，我想我们必须集结在一起。」卡尔在天台的太阳能板上激情的演讲。台下来了很多幸存者。「我在这里邀请大家，带着物资加入英雄营地，我们必须团结起来！！」你听懂了，他想吞并所有人。或许是为了人类着想，也或许为了自己。有一个幸存者不满：「卡尔，你自痴吧，凭什么把物资都给你，我走了。」「走可以，拿着物资加入我们，不然，就都别走了。」卡尔身旁来了几个拿着重机枪的壮汉。他们不演了，直接开始「打劫」。",
+        "choices": [
+          {
+            "id": "pay",
+            "text": "不惹闲事：上交10物资",
+            "resultText": "你不想理这几个在扮演英雄的强盗。给了物资走人了。",
+            "effects": { "humanity": 10, "supplies": -10 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "fight_fail",
+            "text": "联合火并（消耗5弹药）",
+            "cost": { "ammo": 5 },
+            "resultText": "你们失败了。他们的确有强大的能力，能叫你们来定然是防范了你们的反扑。现在没了筹码，他问你要了20物资才放你离开。",
+            "effects": { "supplies": -20 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "evelyn_snipe",
+            "text": "与伊芙琳反击（消耗5弹药，需要伊芙琳）",
+            "requirements": { "partners": ["evelyn"] },
+            "cost": { "ammo": 5 },
+            "resultText": "你早想到了这群混蛋可能有问题，于是叫伊芙琳在青鸟大厦旁的另外一座大厦狙击。你给了手势后，枪响了。伊芙琳一枪命中了卡尔的脑袋，你也与其他幸存者对强盗们展开反击。最后，他们全军覆没。你与其他幸存者分刮了他们的物资。",
+            "effects": { "ammo": 10, "supplies": 30 },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "full_assault",
+            "text": "全军出击（消耗10弹药，需要伊芙琳、莱姆）",
+            "requirements": { "partners": ["evelyn", "lime"] },
+            "cost": { "ammo": 10 },
+            "resultText": "有一些不同意的幸存者与英雄营地展开了冲突，你早想到了这群混蛋可能有问题，于是叫伊芙琳在青鸟大厦旁的另外一座大厦狙击。你给了手势后，枪响了。伊芙琳一枪命中了卡尔的脑袋。随你同往的莱姆也飞扑过去开始撕咬。随着末世的影响，莱姆的体型越来越大了。你们轻易的解决了敌人。并带走了所有物资。其他幸存者见你们实力强大。并不敢要求分赃。这个末世，你有一个强大的团队。",
+            "effects": { "ammo": 30, "supplies": 60 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "day80_john",
+    "title": "惊变八十天·救博士",
+    "nodes": [
+      {
+        "id": "with_evelyn",
+        "narrative": "你与伊芙琳一同前往科研基地，在很远处就能看见里面密密麻麻的丧尸，有一部分正在疯狂的攻击基地的金属门。基地位于南郊，本不应该存在如此数量的丧尸，不知为何会发生这种情况，感觉像是有组织的进攻一样。\n你引开了尸群，伊芙琳前往基地营救博士。计划顺利进行。伊芙琳与约翰抱着科研设备逃了出来。但在接应伊芙琳的时候，出现了问题。一只体型巨大的丧尸击中了二人，二人被击飞在你两侧，身受重伤，尸群也逐渐逼近。\n“别傻站着！快带着博士走！！”伊芙琳朝你大喊。你知道，你只能选择二人其中之一进行营救了。",
+        "choices": [
+          {
+            "id": "save_evelyn",
+            "text": "救伊芙琳",
+            "resultText": "你无法放弃你的伙伴伊芙琳，跑过去抱着她逃离了基地。至于约翰，则在绝望中被丧尸啃食殆尽。尸群仿佛对你们不感兴趣。约翰死后，大部分丧尸对你们停止了追逐，你与伊芙琳得以逃脱。“为什么救我！你明明可以带着约翰逃走的！！”伊芙琳对你怒吼，她早就做好了赴死的准备。“抱歉，我不是一个顾全大局的人，人类的命运或许很重要，但我无法看着伙伴牺牲在我眼前。”\n伊芙琳愣愣的看着你，一时间不知道说什么好。眼神里的愤怒稍减，多了一丝莫名的情绪。",
+            "effects": { "humanity": 10, "setFlag": "day80Resolved" },
+            "goto": { "type": "route", "routeId": "adam_eve" }
+          },
+          {
+            "id": "save_john",
+            "text": "救约翰",
+            "requirements": { "tagsNot": ["承诺"] },
+            "resultText": "你知道此行的目的，如果博士因此而死，伊芙琳也绝对不会接受，这关乎着全人类，只能放下个人情感。你忍痛跑向约翰，并带着他的设备一同逃跑，伊芙琳一直盯着你们，直到你与约翰上车，她才松了口气，放心的拉开了破片手雷的保险栓。\n“轰~”\n……",
+            "effects": { "removePartner": "evelyn", "addPartner": "john", "addTag": "伊芙琳", "setRoute": "savior", "setFlag": "day80Resolved" },
+            "goto": { "type": "event", "eventId": "savior_pre", "nodeId": "solo" }
+          },
+          {
+            "id": "promise",
+            "text": "我说过，我不会让你死在我前面",
+            "requirements": { "tags": ["承诺"], "hideWhenUnmet": true },
+            "resultText": "伊芙琳一时语塞，事已至此，她也没有什么更好的办法。\n“接下来怎么办?”伊芙琳问你。“像以前一样，一起生存，你和我。”你答。伊芙琳转头看向正在开车的你，眼神里没有了愤怒，多了一丝莫名的情绪。“恐怕不能完全和以前一样了。”",
+            "effects": { "humanity": 30, "setFlag": "day80Resolved" },
+            "goto": { "type": "route", "routeId": "adam_eve" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "savior_pre",
+    "title": "救世主结局前置",
+    "nodes": [
+      {
+        "id": "solo",
+        "narrative": "你独自前往科研基地，在很远处就能看见里面密密麻麻的丧尸，有一部分正在疯狂的攻击基地的金属门。基地位于南郊，本不应该存在如此数量的丧尸，不知为何会发生这种情况，感觉像是有组织的进攻一样。\n你拿出前些天搜刮到的无线音箱，把声音调到最大后播放了音乐，以此引开了尸群，而你则潜入基地展开营救。计划顺利进行，虽然与尸群缠斗很久，最终你还是带着博士和科研设备顺利逃离。",
+        "choices": [
+          {
+            "id": "bitten",
+            "text": "（继续）",
+            "resultText": "回去开车的路上，你发现腿部有一些痒，不知道什么时候你被丧尸咬中了。趁着还没产生变异，你把博士带回了庇护所，并与他说了你「重生」的经历。\n「尼奥，我会想办法救你的。」约翰博士抽取了你的血液，用作研究，并把你捆绑在庇护所。「你的身体里有一些奇怪的因子，这或许是你能『重生』的关键。」你逐渐听不清博士的声音，越来越虚弱，随后感觉自己的身体正在消散。",
+            "effects": { "addTag": "救世主", "setFlag": "day80Resolved" },
+            "branches": [
+              {
+                "when": { "tags": ["穿越者"] },
+                "effects": { "setRoute": "savior_zombie" },
+                "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "pre_6h" }
+              },
+              {
+                "when": {},
+                "effects": { "setRoute": "savior" },
+                "goto": { "type": "skipToDay", "day": 90 }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "savior_zombie_arc",
+    "title": "救世主线·穿越者因果",
+    "nodes": [
+      {
+        "id": "pre_6h",
+        "narrative": "惊变前6小时\n你模模糊糊的出现在街上，感觉好像又一次重生了。\n「呦，哥们， cos丧尸啊?」\n街上有一些路人正奇怪的盯着你，但你有点看不清他们，你打算过去求助……",
+        "choices": [
+          {
+            "id": "bite_a",
+            "text": "撕咬",
+            "resultText": "尼奥成为了丧尸，他心中早就有一种直觉，那就是他注定会成为丧尸。",
+            "effects": { "addTag": "丧尸尼奥" },
+            "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "day20" }
+          },
+          {
+            "id": "bite_b",
+            "text": "撕咬",
+            "resultText": "尼奥成为了丧尸，他心中早就有一种直觉，那就是他注定会成为丧尸。",
+            "effects": { "addTag": "丧尸尼奥" },
+            "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "day20" }
+          }
+        ]
+      },
+      {
+        "id": "day20",
+        "narrative": "惊变二十天\n身边的丧尸很多，但他们不会攻击你，你不知道怎么回事，身体好像有一些不听使唤，面前有一个惊恐的盯着你的幸存者，你决定：",
+        "choices": [
+          {
+            "id": "bite20_a",
+            "text": "撕咬",
+            "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "day60" }
+          },
+          {
+            "id": "bite20_b",
+            "text": "撕咬",
+            "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "day60" }
+          }
+        ]
+      },
+      {
+        "id": "day60",
+        "narrative": "惊变六十天\n你逐渐适应了新的身体，但思维还是模糊不清，身边的丧尸仿佛都有些惧怕你，你发现自己能够指挥他们，某天，你好像在街上看到了……自己。",
+        "choices": [
+          {
+            "id": "flee",
+            "text": "强忍住冲动，逃离此地",
+            "resultText": "你强忍住冲动，逃离了此地。",
+            "goto": { "type": "event", "eventId": "savior_zombie_arc", "nodeId": "day80_zombie" }
+          }
+        ]
+      },
+      {
+        "id": "day80_zombie",
+        "openingBranches": [
+          {
+            "when": { "partners": ["evelyn"] },
+            "openingText": "惊变八十天\n得去找约翰！他或许能救自己，你带着大量丧尸前往南郊的科研基地，你目睹了自己救走约翰，也又一次目睹了伊芙琳的死亡。"
+          },
+          {
+            "when": {},
+            "openingText": "惊变八十天\n得去找约翰！他或许能救自己，你带着大量丧尸前往南郊的科研基地，你目睹了自己救走约翰。"
+          }
+        ],
+        "narrative": "你思维虽然呆滞，但还记得庇护所的路，于是你又蹒跚地前往了庇护所。",
+        "choices": [
+          {
+            "id": "to_shelter",
+            "text": "（继续）",
+            "goto": { "type": "skipToDay", "day": 85 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "savior_day90",
+    "title": "惊变九十天·血清",
+    "nodes": [
+      {
+        "id": "wake",
+        "narrative": "你迷迷糊糊的睁开眼睛，约翰正看着你。\n「你醒了！你果然是特殊的存在。我用你的血液研制出了丧尸病毒血清！」约翰兴奋的和你说，随后又疑惑：「不过说来奇怪，十天前你尸变后，突然就消失了。五天后又突然出现在庇护所门外。你知道怎么回事吗?」",
+        "choices": [
+          {
+            "id": "confused",
+            "text": "我也不知道怎么回事。感觉做了一个很长的梦",
+            "effects": { "setFlag": "savior90Confused" },
+            "goto": { "type": "event", "eventId": "savior_day90", "nodeId": "after_answer" }
+          },
+          {
+            "id": "time_traveler",
+            "text": "坦白穿越者的真相",
+            "requirements": { "tags": ["穿越者"], "hideWhenUnmet": true },
+            "effects": { "addTags": ["因果", "异能"] },
+            "goto": { "type": "event", "eventId": "savior_day90", "nodeId": "after_answer" }
+          }
+        ]
+      },
+      {
+        "id": "after_answer",
+        "openingBranches": [
+          {
+            "when": { "tags": ["因果"] },
+            "openingText": "你苦笑。约翰想救的你或许早已回到末世爆发前成为第一只丧尸去了。\n「丧尸爆发的起因，或许我找到了。」\n随后你与约翰交代了你的所有记忆。约翰听完之后感叹道：「我在你的体内发现了异常的因子。这种因子不仅能制作出丧尸血清，更能带给你超出人类的能力，我称之为异能。原来，这末世竟因你而起。」"
+          },
+          {
+            "when": { "flags": ["savior90Confused"] },
+            "openingText": "你心中疑惑，但也不清楚到底怎么回事。"
+          }
+        ],
+        "choices": [
+          {
+            "id": "to_city",
+            "text": "（继续）",
+            "goto": { "type": "event", "eventId": "savior_day90", "nodeId": "city" }
+          }
+        ]
+      },
+      {
+        "id": "city",
+        "narrative": "虽然有了血清，但能制作的数量有限，你们决定召集所有幸存者，一起组建末世下第一个属于「人类」的城市。你带着博士去之前发现的超市里拿走了所有物资。约翰觉得庇护所的位置就足够优渥，可以以此延展，作为城市的地基。",
+        "onEnterEffects": { "supplies": 10000 },
+        "choices": [
+          {
+            "id": "wall_city",
+            "text": "高墙之内（别墅）",
+            "requirements": { "shelter": "villa", "hideWhenUnmet": true },
+            "resultText": "惊变100天，丧尸进化的越来越强大，甚至有一些已经具备了思考能力。围绕着这所四面环山的别墅，所有幸存者开始驻立一座十米高的城墙……尼奥在高墙外的大门上写了八个字：高墙之内，丧尸禁行",
+            "effects": { "addTag": "高墙之内" },
+            "goto": { "type": "finale" }
+          },
+          {
+            "id": "underground",
+            "text": "地底之城（防空洞）",
+            "requirements": { "shelter": "bunker", "hideWhenUnmet": true },
+            "resultText": "惊变100天，丧尸又一次发生了进化，甚至具备了思考能力。尼奥与约翰在防空洞召集所有幸存者聚集在此……人们相信，终有一天会再次见到阳光。",
+            "effects": { "addTag": "地底之城" },
+            "goto": { "type": "finale" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "adam_eve_85",
+    "title": "亚当夏娃·八十五天",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "约翰死了，你与伊芙琳开着卡车把超市里的物资全部搬回庇护所。接下来很久，或许你们都不会为食物而发愁了。",
+        "onEnterEffects": { "supplies": 10000 },
+        "choices": [
+          {
+            "id": "meal",
+            "text": "苟在家里，准备大餐犒劳（消耗10~100物资）",
+            "input": {
+              "type": "number",
+              "min": 10,
+              "max": 100,
+              "step": 5,
+              "defaultValue": 30,
+              "label": "消耗物资",
+              "submitText": "开始烹饪",
+              "perUnitCost": { "supplies": 1 },
+              "resultTextTemplate": "你们用 {{value}} 份物资准备了末世中真正意义上的第一顿大餐。"
+            },
+            "branches": [
+              {
+                "when": { "minInputValue": 50 },
+                "resultText": "超市的物资里有冷冻的海鲜、龙虾、螃蟹、鱼子酱，你毫不吝啬地做了一顿海鲜大餐。来庆祝上一次危机下的存活。饭后伊芙琳吃着水果，你举起酒杯与其碰撞：「敬我们！」"
+              },
+              {
+                "when": {},
+                "resultText": "你在家里准备烧烤。牛肉、猪肉、羊肉、各种蔬菜、甚至还有餐后水果。你毫不吝啬地准备出了末世中你们真正意义上的第一顿大餐。伊芙琳举起酒杯与你碰撞：「生存万岁！」"
+              }
+            ],
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "explore_gear",
+            "text": "外出探索，加固庇护所",
+            "resultText": "你们去各个营地用物资换了大量弹药，回来后加固了庇护所的防御。博士死了，你们接下来能依赖的就只有庇护所。为了打发时间，伊芙琳又拉着你去了商场，带回来很多图书、游戏机、电影光盘等消遣设施。「接下来，想办法活得精彩一些吧。」伊芙琳对你说道。",
+            "effects": { "ammo": 20 },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "adam_eve_90",
+    "title": "亚当夏娃·九十天",
+    "nodes": [
+      {
+        "id": "start",
+        "narrative": "你这几天都没有出门，而是与伊芙琳在家里放松，直到今天晚上，伊芙琳找到了你。「喂，尼奥，我不是一个委婉的人，我觉得我们的关系应该进一步了。」",
+        "choices": [
+          {
+            "id": "accept",
+            "text": "同意",
+            "resultText": "「伊芙琳，这话本来该我先说的，我也喜欢你，从在商场的相遇，我就觉得你是一个很可靠的人。」你诚恳地说。「那还说啥了。我亲你就完事了呗！」伊芙琳说完，便亲吻了你的脸颊。",
+            "effects": { "addTag": "恋人" },
+            "goto": { "type": "nextDay" }
+          },
+          {
+            "id": "refuse",
+            "text": "拒绝",
+            "resultText": "「喂，伙计，清醒点。」你拒绝了伊芙琳。「你这是拒绝我了吗?」伊芙琳直爽地想要问明白。「末世下，不要产生过多的情感，说不定哪天谁就突然死了。」你冷静地回答。「我明白了。」伊芙琳也没再回，自顾地回房间了。",
+            "effects": { "addTag": "末世生存守则" },
+            "goto": { "type": "nextDay" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "adam_eve_100",
+    "title": "亚当夏娃·100天",
+    "nodes": [
+      {
+        "id": "start",
+        "openingBranches": [
+          {
+            "when": { "partners": ["lime"] },
+            "openingText": "尼奥今天外出探索了，想给伊芙琳带回来一些小礼物，但回到庇护所就发现了不对，大门敞开。莱姆也一直在叫。尼奥急忙跑进去。"
+          },
+          { "when": {}, "openingText": "尼奥今天外出探索了，想给伊芙琳带回来一些小礼物，但回到庇护所就发现了不对，大门敞开。尼奥急忙跑进去。" }
+        ],
+        "narrative": "尼奥看到一只丧尸直挺挺地站在房间里，伊芙琳恐惧地看向尼奥：「这TM怎么回事！尼奥。」丧尸回过头看向尼奥，那丧尸正是尼奥自己，它张开嘴巴，仿佛在试图说话。「这是……必须……要做。」它吃力的说完这句话，便以极快的速度冲向尼奥，尼奥还没从震惊中回过神，便被它咬伤，伊芙琳朝它连开数枪，但没能阻止它逃走。尼奥奄奄一息，即将尸变。「照顾好……我们的家。」尼奥看着流泪的伊芙琳。说出了这句话后，尼奥失去了意识。「尼奥！！」伊芙琳伤心不已，但随即变成了惊恐。尼奥的尸体正在逐渐消失。",
+        "choices": [
+          {
+            "id": "finale_lover",
+            "text": "（真正的救世主）",
+            "requirements": { "tags": ["恋人"], "hideWhenUnmet": true },
+            "resultText": "惊变100天：伊芙琳发现自己有了身孕，她独自一人在庇护所，直到孩子诞生。她给孩子取名尼尔，尼尔三岁时，便能把手中的物品收进空间，甚至进行小范围的跃迁，伊芙琳知道，尼奥身上的秘密或许能在尼尔身上解开，而自己有了新的任务：打造救世主。",
+            "effects": { "addTag": "真正的救世主" },
+            "goto": { "type": "finale" }
+          },
+          {
+            "id": "finale_rules",
+            "text": "（尼奥与尼奥结局）",
+            "requirements": { "tags": ["末世生存守则"], "hideWhenUnmet": true },
+            "resultText": "惊变100天：尼奥成为丧尸已经一百天了。他逐渐开始有了思想。也明白成为丧尸是人类的一种进化，它将自己称为新人类。注定有一天，人类全部都会成为丧尸。为了让丧尸注定出现，于是他回到庇护所。在伊芙琳惊恐的目光中咬伤了还是人类的自己。",
+            "effects": { "addTags": ["尼奥与尼奥", "后来的伊芙琳"] },
+            "goto": { "type": "finale" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lone_wolf_100",
+    "title": "独狼·100天",
+    "nodes": [
+      {
+        "id": "fortress",
+        "openingBranches": [
+          {
+            "when": { "shelter": "villa", "partners": ["evelyn"] },
+            "openingText": "你利用海量物资，对它进行了彻底的改造。\n防御工程：你为别墅的防御系统进行了升级，别墅的制高点设置了瞭望哨，配备了高倍镜的步枪。门窗安装了自动喷火装置，只要有丧尸靠近，就会自动开启。\n衣食无忧：你将所有的食物都安放到了冷库中，现在你贮藏有大量补充维生素的果蔬，补充蛋白质的牛羊肉，以及应急时的方便食品。为了长期保存，你通过在图书馆拿到的食谱制作了大量的腌肉和咸菜。\n生活品质：你为自己打造了一个娱乐室，里面存放了在超市找到的书籍、游戏机、电影光盘。为了使自己生活不枯燥，你经常会去娱乐室消遣，享受属于人类的文明。\n现在的你已经有了绝对的防御，同时也能自给自足，除非必要，你绝不轻易下山，你的存在，对于外面那些幸存者来说，是一个遥不可及的传说。\n只是每当你坐在窗边，俯瞰窗外那个死寂的世界时，你总会想起那个曾经与你一同作战的女孩，你很想念她。你从此将庇护所改为伊芙琳堡垒，希望有朝一日她能回到这里。"
+          },
+          {
+            "when": { "shelter": "villa", "flags": ["limeSacrificed"] },
+            "openingText": "你利用海量物资，对它进行了彻底的改造。\n防御工程：你为别墅的防御系统进行了升级，别墅的制高点设置了瞭望哨，配备了高倍镜的步枪。门窗安装了自动喷火装置，只要有丧尸靠近，就会自动开启。\n衣食无忧：你将所有的食物都安放到了冷库中，现在你贮藏有大量补充维生素的果蔬，补充蛋白质的牛羊肉，以及应急时的方便食品。为了长期保存，你通过在图书馆拿到的食谱制作了大量的腌肉和咸菜。\n生活品质：你为自己打造了一个娱乐室，里面存放了在超市找到的书籍、游戏机、电影光盘。为了使自己生活不枯燥，你经常会去娱乐室消遣，享受属于人类的文明。\n现在的你已经有了绝对的防御，同时也能自给自足，除非必要，你绝不轻易下山，你的存在，对于外面那些幸存者来说，是一个遥不可及的传说。\n只是每当你坐在窗边，俯瞰窗外那个死寂的世界时，你总会想起那个曾为了救你而牺牲的小狗。它曾是你在末日中的精神寄托，你将庇护所命名为莱姆堡垒，以此纪念它。"
+          },
+          {
+            "when": { "shelter": "villa", "partners": ["lime"] },
+            "openingText": "你利用海量物资，对它进行了彻底的改造。\n防御工程：你为别墅的防御系统进行了升级，别墅的制高点设置了瞭望哨，配备了高倍镜的步枪。门窗安装了自动喷火装置，只要有丧尸靠近，就会自动开启。\n衣食无忧：你将所有的食物都安放到了冷库中，现在你贮藏有大量补充维生素的果蔬，补充蛋白质的牛羊肉，以及应急时的方便食品。为了长期保存，你通过在图书馆拿到的食谱制作了大量的腌肉和咸菜。\n生活品质：你为自己打造了一个娱乐室，里面存放了在超市找到的书籍、游戏机、电影光盘。为了使自己生活不枯燥，你经常会去娱乐室消遣，享受属于人类的文明。\n现在的你已经有了绝对的防御，同时也能自给自足，除非必要，你绝不轻易下山，你的存在，对于外面那些幸存者来说，是一个遥不可及的传说。\n末日之下，一直对你不离不弃的只有莱姆了。它对你是那样的忠诚，你将它视为你的精神寄托，并将庇护所命名为莱姆堡垒。"
+          },
+          {
+            "when": { "shelter": "villa" },
+            "openingText": "你利用海量物资，对它进行了彻底的改造。\n防御工程：你为别墅的防御系统进行了升级，别墅的制高点设置了瞭望哨，配备了高倍镜的步枪。门窗安装了自动喷火装置，只要有丧尸靠近，就会自动开启。\n衣食无忧：你将所有的食物都安放到了冷库中，现在你贮藏有大量补充维生素的果蔬，补充蛋白质的牛羊肉，以及应急时的方便食品。为了长期保存，你通过在图书馆拿到的食谱制作了大量的腌肉和咸菜。\n生活品质：你为自己打造了一个娱乐室，里面存放了在超市找到的书籍、游戏机、电影光盘。为了使自己生活不枯燥，你经常会去娱乐室消遣，享受属于人类的文明。\n现在的你已经有了绝对的防御，同时也能自给自足，除非必要，你绝不轻易下山，你的存在，对于外面那些幸存者来说，是一个遥不可及的传说。\n为了彰显自己在末日之下的生存能力，你将庇护所命名为尼奥堡垒。"
+          },
+          {
+            "when": { "shelter": "bunker", "partners": ["evelyn"] },
+            "openingText": "在获得海量物资后，你将它打造成了一个真正的地下王国。\n防御工程：你只保留了一个出入口，要想进入这个防空洞，需要通过数道带有密码的门以及巧妙的陷阱。你将通风口隐蔽了起来，外人难以发现，同时为了以防万一，你规划了紧急的逃生路线。\n自给自足：你在这里建立了一个规模特别大的培育室，利用无土栽培技术和LED灯，你种植了大量的蘑菇和蔬菜，同时你建立了更复杂的循环系统，处理废水和空气。将这里打造成了一个微型生态圈。再也不用依赖外界了。\n生活品质：地下防空洞的空间非常开阔，你将里面的空间规划的井井有条，区域分明，甚至为了身体着想，你还设置了运动区和健身区。同时为了保暖，你在内部设置了恒温装置。\n你将自己和外界安全的隔绝开来，每当外面下起灰色的雪，你都庆幸自己身处这个温暖，安全且充实的地下王国。\n只是每当你清点武器装备时，你总会想起那个曾经与你一同作战的女孩。你很想念她。你从此将庇护所改为伊芙琳基地，希望有朝一日她能回到这里。"
+          },
+          {
+            "when": { "shelter": "bunker", "partners": ["luna"] },
+            "openingText": "在获得海量物资后，你将它打造成了一个真正的地下王国。\n防御工程：你只保留了一个出入口，要想进入这个防空洞，需要通过数道带有密码的门以及巧妙的陷阱。你将通风口隐蔽了起来，外人难以发现，同时为了以防万一，你规划了紧急的逃生路线。\n自给自足：你在这里建立了一个规模特别大的培育室，利用无土栽培技术和LED灯，你种植了大量的蘑菇和蔬菜，同时你建立了更复杂的循环系统，处理废水和空气。将这里打造成了一个微型生态圈。再也不用依赖外界了。\n生活品质：地下防空洞的空间非常开阔，你将里面的空间规划的井井有条，区域分明，甚至为了身体着想，你还设置了运动区和健身区。同时为了保暖，你在内部设置了恒温装置。\n你将自己和外界安全的隔绝开来，每当外面下起灰色的雪，你都庆幸自己身处这个温暖，安全且充实的地下王国。\n只是每当你独自享用蘑菇时，你总会想起那个曾经救你牺牲掉自己的女孩。为了纪念她，你将庇护所命名为露娜基地。"
+          },
+          {
+            "when": { "shelter": "bunker", "flags": ["limeSacrificed"] },
+            "openingText": "在获得海量物资后，你将它打造成了一个真正的地下王国。\n防御工程：你只保留了一个出入口，要想进入这个防空洞，需要通过数道带有密码的门以及巧妙的陷阱。你将通风口隐蔽了起来，外人难以发现，同时为了以防万一，你规划了紧急的逃生路线。\n自给自足：你在这里建立了一个规模特别大的培育室，利用无土栽培技术和LED灯，你种植了大量的蘑菇和蔬菜，同时你建立了更复杂的循环系统，处理废水和空气。将这里打造成了一个微型生态圈。再也不用依赖外界了。\n生活品质：地下防空洞的空间非常开阔，你将里面的空间规划的井井有条，区域分明，甚至为了身体着想，你还设置了运动区和健身区。同时为了保暖，你在内部设置了恒温装置。\n你将自己和外界安全的隔绝开来，每当外面下起灰色的雪，你都庆幸自己身处这个温暖，安全且充实的地下王国。\n只是你总会想起那个曾为了救你而牺牲的小狗，它曾是你在末日中的精神寄托。你将庇护所命名为莱姆基地，以此纪念它。"
+          },
+          {
+            "when": { "shelter": "bunker", "partners": ["lime"] },
+            "openingText": "在获得海量物资后，你将它打造成了一个真正的地下王国。\n防御工程：你只保留了一个出入口，要想进入这个防空洞，需要通过数道带有密码的门以及巧妙的陷阱。你将通风口隐蔽了起来，外人难以发现，同时为了以防万一，你规划了紧急的逃生路线。\n自给自足：你在这里建立了一个规模特别大的培育室，利用无土栽培技术和LED灯，你种植了大量的蘑菇和蔬菜，同时你建立了更复杂的循环系统，处理废水和空气。将这里打造成了一个微型生态圈。再也不用依赖外界了。\n生活品质：地下防空洞的空间非常开阔，你将里面的空间规划的井井有条，区域分明，甚至为了身体着想，你还设置了运动区和健身区。同时为了保暖，你在内部设置了恒温装置。\n你将自己和外界安全的隔绝开来，每当外面下起灰色的雪，你都庆幸自己身处这个温暖，安全且充实的地下王国。\n末日之下，一直对你不离不弃的只有莱姆了。它对你是那样的忠诚。你将它视为你的精神寄托，并将庇护所命名为莱姆基地。"
+          },
+          {
+            "when": { "shelter": "bunker" },
+            "openingText": "在获得海量物资后，你将它打造成了一个真正的地下王国。\n防御工程：你只保留了一个出入口，要想进入这个防空洞，需要通过数道带有密码的门以及巧妙的陷阱。你将通风口隐蔽了起来，外人难以发现，同时为了以防万一，你规划了紧急的逃生路线。\n自给自足：你在这里建立了一个规模特别大的培育室，利用无土栽培技术和LED灯，你种植了大量的蘑菇和蔬菜，同时你建立了更复杂的循环系统，处理废水和空气。将这里打造成了一个微型生态圈。再也不用依赖外界了。\n生活品质：地下防空洞的空间非常开阔，你将里面的空间规划的井井有条，区域分明，甚至为了身体着想，你还设置了运动区和健身区。同时为了保暖，你在内部设置了恒温装置。\n你将自己和外界安全的隔绝开来，每当外面下起灰色的雪，你都庆幸自己身处这个温暖，安全且充实的地下王国。为了彰显自己在末日之下的生存能力，你将庇护所命名为尼奥基地。"
+          }
+        ],
+        "narrative": "你已经适应了独自生存，相信自己已经战胜了末日。\n直到那个下午。\n有一只丧尸径直走向了你的庇护所大门。你感到十分的诧异，门口的警报器居然没有触发。只有一种解释，这只丧尸知道密码，并输入了！",
+        "choices": [
+          {
+            "id": "fortress_tag",
+            "text": "（继续）",
+            "branches": [
+              {
+                "when": { "shelter": "villa" },
+                "effects": { "addTag": "孤独堡垒" },
+                "goto": { "type": "event", "eventId": "lone_wolf_100", "nodeId": "death" }
+              },
+              {
+                "when": { "shelter": "bunker" },
+                "effects": { "addTag": "地下王国" },
+                "goto": { "type": "event", "eventId": "lone_wolf_100", "nodeId": "death" }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "death",
+        "narrative": "它没有向其他丧尸那样无意识的徘徊或冲撞，好像它是有明确目的一般找上了你。它的脸上覆盖着一块肮脏的破布，将它的容貌完全隐藏。你开枪驱逐他，可他并没有倒下或逃离。你听到它吃力的发出了两个模糊不清的字“因……果……”还没等你反应过来，它竟快速的冲了过来袭击了你。你倒了下去，视线开始变得模糊，最后看到的是那个仿佛完成使命般转身离去的身影。你感觉到你的身影开始逐渐消失……",
+        "choices": [
+          {
+            "id": "end",
+            "text": "（结局）",
+            "resultText": "惊变100天。这一世，尼奥处心积虑的活着。但他还是走向死亡。在解脱那一刻，尼奥有一种感觉。这一切，冥冥之中好像是注定的。但他有好多不明白，自己在这末世之下，到底在扮演什么角色?",
+            "effects": { "addTag": "尼奥之死" },
+            "goto": { "type": "finale" }
+          }
+        ]
+      }
+    ]
+  }
+]

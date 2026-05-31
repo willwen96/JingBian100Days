@@ -1,0 +1,86 @@
+{
+  "title": "末世爆发前",
+  "days": [
+    {
+      "phase": "pre_5h",
+      "title": "末世爆发前5小时",
+      "openingText": "时间紧迫，不足以囤积大量物资。由于你有着前世的记忆，你决定优先找一处带着物资的庇护所。你记得有两处相对安全的地点，请选择其中一处：",
+      "choices": [
+        {
+          "id": "shelter_villa",
+          "text": "山中别墅",
+          "resultText": "这个别墅是一位富豪为应对紧急情况打造的末世堡垒，四面环山，别墅内配有发电机、冷库、过滤系统、水循环系统，环境舒适且温暖，外墙上也安装了电力防护系统，院子内还有一台改装过的越野车，实为末世绝佳之选。别墅的冷库内有着足以生存一段时间的物资，和一把手枪。",
+          "effects": { "supplies": 50, "ammo": 5 },
+          "goto": { "type": "event", "eventId": "pre_outbreak", "nodeId": "phase_2h" },
+          "branches": [{ "when": {}, "effects": { "setShelter": "villa" } }]
+        },
+        {
+          "id": "shelter_bunker",
+          "text": "城郊的防空洞",
+          "resultText": "你选择了防空洞，里面环境虽然不算好，但应对末世的确是明智之举。防空洞外部全由水泥浇筑，内部有电力与新风系统、净水器，并配备防毒通道与防弹改装车。洞口隐蔽且配备金属密码门。你意外在仓库里发现了一些冷藏食物和一把老式左轮手枪。",
+          "effects": { "supplies": 40, "ammo": 10 },
+          "goto": { "type": "event", "eventId": "pre_outbreak", "nodeId": "phase_2h" },
+          "branches": [{ "when": {}, "effects": { "setShelter": "bunker" } }]
+        }
+      ]
+    },
+    {
+      "phase": "pre_2h",
+      "title": "末世爆发还有2小时",
+      "openingText": "你决定再做一些准备……",
+      "choices": [
+        {
+          "id": "stock_food",
+          "text": "继续囤积食物",
+          "resultText": "你购买了大量易贮藏蔬菜、方便面、压缩饼干、牛肉与水果，全部放进冷库。这些食物至少足够你在末世生存很久。",
+          "effects": { "supplies": 70 },
+          "goto": { "type": "event", "eventId": "pre_outbreak", "nodeId": "phase_outbreak" }
+        },
+        {
+          "id": "stock_medicine",
+          "text": "购买一些药品",
+          "resultText": "你购买了各种药物与微量元素、维生素，甚至搞来了一针肾上腺素。这东西关键时刻能救你的命。",
+          "effects": { "supplies": 40, "addItem": "肾上腺素" },
+          "goto": { "type": "event", "eventId": "pre_outbreak", "nodeId": "phase_outbreak" },
+          "hostNote": "肾上腺素：使用后，下一次选择免疫所有消耗。"
+        },
+        {
+          "id": "stock_weapons",
+          "text": "购买一些武器",
+          "resultText": "你在黑市上购买了一把猎枪和大量弹药。你始终认为，拳头才是硬道理。",
+          "effects": { "ammo": 15 },
+          "goto": { "type": "event", "eventId": "pre_outbreak", "nodeId": "phase_outbreak" }
+        }
+      ]
+    },
+    {
+      "phase": "outbreak_mall",
+      "title": "商场遇丧尸与受伤的狗",
+      "openingText": "你打算继续囤积必备品时，商场里传来惨叫。几只丧尸正在啃咬路人。你知道末世爆发了。你急忙开车赶回庇护所。街道上乱作一团。你走神时撞到了一只带着项圈、无法行走的狗。",
+      "choices": [
+        {
+          "id": "save_dog",
+          "text": "带回庇护所救治（需解决几只靠近的丧尸）",
+          "cost": { "ammo": 3 },
+          "resultText": "你回到庇护所后救治了狗狗，并给它起名莱姆，它将是你末世中最值得信任的伙伴。",
+          "effects": { "humanity": 10, "addPartner": "lime" },
+          "goto": { "type": "day", "day": 1 }
+        },
+        {
+          "id": "ignore_dog",
+          "text": "无视它",
+          "resultText": "或许在平时你会找宠物医院救治它，但身处末世，莫名的仁慈就是对自己的残忍。",
+          "effects": { "humanity": -5 },
+          "goto": { "type": "day", "day": 1 }
+        },
+        {
+          "id": "dog_to_supplies",
+          "text": "转化为10点物资",
+          "resultText": "末世到来，我不吃它，它也活不了。这不是狗，这是储备粮……在它可怜的眼神中结束了它的痛苦。",
+          "effects": { "supplies": 10, "humanity": -30 },
+          "goto": { "type": "day", "day": 1 }
+        }
+      ]
+    }
+  ]
+}

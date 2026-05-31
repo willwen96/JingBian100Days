@@ -1,0 +1,72 @@
+{
+  "routes": [
+    {
+      "id": "savior",
+      "name": "救世主线",
+      "description": "营救约翰博士，独自或牺牲伊芙琳",
+      "milestones": [
+        { "day": 80, "event": "day80_john", "branch": "solo_or_save_john" },
+        { "day": null, "endingId": "savior_pre", "title": "救世主结局前置" },
+        { "day": null, "endingId": "savior", "title": "救世主结局", "tagsGranted": ["救世主"], "score": 300 }
+      ],
+      "zombie_branch": {
+        "requiresTag": "穿越者",
+        "days": [
+          { "phase": "pre_6h", "choices": ["撕咬", "撕咬"], "tag": "丧尸尼奥", "score": 150 },
+          { "day": 20, "note": "撕咬或撕咬" },
+          { "day": 60, "note": "撕咬或撕咬，可逃离" },
+          { "day": 80, "note": "带丧尸找约翰" },
+          { "day": 85, "note": "忍住不咬约翰" },
+          { "day": 90, "choices": ["不知道", "穿越者专属因果线"], "tags": ["因果", "异能"] }
+        ],
+        "finale_choices": [
+          { "id": "wall_city", "text": "高墙之内（别墅）", "tag": "高墙之内", "score": 2, "isFinale": true },
+          { "id": "underground", "text": "地底之城（防空洞）", "tag": "地底之城", "score": 2, "isFinale": true }
+        ]
+      }
+    },
+    {
+      "id": "adam_eve",
+      "name": "亚当夏娃线",
+      "description": "第80天救伊芙琳或兑现承诺",
+      "milestones": [
+        { "day": 85, "suppliesCost": 20, "effects": { "supplies": 10000 }, "note": "约翰已死，搬空超市" },
+        { "day": 90, "choices": [
+          { "text": "同意", "tag": "恋人", "score": 300, "finaleBranch": "lover" },
+          { "text": "拒绝", "tag": "末世生存守则", "score": 200, "finaleBranch": "rules" }
+        ]},
+        { "day": 100, "finale": [
+          { "requiresTag": "恋人", "tag": "真正的救世主", "score": 1.7, "isFinale": true },
+          { "requiresTag": "末世生存守则", "tags": ["尼奥与尼奥", "后来的伊芙琳"], "scores": [1.5, 400], "isFinale": true }
+        ]}
+      ]
+    },
+    {
+      "id": "lone_wolf",
+      "name": "独狼线",
+      "description": "不救约翰，搬空超市",
+      "milestones": [
+        { "effects": { "supplies": 10000 } },
+        { "finale": [
+          { "shelter": "villa", "tag": "孤独堡垒", "score": 500, "namingPriority": ["evelyn", "lime"] },
+          { "shelter": "bunker", "tag": "地下王国", "score": 500, "namingPriority": ["evelyn", "luna", "lime"] }
+        ]},
+        { "day": 100, "tag": "尼奥之死", "score": 1.2, "isFinale": true }
+      ]
+    }
+  ],
+  "narratives": {
+    "savior_pre": "你独自潜入科研基地，引开尸群救出博士。回程发现腿被咬伤……",
+    "savior": "博士抽取你的血液研究「重生」因子。你逐渐消散……",
+    "wall_city": "别墅四周筑起高墙，人类城市崛起……",
+    "underground": "防空洞扩建为地底之城……",
+    "adam_eve_85_meal": "大餐分支：消耗物资10-100，50以下烧烤，50以上海鲜",
+    "lone_wolf_villa": "尼奥堡垒/伊芙琳堡垒/莱姆堡垒——按伙伴优先级命名",
+    "lone_wolf_bunker": "尼奥基地/伊芙琳基地/露娜基地/莱姆基地",
+    "neo_death": "丧尸输入密码进入，袭击后身影消散……"
+  },
+  "gameOver": {
+    "supplies_zero": "物资为0",
+    "tag_尽头": { "condition": "无法濒死复活", "score": -300 }
+  }
+}

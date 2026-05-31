@@ -1,0 +1,114 @@
+{
+  "_comment": "引擎规则配置。带 null 的 template 字段请对照《判定与结局评分》补全。",
+  "version": 1,
+  "demo": {
+    "maxDay": 100
+  },
+  "stats": {
+    "humanityInitial": 50,
+    "humanityMin": null,
+    "humanityMax": null,
+    "ammoMinimum": 0,
+    "gameOverWhenSuppliesAtOrBelow": 0
+  },
+  "daySuppliesCost": {
+    "chargeOn": "enterDay",
+    "description": "开启新一天时扣除。优先使用 days.json 中该天的 suppliesCost；若无则用 fallbackTiers。",
+    "useDayDefinitionWhenPresent": true,
+    "fallbackTiers": [
+      { "fromDay": 2, "toDay": 9, "base": 5 },
+      { "fromDay": 10, "toDay": 49, "base": 15 },
+      { "fromDay": 50, "toDay": 99, "base": 20 }
+    ],
+    "partnerSuppliesPerDay": {
+      "lime": 0,
+      "blake": 10,
+      "luna": 5,
+      "evelyn": 10,
+      "john": 0,
+      "baby": 5
+    },
+    "itemModifiers": [
+      {
+        "item": "供暖装置",
+        "suppliesPerDay": -5,
+        "note": "加固庇护所后获得，之后每天物资消耗-5"
+      }
+    ],
+    "accumulateEffectField": "suppliesCostModifier"
+  },
+  "nearDeath": {
+    "suppliesCost": 30,
+    "description": "濒死：消耗30物资跳过本天，进入下一天",
+    "triggers": ["choiceEffect", "insufficientDayCost"]
+  },
+  "companionToSupplies": {
+    "enabled": true,
+    "triggerWhen": "insufficientDayCost",
+    "description": "物资不足开启下一天时，停留在「当前天数的夜晚」触发前夜事件（例：无法开启第35天 → 惊变第34天前夜）。详见 companion-convert.json。",
+    "priorityBeforeNearDeath": true,
+    "dataFile": "companion-convert.json",
+    "ineligiblePartners": ["baby", "john"],
+    "limeBlockedByTags": ["伙伴"]
+  },
+  "items": {
+    "肾上腺素": {
+      "effect": "immuneNextChoiceCost",
+      "consumeOnUse": true,
+      "description": "背包中有肾上腺素时，下一次有弹药/物资消耗的选择免费并消耗该物品；无消耗选项不触发"
+    }
+  },
+  "tags": {
+    "notifyPlayerNameOnly": true,
+    "revealFlavorOnSettlement": true,
+    "autoGrant": [
+      {
+        "tagId": "尽头",
+        "when": "gameOverInsufficientSupplies",
+        "scoreFromTagsJson": true
+      },
+      {
+        "tagId": "人性的光芒",
+        "when": "neverChoseConvertToSupplies",
+        "requiresSurvival": true,
+        "scoreFromTagsJson": true
+      },
+      {
+        "tagId": "末世之王",
+        "when": "exploreEventCountGte",
+        "value": 7,
+        "scoreFromTagsJson": true
+      }
+    ]
+  },
+  "tracking": {
+    "convertToSupplies": {
+      "description": "用于自动判定词条《人性的光芒》",
+      "choiceTextKeywords": ["转化为", "转化物资"],
+      "effectFlags": ["addTagSilentIfDuplicate"]
+    }
+  },
+  "flags": {
+    "skipNextDayActions": {
+      "description": "空投重伤等：下一整天的日常选项不可用",
+      "clearOn": "enterDay"
+    }
+  },
+  "explore": {
+    "countRandomExploreFor末世之王": true,
+    "description": "每完成一次外出探索区域（含选区返回）计 1 次"
+  },
+  "radioBroadcasts": {
+    "radio_listen": {
+      "resultText": "请人们保护好自己的安全，不要外出！！若打算外出，尽可能随时保留10颗以上的弹药，以防万一。约翰博士正在想办法制造丧尸病毒血清。请大家注意收听收音机，了解最新动态。"
+    },
+    "radio_airdrop": {
+      "resultText": "滋滋，有关部门在坐标192.163处投放了物资空投。幸存者可前往获取，前往时请务必备好弹药。市民们请努力生存。约翰博士正在研发血清。",
+      "dayRange": [35, 45]
+    }
+  },
+  "hostReminders": [
+    { "fromDay": 75, "message": "尽量保留三十颗以上的弹药" },
+    { "fromDay": 80, "message": "接下来的选择影响着结局" }
+  ]
+}
