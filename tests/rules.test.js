@@ -104,4 +104,15 @@ describe('GameRules', () => {
     rules.clampStats(state);
     expect(state.stats.supplies).toBe(0);
   });
+
+  it('waives all day entry costs when day suppliesCost is explicitly zero', () => {
+    const day38 = fixture.days.find((d) => d.day === 38);
+    const result = rules.calculateDaySuppliesCost(
+      38,
+      createState({ partners: ['luna', 'blake'] }),
+      day38
+    );
+    expect(result.total).toBe(0);
+    expect(result.breakdown[0].note).toBe('不消耗物资');
+  });
 });

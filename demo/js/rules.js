@@ -18,6 +18,14 @@ export class GameRules {
 
   /** 计算进入某天时的物资消耗明细 */
   calculateDaySuppliesCost(day, state, dayDef) {
+    // days.json 中 suppliesCost: 0 表示整天开启不扣物资（含伙伴日耗），如第38天手册
+    if (dayDef?.suppliesCost === 0) {
+      return {
+        total: 0,
+        breakdown: [{ label: `第 ${day} 天`, amount: 0, note: '不消耗物资' }],
+      };
+    }
+
     const breakdown = [];
     let total = 0;
 
@@ -25,8 +33,6 @@ export class GameRules {
     if (base > 0) {
       breakdown.push({ label: `第 ${day} 天基础消耗`, amount: base });
       total += base;
-    } else if (base === 0 && dayDef?.suppliesCost === 0) {
-      breakdown.push({ label: `第 ${day} 天`, amount: 0, note: '不消耗物资' });
     }
 
     const partnerCfg = this.config.daySuppliesCost?.partnerSuppliesPerDay ?? {};

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { GameEngine } from '../demo/js/engine.js';
+import { GameRules } from '../demo/js/rules.js';
 import { loadFixtureData } from './helpers/load-data.js';
 
 const fixture = await loadFixtureData();
@@ -554,6 +555,57 @@ describe('GameEngine', () => {
 
     const villaIds = villa.getView().choices.map((choice) => choice.id);
     expect(villaIds).toEqual(['stay_peaceful_villa']);
+  });
+
+  it('entering day 38 costs no supplies even with partners (handbook: 不消耗物资)', () => {
+    const rules = new GameRules(fixture.rules, fixture.partners);
+    const day38 = fixture.days.find((d) => d.day === 38);
+
+    const withLuna = {
+      day: 37,
+      stats: { humanity: 50, supplies: 100, ammo: 20 },
+      partners: ['luna'],
+      items: [],
+      suppliesCostModifier: 0,
+    };
+    expect(rules.calculateDaySuppliesCost(38, withLuna, day38).total).toBe(0);
+
+    const bunkerBlake = { ...withLuna, partners: ['blake'] };
+    expect(rules.calculateDaySuppliesCost(38, bunkerBlake, day38).total).toBe(0);
+
+    const villaEvelyn = {
+      ...withLuna,
+      partners: ['evelyn', 'lime'],
+      shelter: 'villa',
+    };
+    expect(rules.calculateDaySuppliesCost(38, villaEvelyn, day38).total).toBe(0);
+
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 37;
+    engine.state.shelter = 'bunker';
+    engine.state.partners = ['luna'];
+    engine.state.stats.supplies = 100;
+    engine._advanceDay();
+    expect(engine.state.day).toBe(38);
+    expect(engine.state.stats.supplies).toBe(100);
+  });
+
+  it('starting evelyn from day explore shows mall onEnter supplies in scene outcome', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 35;
+    engine.state.shelter = 'bunker';
+    engine.state.stats.supplies = 50;
+    engine.state.stats.ammo = 20;
+
+    engine.pickChoice('explore');
+
+    expect(engine.state.event?.id).toBe('evelyn');
+    expect(engine.state.stats.supplies).toBe(80);
+    const view = engine.getView();
+    expect(view.sceneOutcome?.effects).toContain('物资 +30');
+    expect(view.sceneOutcome?.text).toContain('物资');
   });
 
   it('applies day 35 handbook onEnter when player already has a radio', () => {

@@ -344,7 +344,8 @@ export class GameEngine {
     });
     if (area.onEnterEffects || area.onEnterResultText) {
       const summary = area.onEnterEffects ? this._applyEffects(area.onEnterEffects) : null;
-      this._setSceneOutcome(area.name || '探索', area.onEnterResultText, summary);
+      const sceneText = this._formatSceneOnEnterText(area.onEnterResultText);
+      this._setSceneOutcome(area.name || '探索', sceneText, summary);
       const last = this.state.choiceLog[this.state.choiceLog.length - 1];
       if (last) last.effects = summary;
     } else {
@@ -1060,6 +1061,10 @@ export class GameEngine {
     return null;
   }
 
+  _formatSceneOnEnterText(resultText) {
+    return resultText?.trim() || null;
+  }
+
   _formatOutcomeMessage(resultText, effectSummary) {
     const parts = [];
     if (resultText?.trim()) parts.push(resultText.trim());
@@ -1433,7 +1438,8 @@ export class GameEngine {
 
     if (node?.onEnterEffects || node?.onEnterResultText) {
       const summary = node.onEnterEffects ? this._applyEffects(node.onEnterEffects) : null;
-      this._setSceneOutcome(ev?.title || '事件', node.onEnterResultText || null, summary);
+      const sceneText = this._formatSceneOnEnterText(node.onEnterResultText);
+      this._setSceneOutcome(ev?.title || '事件', sceneText, summary);
     } else if (!preserveChoice || sameEvent) {
       this._clearSceneOutcome();
     }
@@ -1528,7 +1534,8 @@ export class GameEngine {
 
     const summary = effects ? this._applyEffects(effects) : null;
     const label = dayDef.title || (this.state.day > 0 ? `第 ${this.state.day} 天` : '新的一天');
-    this._setSceneOutcome(label, resultText || null, summary);
+    const sceneText = this._formatSceneOnEnterText(resultText);
+    this._setSceneOutcome(label, sceneText, summary);
   }
 
   _enterDayAfterCost(day, options = {}) {
