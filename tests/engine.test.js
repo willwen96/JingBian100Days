@@ -237,15 +237,28 @@ describe('GameEngine', () => {
     expect(engine.state.lastChoiceOutcome?.text).toContain('最后的 4 只丧尸');
   });
 
-  it('hides evelyn rescue when the player has no ammo', () => {
+  it('allows evelyn rescue at mall with no ammo and uses retreat_no_ammo at rescue_zombies', () => {
     const engine = createEngine();
     engine.state.mode = 'event';
     engine.state.event = { id: 'evelyn', nodeId: 'mall' };
     engine.state.stats.ammo = 0;
+    engine.state.stats.supplies = 50;
 
-    const ids = engine.getView().choices.map((choice) => choice.id);
-    expect(ids).not.toContain('rescue');
-    expect(engine.pickChoice('rescue').error).toContain('弹药');
+    const mallChoices = engine.getView().choices.map((choice) => choice.id);
+    expect(mallChoices).toContain('rescue');
+
+    const enter = engine.pickChoice('rescue');
+    expect(enter.ok).toBe(true);
+    expect(engine.state.event.nodeId).toBe('rescue_zombies');
+    expect(engine.state.flags.evelyn_rescued).toBe(true);
+    expect(engine.state.stats.supplies).toBe(40);
+
+    const zombieChoices = engine.getView().choices.map((choice) => choice.id);
+    expect(zombieChoices).toEqual(['retreat_no_ammo']);
+
+    const ok = engine.pickChoice('retreat_no_ammo');
+    expect(ok.ok).toBe(true);
+    expect(engine.state.event.nodeId).toBe('after_rescue');
   });
 
   it('offers retreat at rescue_zombies when ammo is depleted', () => {

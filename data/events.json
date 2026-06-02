@@ -366,14 +366,13 @@
     "nodes": [
       {
         "id": "mall",
-        "narrative": "你认为目前弹药充沛，实力足够，于是决定去最危险的商场探索物资。果然，你得到了大量的物资与药品。临走时，你不慎弄响了商场的警报器，大量丧尸被声音吸引。你飞速逃离，但商场内的另一处传来了枪响：一个女人被大群丧尸围在绝境。你知道，是因为你弄响警报器害的。",
+        "narrative": "你决定去最危险的商场探索物资。果然，你得到了大量的物资与药品。临走时，你不慎弄响了商场的警报器，大量丧尸被声音吸引。你飞速逃离，但商场内的另一处传来了枪响：一个女人被大群丧尸围在绝境。你知道，是因为你弄响警报器害的。",
         "onEnterEffects": { "supplies": 30 },
         "onEnterResultText": "你得到了大量的物资与药品。",
         "choices": [
           {
             "id": "rescue",
             "text": "前往营救",
-            "requirements": { "minAmmo": 1, "hideWhenUnmet": true },
             "resultText": "你暗叹倒霉。但还是过去帮忙，刚搜刮的物资也遗失了不少。",
             "effects": { "supplies": -10, "setFlag": "evelyn_rescued" },
             "goto": { "type": "event", "eventId": "evelyn", "nodeId": "rescue_zombies" }
