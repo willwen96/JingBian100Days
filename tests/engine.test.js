@@ -546,6 +546,31 @@ describe('GameEngine', () => {
     const result = engine.pickChoice('luna_day38');
     expect(result.ok).toBe(true);
     expect(engine.state.event?.id).toBe('luna_day38');
+    expect(engine.state.event?.nodeId).toBe('base');
+    expect(engine.getView().choices.map((c) => c.id)).toEqual(['enter_warehouse']);
+  });
+
+  it('luna_day38 grants warehouse ammo on enter; abandon costs 5 ammo', () => {
+    const engine = createEngine();
+    engine.state.mode = 'event';
+    engine.state.shelter = 'bunker';
+    engine.state.stats.ammo = 2;
+    engine._enterEvent('luna_day38', 'base');
+    expect(engine.state.stats.ammo).toBe(2);
+    expect(engine.getView().sceneOutcome).toBeFalsy();
+
+    const intoWarehouse = engine.pickChoice('enter_warehouse');
+    expect(intoWarehouse.ok).toBe(true);
+    expect(engine.state.event?.nodeId).toBe('warehouse');
+    expect(engine.state.stats.ammo).toBe(32);
+    expect(engine.getView().sceneOutcome?.effects).toContain('弹药 +30');
+    expect(engine.getView().narrative).toContain('尖叫声');
+    expect(engine.getView().narrative).not.toContain('发现了一些子弹');
+
+    const abandon = engine.pickChoice('abandon');
+    expect(abandon.ok).toBe(true);
+    expect(engine.state.stats.ammo).toBe(27);
+    expect(engine.state.partners).not.toContain('luna');
   });
 
   it('day 38 without luna only allows a peaceful day', () => {
