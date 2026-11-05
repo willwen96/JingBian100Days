@@ -374,7 +374,12 @@ export class GameEngine {
     const s = this.state;
 
     if (s.mode === 'intro') {
-      return { type: 'intro', intro: this.meta.intro, hostOpening: this.meta.hostOpening };
+      return {
+        type: 'intro',
+        intro: this.meta.intro,
+        hostOpening: this.meta.hostOpening,
+        titleImage: normalizeIllustration(this.meta.titleImage),
+      };
     }
     if (s.mode === 'gameover') {
       return {
