@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-export default function AppShell({ children, toolbar }) {
+export default function AppShell({ children, toolbar, wide = false }) {
   return (
-    <div className="app">
+    <div className={`app${wide ? ' app-wide' : ''}`}>
       {toolbar}
       {children}
     </div>

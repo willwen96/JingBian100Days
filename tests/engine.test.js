@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { GameEngine, applySavedGame, serializePlainState } from '../demo/js/engine.js';
+import { GameEngine, applySavedGame, normalizeIllustration, serializePlainState } from '../demo/js/engine.js';
 import { GameRules } from '../demo/js/rules.js';
 import { loadFixtureData } from './helpers/load-data.js';
 
@@ -1186,5 +1186,25 @@ describe('day cost feedback', () => {
     engine._enterEvent('airdrop', 'start');
     engine.pickChoice('all_in');
     expect(engine.getView().lastDayCost.map((e) => e.day)).toEqual([45, 50]);
+  });
+});
+
+describe('illustration', () => {
+  it('normalizes string and object illustration fields', () => {
+    expect(normalizeIllustration('images/a.jpg')).toEqual({ src: 'images/a.jpg', alt: '', caption: null });
+    expect(normalizeIllustration({ src: 'b.png', alt: 'x', caption: 'c' })).toEqual({ src: 'b.png', alt: 'x', caption: 'c' });
+    expect(normalizeIllustration({})).toBeNull();
+    expect(normalizeIllustration(null)).toBeNull();
+  });
+
+  it('exposes illustration from day definitions in the view', () => {
+    const data = { ...fixture, days: fixture.days.map((d) => (d.day === 3 ? { ...d, illustration: 'images/day3.jpg' } : d)) };
+    const engine = new GameEngine(data);
+    engine.state.mode = 'day';
+    engine.state.day = 3;
+    engine.state.shelter = 'villa';
+    expect(engine.getView().illustration?.src).toBe('images/day3.jpg');
+    engine.state.day = 2;
+    expect(engine.getView().illustration).toBeNull();
   });
 });

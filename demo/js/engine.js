@@ -434,6 +434,7 @@ export class GameEngine {
         ...base,
         title: phase.title,
         narrative: phase.openingText,
+        illustration: normalizeIllustration(phase.illustration),
         choices: this._mapChoices(phase.choices),
       };
     }
@@ -445,6 +446,7 @@ export class GameEngine {
         ...base,
         title: dayDef?.title || `第 ${s.day} 天`,
         narrative: this._resolveDayOpeningText(dayDef),
+        illustration: normalizeIllustration(dayDef?.illustration),
         choices: this._mapChoices(this._resolveDayChoices(dayDef)),
         hostNote: dayDef?.hostNote,
         route: s.route,
@@ -472,6 +474,7 @@ export class GameEngine {
         ...base,
         title: ev?.title || '事件',
         narrative: this._resolveNodeText(node),
+        illustration: normalizeIllustration(node?.illustration ?? ev?.illustration),
         choices: this._mapChoices(node?.choices || []),
       };
     }
@@ -499,6 +502,7 @@ export class GameEngine {
           ...base,
           title: area.name,
           narrative: node.narrative || area.openingText,
+          illustration: normalizeIllustration(node.illustration ?? area.illustration),
           choices: this._mapChoices(node.choices || []),
         };
       }
@@ -507,6 +511,7 @@ export class GameEngine {
         ...base,
         title: area.name,
         narrative: area.openingText,
+        illustration: normalizeIllustration(area.illustration),
         choices: this._mapChoices(area.choices || []),
       };
     }
@@ -1738,6 +1743,19 @@ export class GameEngine {
     }
     return this._advanceDay();
   }
+}
+
+/**
+ * 插图字段：可写成字符串（图片路径，相对 data/ 目录，如 "images/day1.jpg"）
+ * 或对象 { src, alt?, caption? }。无插图时返回 null。
+ */
+export function normalizeIllustration(raw) {
+  if (!raw) return null;
+  if (typeof raw === 'string') return { src: raw, alt: '', caption: null };
+  if (typeof raw === 'object' && typeof raw.src === 'string' && raw.src) {
+    return { src: raw.src, alt: raw.alt || '', caption: raw.caption || null };
+  }
+  return null;
 }
 
 function fmtDelta(n) {

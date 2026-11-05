@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
-export default function ChoiceLogPanel({ entries, defaultOpen = false, title = '选择记录' }) {
+import { effectTone } from '../utils/effectTone.js';
+
+export default function ChoiceLogPanel({
+  entries,
+  defaultOpen = false,
+  title = '选择记录',
+  newestFirst = false,
+}) {
   const [open, setOpen] = useState(defaultOpen);
   if (!entries?.length) return null;
 
@@ -11,7 +18,7 @@ export default function ChoiceLogPanel({ entries, defaultOpen = false, title = '
       </button>
       {open && (
         <ol className="choice-log-list">
-          {entries.map((e) => (
+          {(newestFirst ? [...entries].reverse() : entries).map((e) => (
             <li key={e.index} className="choice-log-item">
               <div className="choice-log-head">
                 <span className="choice-log-index">#{e.index}</span>
@@ -24,7 +31,7 @@ export default function ChoiceLogPanel({ entries, defaultOpen = false, title = '
               {e.effects?.length ? (
                 <div className="choice-log-effects">
                   {e.effects.map((fx, i) => (
-                    <span key={i} className="effect-chip small">
+                    <span key={i} className={`effect-chip small ${effectTone(fx)}`}>
                       {fx}
                     </span>
                   ))}

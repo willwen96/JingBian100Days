@@ -841,3 +841,138 @@ body {
     justify-content: center;
   }
 }
+
+/* ---------- 插图 ---------- */
+
+.story-panel {
+  overflow: hidden;
+}
+
+.illustration {
+  margin: -1.25rem -1.35rem 1.1rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.illustration img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 240px;
+  object-fit: cover;
+}
+
+.illustration figcaption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 0.45rem 1.35rem;
+}
+
+/* ---------- 宽屏布局（≥1024px）：主区 + 右侧状态栏 ---------- */
+
+@media (min-width: 1024px) {
+  .app.app-wide {
+    max-width: 1280px;
+    padding: 1.25rem 2rem 3rem;
+  }
+
+  .app.app-wide {
+    position: relative;
+  }
+
+  .app-wide .game-toolbar {
+    position: absolute;
+    top: 1.85rem;
+    right: 2rem;
+    margin: 0;
+    justify-content: flex-end;
+  }
+
+  .app-wide .page-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .play-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-areas:
+      'main side'
+      'main log';
+    grid-template-rows: auto 1fr;
+    column-gap: 1.75rem;
+    align-items: start;
+  }
+
+  .play-main {
+    grid-area: main;
+    min-width: 0;
+  }
+
+  .play-side {
+    grid-area: side;
+  }
+
+  .play-log {
+    grid-area: log;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .play-log .choice-log {
+    margin-top: 0.25rem;
+  }
+
+  .play-log .choice-log-list {
+    max-height: calc(100vh - 6rem);
+  }
+
+  .play-side .stats-bar {
+    margin-bottom: 0.75rem;
+  }
+
+  .story-panel {
+    padding: 1.75rem 2rem;
+    font-size: 1.05rem;
+    line-height: 1.85;
+  }
+
+  .illustration {
+    margin: -1.75rem -2rem 1.4rem;
+  }
+
+  .illustration img {
+    max-height: 36vh;
+  }
+
+  .illustration figcaption {
+    padding: 0.5rem 2rem;
+  }
+
+  .play-main .choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .play-main .choices .choice-card,
+  .play-main .choices .explore-prompt {
+    grid-column: 1 / -1;
+  }
+
+  .play-main .choice-btn {
+    height: 100%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .app.app-wide {
+    max-width: 1440px;
+  }
+
+  .play-layout {
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+}

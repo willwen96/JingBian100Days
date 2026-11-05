@@ -91,7 +91,7 @@ export default function App() {
   }
 
   return (
-    <AppShell>
+    <AppShell wide={view.type === 'play' || view.type === 'explore_pick'}>
       {view.type === 'intro' && (
         <IntroScreen
           view={{ ...view, hasSavedGame }}
