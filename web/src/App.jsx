@@ -8,7 +8,7 @@ import SaveModal from './components/SaveModal.jsx';
 import { useGame } from './hooks/useGame.js';
 
 export default function App() {
-  const { engine, view, loadError, dayPulse, run, refresh, saveSlots, hasSavedGame } = useGame();
+  const { engine, view, loadError, dayPulse, statDelta, run, refresh, saveSlots, hasSavedGame } = useGame();
   const { msg, show, clear } = useToast();
   const [saveModal, setSaveModal] = useState(null);
 
@@ -22,8 +22,9 @@ export default function App() {
 
   const handlePickChoice = useCallback(
     (id, value) => {
-      const result = run((e) =>
-        value != null ? e.pickChoiceWithInput(id, value) : e.pickChoice(id)
+      const result = run(
+        (e) => (value != null ? e.pickChoiceWithInput(id, value) : e.pickChoice(id)),
+        { trackDelta: true }
       );
       if (result?.error) {
         show(result.error);
@@ -42,7 +43,7 @@ export default function App() {
 
   const handlePickExplore = useCallback(
     (areaId) => {
-      const result = run((e) => e.pickExploreArea(areaId));
+      const result = run((e) => e.pickExploreArea(areaId), { trackDelta: true });
       if (result?.error) show(result.error);
     },
     [run, show]
@@ -50,7 +51,7 @@ export default function App() {
 
   const handleNearDeath = useCallback(
     (accept) => {
-      run((e) => e.resolveNearDeath(accept));
+      run((e) => e.resolveNearDeath(accept), { trackDelta: true });
     },
     [run]
   );
@@ -104,6 +105,7 @@ export default function App() {
           view={view}
           engine={engine}
           dayPulse={dayPulse}
+          statDelta={statDelta}
           toolbar={toolbar}
           onPickChoice={handlePickChoice}
           onPickExplore={handlePickExplore}

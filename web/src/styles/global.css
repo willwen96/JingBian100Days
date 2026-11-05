@@ -13,6 +13,8 @@
   --scene: #5b8db8;
   --danger: #c94a4a;
   --success: #5a9e6f;
+  --gain: #7cc48f;
+  --loss: #e07070;
 }
 
 * {
@@ -102,6 +104,64 @@ body {
   font-size: 1.4rem;
   font-weight: 700;
   margin-top: 0.1rem;
+}
+
+.stat .value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.1rem;
+}
+
+.stat .value-row .value {
+  margin-top: 0;
+}
+
+.stat {
+  transition: border-color 0.3s ease;
+}
+
+.stat.changed.gain {
+  border-color: rgba(90, 158, 111, 0.7);
+  animation: statFlashGain 0.9s ease;
+}
+
+.stat.changed.loss {
+  border-color: rgba(201, 74, 74, 0.7);
+  animation: statFlashLoss 0.9s ease;
+}
+
+.stat-delta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  animation: deltaIn 0.4s ease;
+}
+
+.stat-delta.gain { color: var(--gain); }
+.stat-delta.loss { color: var(--loss); }
+
+@keyframes statFlashGain {
+  0% { background: rgba(90, 158, 111, 0.35); }
+  100% { background: var(--surface); }
+}
+
+@keyframes statFlashLoss {
+  0% { background: rgba(201, 74, 74, 0.35); }
+  100% { background: var(--surface); }
+}
+
+@keyframes deltaIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat.changed.gain,
+  .stat.changed.loss,
+  .stat-delta {
+    animation: none;
+  }
 }
 
 .stat.humanity .value { color: var(--humanity); }
@@ -212,14 +272,61 @@ body {
 }
 
 .effect-chip {
-  display: inline-block;
-  background: rgba(110, 181, 168, 0.18);
-  border: 1px solid rgba(110, 181, 168, 0.45);
-  color: var(--humanity);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(139, 147, 167, 0.14);
+  border: 1px solid rgba(139, 147, 167, 0.4);
+  color: var(--text);
   font-size: 0.82rem;
   font-weight: 600;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
+}
+
+.effect-chip.gain {
+  background: rgba(90, 158, 111, 0.18);
+  border-color: rgba(90, 158, 111, 0.55);
+  color: var(--gain);
+}
+
+.effect-chip.loss {
+  background: rgba(201, 74, 74, 0.16);
+  border-color: rgba(201, 74, 74, 0.55);
+  color: var(--loss);
+}
+
+.chip-prefix {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.outcome-banner.day-cost-outcome {
+  background: rgba(212, 168, 75, 0.1);
+  border-left: 4px solid var(--supplies);
+  padding: 0.6rem 1rem;
+}
+
+.day-cost-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+}
+
+.day-cost-line + .day-cost-line {
+  margin-top: 0.35rem;
+}
+
+.day-cost-title {
+  font-weight: 700;
+}
+
+.day-cost-line .day-cost-detail {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .effect-chip.small {

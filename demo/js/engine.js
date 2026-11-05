@@ -59,6 +59,7 @@ export function createInitialState(meta) {
     lastChoiceOutcome: null,
     lastSceneOutcome: null,
     lastCostLog: null,
+    lastDayCost: null,
     pendingNearDeath: false,
     pendingNearDeathContext: null,
     companionNightResolvedForTarget: null,
@@ -219,6 +220,7 @@ export class GameEngine {
 
     const check = this._canPickChoice(choice, overrides.cost);
     if (!check.ok) return { error: check.reason };
+    this.state.lastDayCost = null;
 
     if (choice.requirements?.once) {
       this.state.onceUsed.add(this._onceKey(choice));
@@ -302,6 +304,7 @@ export class GameEngine {
     if (!this.state.pendingNearDeath) return;
 
     this.state.pendingNearDeath = false;
+    this.state.lastDayCost = null;
     const ctx = this.state.pendingNearDeathContext;
     this.state.pendingNearDeathContext = null;
 
@@ -337,6 +340,7 @@ export class GameEngine {
       ? this._canPickChoice({ requirements: area.requirements })
       : { ok: true };
     if (!reqCheck.ok) return { error: reqCheck.reason };
+    this.state.lastDayCost = null;
 
     // 探索区域在进入后即视为已消耗，后续不再出现在列表中
     this.state.closedExploreAreas.push(areaId);
@@ -410,6 +414,7 @@ export class GameEngine {
       sceneOutcome: s.lastSceneOutcome,
       lastResult: this._choiceOutcomeMessage(),
       lastCostLog: s.lastCostLog,
+      lastDayCost: s.lastDayCost?.entries ?? null,
       lastEffectSummary: s.lastChoiceOutcome?.effects ?? null,
       day: s.day,
       nextDayCostPreview: nextCostPreview,
@@ -1584,6 +1589,7 @@ export class GameEngine {
     if (this.state.skipNextDayCostOnce) {
       this.state.skipNextDayCostOnce = false;
       this._log('濒死跳过：免除本次开启新一天的物资消耗');
+      this._recordDayCost(day, 0, null, '濒死跳过，免除本次物资消耗');
       return this._enterDay(day, options);
     }
 
@@ -1594,10 +1600,19 @@ export class GameEngine {
       if (attempt.paid > 0) {
         this._log(`进入第 ${day} 天，消耗物资 ${attempt.paid}（${this.rules.formatBreakdown(attempt.breakdown)}）`);
       }
+      this._recordDayCost(day, attempt.paid, attempt.breakdown);
       return this._enterDay(day, options);
     }
 
     return this._resolveInsufficientDayCost(day, attempt);
+  }
+
+  /** 记录开启新一天的物资消耗，供界面展示（同一次操作跨多天时累加，如重伤跳过） */
+  _recordDayCost(day, paid, breakdown, note = null) {
+    const detail = breakdown?.length ? this.rules.formatBreakdown(breakdown) : null;
+    const entry = { day, paid, detail, note };
+    const prev = this.state.lastDayCost;
+    this.state.lastDayCost = prev ? { entries: [...prev.entries, entry] } : { entries: [entry] };
   }
 
   _advanceDay(options = {}) {
@@ -1670,6 +1685,7 @@ export class GameEngine {
   _pickCompanionConvertChoice(choiceId) {
     const resolved = resolveCompanionConvertChoice(choiceId, this.state, this.companionConvert);
     if (resolved.error) return { error: resolved.error };
+    this.state.lastDayCost = null;
 
     if (resolved.phase === 'selected') {
       this._clearChoiceOutcome();

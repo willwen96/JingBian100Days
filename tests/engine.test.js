@@ -1156,3 +1156,35 @@ describe('engine bug fixes (audit 2026-11)', () => {
     expect(() => engine.getView()).not.toThrow();
   });
 });
+
+describe('day cost feedback', () => {
+  it('records supplies paid when entering a new day and clears it on next action', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 2;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 200;
+    engine._advanceDay();
+    const view = engine.getView();
+    expect(view.lastDayCost).toHaveLength(1);
+    expect(view.lastDayCost[0].day).toBe(3);
+    expect(view.lastDayCost[0].paid).toBeGreaterThan(0);
+
+    const choice = view.choices.find((c) => !c.disabled);
+    engine.pickChoice(choice.id);
+    const after = engine.getView();
+    if (after.day === 3) expect(after.lastDayCost).toBeNull();
+  });
+
+  it('records both days when an injury skip spans two days', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 40;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 500;
+    engine.state.stats.ammo = 100;
+    engine._enterEvent('airdrop', 'start');
+    engine.pickChoice('all_in');
+    expect(engine.getView().lastDayCost.map((e) => e.day)).toEqual([45, 50]);
+  });
+});

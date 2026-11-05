@@ -37,6 +37,7 @@ export default function PlayScreen({
   view,
   engine,
   dayPulse,
+  statDelta,
   toolbar,
   onPickChoice,
   onPickExplore,
@@ -52,7 +53,7 @@ export default function PlayScreen({
         <p className="subtitle">{dayLabel}</p>
       </header>
 
-      <StatsBar stats={view.stats} />
+      <StatsBar stats={view.stats} delta={statDelta?.delta} deltaKey={statDelta?.key} />
       <MetaPanel
         shelter={view.shelter}
         partners={view.partners}
@@ -60,9 +61,12 @@ export default function PlayScreen({
         tags={view.tags}
       />
 
-      <OutcomePanels choiceOutcome={view.choiceOutcome} sceneOutcome={view.sceneOutcome} />
-
-      {view.lastCostLog ? <div className="cost-banner">{view.lastCostLog}</div> : null}
+      <OutcomePanels
+        choiceOutcome={view.choiceOutcome}
+        sceneOutcome={view.sceneOutcome}
+        costLog={view.lastCostLog}
+        dayCost={view.lastDayCost}
+      />
       <DayCostPreview preview={view.nextDayCostPreview} engine={engine} />
 
       {view.hostReminder ? (
