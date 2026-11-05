@@ -77,20 +77,79 @@ export function serializeGame(engine) {
   };
 }
 
+const VALID_MODES = new Set(['pre', 'day', 'event', 'explore', 'explore_pick', 'gameover', 'demo_complete']);
+const ARRAY_FIELDS = ['partners', 'items', 'tags', 'closedExploreAreas', 'disabledFixedEvents', 'log', 'choiceLog'];
+
+const isPlainObject = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
+
+/**
+ * 校验存档 state 结构及其引用的事件/区域/天数是否仍存在于当前数据中。
+ * 返回 null 表示有效，否则返回错误原因。
+ */
+export function validateSavedState(raw, engine) {
+  if (!isPlainObject(raw)) return '存档数据无效';
+  if (!VALID_MODES.has(raw.mode)) return '存档数据无效';
+  if (!Number.isInteger(raw.day) || raw.day < 0) return '存档数据无效';
+  const st = raw.stats;
+  if (!isPlainObject(st) || !['humanity', 'supplies', 'ammo'].every((k) => Number.isFinite(st[k]))) {
+    return '存档数据无效';
+  }
+  for (const f of ARRAY_FIELDS) {
+    if (raw[f] != null && !Array.isArray(raw[f])) return '存档数据无效';
+  }
+  if (!Array.isArray(raw.partners) || !Array.isArray(raw.items) || !Array.isArray(raw.tags)) {
+    return '存档数据无效';
+  }
+  if (raw.flags != null && !isPlainObject(raw.flags)) return '存档数据无效';
+  if (raw.onceUsed != null && !Array.isArray(raw.onceUsed)) return '存档数据无效';
+
+  const stale = '存档与当前游戏版本不匹配';
+  if (raw.mode === 'pre' && engine?.preOutbreak) {
+    if (!engine.preOutbreak.days?.some((d) => d.phase === raw.prePhase)) return stale;
+  }
+  if (raw.mode === 'day' && engine?.allDays && raw.day > 0) {
+    if (!engine.allDays.some((d) => d.day === raw.day)) return stale;
+  }
+  if (raw.mode === 'event') {
+    if (!isPlainObject(raw.event) || typeof raw.event.id !== 'string') return '存档数据无效';
+    if (raw.event.id === 'companion_convert_night') {
+      if (!isPlainObject(raw.event.meta) || !Array.isArray(raw.event.meta.eligible)) return '存档数据无效';
+    } else if (engine?.events && !engine.events[raw.event.id]) {
+      return stale;
+    }
+  }
+  if (raw.mode === 'explore') {
+    if (!isPlainObject(raw.explore) || typeof raw.explore.areaId !== 'string') return '存档数据无效';
+    if (engine?.exploration && !engine.exploration[raw.explore.areaId]) return stale;
+  }
+  return null;
+}
+
+function normalizeState(raw) {
+  const state = deserializePlainState(raw);
+  for (const f of ARRAY_FIELDS) {
+    if (!Array.isArray(state[f])) state[f] = [];
+  }
+  if (!isPlainObject(state.flags)) state.flags = {};
+  return state;
+}
+
 export function applySavedGame(engine, payload) {
-  if (!payload?.state) {
+  if (!isPlainObject(payload) || !payload.state) {
     return { error: '存档数据无效' };
   }
   if (payload.version !== SAVE_VERSION) {
     return { error: '存档版本不兼容' };
   }
+  const invalid = validateSavedState(payload.state, engine);
+  if (invalid) return { error: invalid };
+  const checkpointState = payload.dayCheckpoint?.state;
+  const checkpointValid = checkpointState && !validateSavedState(checkpointState, engine);
 
-  engine.state = deserializePlainState(payload.state);
+  engine.state = normalizeState(payload.state);
   engine.dayCheckpointKey = payload.dayCheckpointKey ?? null;
   engine.dayRestartUsed = payload.dayRestartUsed ?? false;
-  engine.dayCheckpoint = payload.dayCheckpoint
-    ? { state: deserializePlainState(payload.dayCheckpoint.state) }
-    : null;
+  engine.dayCheckpoint = checkpointValid ? { state: normalizeState(checkpointState) } : null;
   return { ok: true, summary: payload.summary ?? null };
 }
 
