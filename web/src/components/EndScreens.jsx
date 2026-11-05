@@ -11,6 +11,7 @@ export function GameOverScreen({ view, onRestart }) {
         </div>
       ) : null}
       <p className="end-reason">{view.reason}</p>
+      {view.devModified ? <p className="dev-modified-note">本局使用过开发者模式修改状态，分数仅供参考。</p> : null}
       <EndingScorePanel endingScore={view.endingScore} tagsById={view.tagsById} />
       <ChoiceLogPanel entries={view.choiceLog} defaultOpen title="本局选择回顾" />
       <button type="button" className="btn btn-primary btn-block" onClick={onRestart}>
@@ -37,6 +38,7 @@ export function DemoCompleteScreen({ view, onRestart }) {
         人性 {s.stats.humanity} · 物资 {s.stats.supplies} · 弹药 {s.stats.ammo} · 庇护所：
         {shelterNames[s.shelter] || '—'}
       </p>
+      {view.devModified ? <p className="dev-modified-note">本局使用过开发者模式修改状态，分数仅供参考。</p> : null}
       <EndingScorePanel endingScore={view.endingScore} tagsById={view.tags} />
       <ChoiceLogPanel entries={view.choiceLog} defaultOpen title="本局选择回顾" />
       <button type="button" className="btn btn-primary btn-block" onClick={onRestart}>

@@ -1,16 +1,20 @@
 import { useCallback, useState } from 'react';
 
+import DevPanel from './components/DevPanel.jsx';
 import { DemoCompleteScreen, GameOverScreen } from './components/EndScreens.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
 import AppShell, { ErrorScreen, LoadingScreen, Toast, useToast } from './components/Layout.jsx';
 import PlayScreen from './components/PlayScreen.jsx';
 import SaveModal from './components/SaveModal.jsx';
+import { useDevMode } from './hooks/useDevMode.js';
 import { useGame } from './hooks/useGame.js';
 
 export default function App() {
   const { engine, view, loadError, dayPulse, statDelta, run, refresh, saveSlots, hasSavedGame } = useGame();
   const { msg, show, clear } = useToast();
   const [saveModal, setSaveModal] = useState(null);
+  const [devEnabled] = useDevMode();
+  const [devOpen, setDevOpen] = useState(false);
 
   const handleRestart = useCallback(() => {
     run((e) => e.restart());
@@ -134,6 +138,15 @@ export default function App() {
           }}
         />
       )}
+
+      {devEnabled && !devOpen ? (
+        <button type="button" className="dev-fab" onClick={() => setDevOpen(true)} title="开发者模式">
+          DEV
+        </button>
+      ) : null}
+      {devEnabled && devOpen ? (
+        <DevPanel engine={engine} run={run} show={show} onClose={() => setDevOpen(false)} />
+      ) : null}
 
       <Toast message={msg} onDone={clear} />
     </AppShell>

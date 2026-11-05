@@ -11,8 +11,10 @@ import {
 import { playDiceGame, playRussianRoulette } from './minigames.js';
 import { calculateEndingScore } from './scoring.js';
 import {
+  SAVE_VERSION,
   applySavedGame,
   deserializePlainState,
+  validateSavedState,
   loadGameFromSlot,
   saveGameToSlot,
   serializePlainState,
@@ -67,6 +69,7 @@ export function createInitialState(meta) {
     gameOverReason: null,
     demoComplete: false,
     route: null,
+    devModified: false,
     endingScore: null,
     log: [],
     choiceLog: [],
@@ -383,6 +386,7 @@ export class GameEngine {
         endingScore: s.endingScore,
         tagsById: this.tagsById,
         choiceLog: [...(s.choiceLog || [])],
+        devModified: Boolean(s.devModified),
       };
     }
     if (s.mode === 'demo_complete') {
@@ -394,6 +398,7 @@ export class GameEngine {
         finaleTitle: s.endingScore?.finaleTag?.name ?? '大结局',
         finaleNarrative: this._resolveFinaleNarrative(s),
         choiceLog: [...(s.choiceLog || [])],
+        devModified: Boolean(s.devModified),
       };
     }
 
@@ -425,6 +430,7 @@ export class GameEngine {
       dayRestartUsed: this.dayRestartUsed,
       choiceLog: [...(s.choiceLog || [])],
       deadlockWarning: this._getDeadlockWarning(),
+      devModified: Boolean(s.devModified),
     };
 
     if (s.mode === 'pre') {
@@ -517,6 +523,158 @@ export class GameEngine {
     }
 
     return { type: 'unknown' };
+  }
+
+  // ---------------- 开发者模式（临时修改状态，用于排查/绕过 bug） ----------------
+
+  /** 开发者面板可选项：天数、事件、伙伴、词条、物品、flag、路线 */
+  devCatalog() {
+    const flags = new Set();
+    const items = new Set(['肾上腺素', '收音机', '供暖装置']);
+    const collect = (o) => {
+      if (Array.isArray(o)) return o.forEach(collect);
+      if (!o || typeof o !== 'object') return;
+      for (const [k, v] of Object.entries(o)) {
+        if ((k === 'setFlag' || k === 'clearFlag') && typeof v === 'string') flags.add(v);
+        else if ((k === 'flags' || k === 'flagsNot') && Array.isArray(v)) v.forEach((f) => flags.add(f));
+        else if (k === 'addItem' && typeof v === 'string') items.add(v);
+        else collect(v);
+      }
+    };
+    collect([this.allDays, Object.values(this.events), Object.values(this.exploration)]);
+    return {
+      days: this.days.map((d) => ({ day: d.day, title: d.title || `第 ${d.day} 天` })),
+      events: Object.values(this.events).map((e) => ({
+        id: e.id,
+        title: e.title || e.id,
+        nodes: (e.nodes || []).map((n) => n.id),
+      })),
+      partners: ['lime', 'blake', 'luna', 'evelyn', 'john', 'baby'].map((id) => ({
+        id,
+        name: this._partnerName(id),
+      })),
+      tags: Object.values(this.tagsById).map((t) => ({ id: t.id, name: t.name || t.id, isFinale: !!t.isFinale })),
+      items: [...items],
+      flags: [...flags].sort(),
+      routes: ['savior', 'savior_zombie', 'adam_eve', 'lone_wolf'],
+      shelters: Object.entries(SHELTER_NAMES).map(([id, name]) => ({ id, name })),
+    };
+  }
+
+  _devTouch() {
+    this.state.devModified = true;
+    this.rules.clampStats(this.state);
+    return { ok: true };
+  }
+
+  devSetStat(key, value) {
+    if (!['humanity', 'supplies', 'ammo'].includes(key)) return { error: '未知数值' };
+    const n = Number(value);
+    if (!Number.isFinite(n)) return { error: '请输入数字' };
+    this.state.stats[key] = Math.round(n);
+    return this._devTouch();
+  }
+
+  devSetShelter(shelter) {
+    if (shelter && !SHELTER_NAMES[shelter]) return { error: '未知庇护所' };
+    this.state.shelter = shelter || null;
+    return this._devTouch();
+  }
+
+  /** 切换 partners / items / tags 中的某一项 */
+  devToggle(listName, value, on) {
+    if (!['partners', 'items', 'tags'].includes(listName) || !value) return { error: '无效参数' };
+    const list = this.state[listName];
+    const has = list.includes(value);
+    const want = on ?? !has;
+    if (want && !has) list.push(value);
+    if (!want && has) this.state[listName] = list.filter((x) => x !== value);
+    return this._devTouch();
+  }
+
+  devSetFlag(name, on) {
+    if (!name) return { error: '请输入 flag 名' };
+    if (on) this.state.flags[name] = true;
+    else delete this.state.flags[name];
+    return this._devTouch();
+  }
+
+  devSetRoute(route) {
+    this.state.route = route || null;
+    return this._devTouch();
+  }
+
+  /** 清除濒死 / 重伤 / 免日耗等挂起状态 */
+  devClearPending() {
+    const s = this.state;
+    s.pendingNearDeath = false;
+    s.pendingNearDeathContext = null;
+    s.skipNextDayActions = false;
+    s.skipNextDayCostOnce = false;
+    return this._devTouch();
+  }
+
+  _devResetTransient() {
+    const s = this.state;
+    s.pendingNearDeath = false;
+    s.pendingNearDeathContext = null;
+    s.gameOver = false;
+    s.gameOverReason = null;
+    s.demoComplete = false;
+    s.endingScore = null;
+    s.lastCostLog = null;
+    s.lastDayCost = null;
+    this._clearAllOutcomes();
+  }
+
+  /** 直接跳到某天开头（不扣物资，会触发当天的开场效果） */
+  devJumpToDay(day) {
+    const d = Number(day);
+    if (!this._getDayDef(d)) return { error: '没有这一天' };
+    this._devResetTransient();
+    this.state.devModified = true;
+    this.dayRestartUsed = false;
+    this._enterDay(d);
+    return this._devTouch();
+  }
+
+  /** 直接进入某个事件节点 */
+  devEnterEvent(eventId, nodeId) {
+    const ev = this.events[eventId];
+    if (!ev) return { error: '未知事件' };
+    if (nodeId && !ev.nodes.some((n) => n.id === nodeId)) return { error: '该事件没有这个节点' };
+    this._devResetTransient();
+    if (this.state.day === 0 && !this.state.prePhase) this.state.day = 1;
+    this.state.explore = null;
+    this.state.event = null;
+    this._enterEvent(eventId, nodeId || ev.nodes[0]?.id);
+    return this._devTouch();
+  }
+
+  /** 恢复「重新开启当天」的次数 */
+  devResetDayRestart() {
+    this.dayRestartUsed = false;
+    return this._devTouch();
+  }
+
+  devExportState() {
+    return JSON.stringify(serializePlainState(this.state), null, 2);
+  }
+
+  devImportState(json) {
+    let raw;
+    try {
+      raw = typeof json === 'string' ? JSON.parse(json) : json;
+    } catch {
+      return { error: 'JSON 格式错误' };
+    }
+    const invalid = validateSavedState(raw, this);
+    if (invalid) return { error: invalid };
+    const res = applySavedGame(this, { version: SAVE_VERSION, state: raw });
+    if (res.error) return res;
+    this.state.devModified = true;
+    this._captureDayCheckpoint();
+    return { ok: true };
   }
 
   _partnerName(id) {
