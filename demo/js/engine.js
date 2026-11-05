@@ -175,6 +175,7 @@ export class GameEngine {
   pickChoice(choiceId) {
     const located = this._locateChoice(choiceId);
     if (located.error) return { error: located.error };
+    if (located.choice.input?.type === 'number') return { error: '该选项需要输入数值' };
     return this._executeChoice(located.choice);
   }
 
@@ -191,6 +192,9 @@ export class GameEngine {
   }
 
   _locateChoice(choiceId) {
+    if (this.state.pendingNearDeath) {
+      return { error: '请先处理濒死状态' };
+    }
     if (this._isCompanionConvertEvent()) {
       return { choice: { id: choiceId, _isCompanionConvertChoice: true } };
     }
@@ -321,6 +325,9 @@ export class GameEngine {
   }
 
   pickExploreArea(areaId) {
+    if (this.state.pendingNearDeath) {
+      return { error: '请先处理濒死状态' };
+    }
     if (this.state.closedExploreAreas.includes(areaId)) {
       return { error: '该区域已不可用' };
     }
@@ -333,6 +340,8 @@ export class GameEngine {
 
     // 探索区域在进入后即视为已消耗，后续不再出现在列表中
     this.state.closedExploreAreas.push(areaId);
+    // 末世之王计数：进入区域即计 1 次（探索选项都带 goto，不会经过 _finishExploreOrAdvance）
+    this.rules.onExploreCompleted(this.state);
     this.state.explore = { areaId, nodeId: null };
     this.state.mode = 'explore';
     this._appendChoiceLog({
@@ -1466,6 +1475,7 @@ export class GameEngine {
   }
 
   _enterDay(day, options = {}) {
+    const skipThisDay = this.rules.shouldSkipDayActions(this.state);
     this.rules.clearDayActionFlags(this.state);
     this.state.mode = 'day';
     this.state.day = day;
@@ -1480,6 +1490,9 @@ export class GameEngine {
     const dayDef = this._getDayDef(day);
     this._applyDayEnterHooks(dayDef);
     const autoEvent = this._resolveDayAutoEnter(dayDef);
+    if (skipThisDay && !autoEvent) {
+      return this._skipDayDueToInjury(day, dayDef, options);
+    }
     if (autoEvent) {
       const result = this._enterEvent(autoEvent.eventId, autoEvent.nodeId, options);
       this._captureDayCheckpoint();
@@ -1487,6 +1500,29 @@ export class GameEngine {
     }
     this._captureDayCheckpoint();
     return { ok: true };
+  }
+
+  /** 重伤（skipNextDayActions）：当天无法行动，自动进入下一个可玩天（照常扣下一天物资） */
+  _skipDayDueToInjury(day, dayDef, options = {}) {
+    const label = dayDef?.title || `第 ${day} 天`;
+    const text = `伤势过重，你在床上躺了一整天。${label}无法进行任何行动，已自动跳过。`;
+    this._log(text);
+    this._appendChoiceLog({
+      context: label,
+      choiceText: '（重伤休养，跳过本天）',
+      resultText: text,
+      effects: this.state.lastSceneOutcome?.effects ?? null,
+      costLog: null,
+    });
+    const skippedScene = this.state.lastSceneOutcome;
+    const result = this._advanceDay({ ...options, preserveChoiceOutcome: true });
+    if (this.state.mode === 'day' || this.state.mode === 'event') {
+      const cur = this.state.lastSceneOutcome;
+      const merged = [skippedScene?.text, text, cur?.text].filter(Boolean).join('\n\n');
+      const fx = [...(skippedScene?.effects || []), ...(cur?.effects || [])];
+      this._setSceneOutcome(cur?.label || label, merged, fx);
+    }
+    return result;
   }
 
   /** 进入某天时的手册开场效果（如第35天收音机/物资、第38天菌类收成） */
@@ -1540,6 +1576,8 @@ export class GameEngine {
 
   _enterDayAfterCost(day, options = {}) {
     if (day <= 1) {
+      // 第 1 天本身不扣物资，濒死「免一次日耗」在此视为已用掉，避免顺延到第 2 天
+      this.state.skipNextDayCostOnce = false;
       return this._enterDay(day, options);
     }
 
@@ -1667,7 +1705,6 @@ export class GameEngine {
 
   _finishExploreOrAdvance() {
     if (this.state.mode === 'explore' || this.state.mode === 'explore_pick') {
-      this.rules.onExploreCompleted(this.state);
       this.state.mode = 'day';
       this.state.explore = null;
       return this._advanceDay();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { GameEngine } from '../demo/js/engine.js';
+import { GameEngine, applySavedGame, serializePlainState } from '../demo/js/engine.js';
 import { GameRules } from '../demo/js/rules.js';
 import { loadFixtureData } from './helpers/load-data.js';
 
@@ -1075,5 +1075,84 @@ describe('GameEngine', () => {
     const help = engine.getView().choices.find((c) => c.id === 'help');
     expect(help).toBeTruthy();
     expect(help.special).toBe(false);
+  });
+});
+
+describe('engine bug fixes (audit 2026-11)', () => {
+  function atDay(day, extra = {}) {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = day;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 500;
+    engine.state.stats.ammo = 100;
+    Object.assign(engine.state, extra);
+    return engine;
+  }
+
+  it('Blake trust branch resolves when humanity is exactly 50 (survives)', () => {
+    const engine = atDay(40, { partners: ['blake'] });
+    engine.state.stats.humanity = 50;
+    engine._enterEvent('airdrop', 'blake_after_partial');
+    engine.pickChoice('trust');
+    expect(engine.state.mode).not.toBe('event');
+    expect(engine.state.gameOver).toBe(false);
+    expect(engine.state.partners).not.toContain('blake');
+    expect(engine.state.day).toBeGreaterThan(40);
+  });
+
+  it('counts explore areas toward 末世之王 even when choices goto nextDay/event', () => {
+    const engine = atDay(10);
+    engine.state.mode = 'explore_pick';
+    engine.pickExploreArea('cannery');
+    const choice = engine.getView().choices.find((c) => !c.disabled);
+    engine.pickChoice(choice.id);
+    expect(engine.state.exploreEventCount).toBe(1);
+  });
+
+  it('airdrop all_in skips the following day automatically', () => {
+    const engine = atDay(40);
+    engine._enterEvent('airdrop', 'start');
+    engine.pickChoice('all_in');
+    expect(engine.state.day).toBe(50);
+    expect(engine.state.mode).toBe('day');
+    expect(engine.state.skipNextDayActions).toBe(false);
+    expect(engine.state.choiceLog.some((e) => e.choiceText.includes('跳过本天'))).toBe(true);
+    expect(engine.getView().sceneOutcome?.text).toContain('自动跳过');
+  });
+
+  it('near-death cost skip is consumed by free day 1', () => {
+    const engine = createEngine();
+    engine.startGame();
+    engine.state.skipNextDayCostOnce = true;
+    engine._advanceDay();
+    expect(engine.state.day).toBe(1);
+    expect(engine.state.skipNextDayCostOnce).toBe(false);
+  });
+
+  it('rejects pickChoice on number-input choices and while near-death is pending', () => {
+    const engine = atDay(50);
+    engine._enterEvent('evelyn', 'rescue_zombies');
+    expect(engine.pickChoice('kill_custom').error).toBeTruthy();
+
+    const e2 = atDay(10);
+    e2.state.pendingNearDeath = true;
+    const c = e2.getView().choices.find((x) => !x.disabled);
+    expect(e2.pickChoice(c.id).error).toBeTruthy();
+    expect(e2.state.day).toBe(10);
+  });
+
+  it('refuses corrupt or stale saves without touching current state', () => {
+    const engine = atDay(10);
+    const before = engine.state;
+    expect(applySavedGame(engine, { version: 1, state: { mode: 'day', day: 5 } }).error).toBeTruthy();
+    expect(
+      applySavedGame(engine, {
+        version: 1,
+        state: { ...serializePlainState(before), mode: 'event', event: { id: 'no_such_event', nodeId: 'start' } },
+      }).error
+    ).toBeTruthy();
+    expect(engine.state).toBe(before);
+    expect(() => engine.getView()).not.toThrow();
   });
 });
