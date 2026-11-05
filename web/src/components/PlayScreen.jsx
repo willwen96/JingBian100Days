@@ -1,6 +1,7 @@
 import ChoiceList from './ChoiceList.jsx';
 import ChoiceLogPanel from './ChoiceLogPanel.jsx';
 import ExplorePick from './ExplorePick.jsx';
+import Illustration from './Illustration.jsx';
 import MetaPanel from './MetaPanel.jsx';
 import OutcomePanels from './OutcomePanels.jsx';
 import StatsBar from './StatsBar.jsx';
@@ -37,6 +38,7 @@ export default function PlayScreen({
   view,
   engine,
   dayPulse,
+  statDelta,
   toolbar,
   onPickChoice,
   onPickExplore,
@@ -52,42 +54,54 @@ export default function PlayScreen({
         <p className="subtitle">{dayLabel}</p>
       </header>
 
-      <StatsBar stats={view.stats} />
-      <MetaPanel
-        shelter={view.shelter}
-        partners={view.partners}
-        items={view.items}
-        tags={view.tags}
-      />
+      <div className="play-layout">
+        <aside className="play-side">
+          <StatsBar stats={view.stats} delta={statDelta?.delta} deltaKey={statDelta?.key} />
+          <MetaPanel
+            shelter={view.shelter}
+            partners={view.partners}
+            items={view.items}
+            tags={view.tags}
+          />
+          <DayCostPreview preview={view.nextDayCostPreview} engine={engine} />
+          {view.hostReminder ? (
+            <div className="host-reminder">主持人提醒：{view.hostReminder}</div>
+          ) : null}
+          {view.adrenalineReady ? (
+            <div className="host-reminder adrenaline">肾上腺素已就绪：下一次有消耗的选择免费</div>
+          ) : null}
+          {view.skipDayActions ? <div className="host-reminder">本日无法进行常规行动</div> : null}
+        </aside>
 
-      <OutcomePanels choiceOutcome={view.choiceOutcome} sceneOutcome={view.sceneOutcome} />
+        <main className="play-main">
+          <OutcomePanels
+            choiceOutcome={view.choiceOutcome}
+            sceneOutcome={view.sceneOutcome}
+            costLog={view.lastCostLog}
+            dayCost={view.lastDayCost}
+          />
 
-      {view.lastCostLog ? <div className="cost-banner">{view.lastCostLog}</div> : null}
-      <DayCostPreview preview={view.nextDayCostPreview} engine={engine} />
+          {view.deadlockWarning ? <div className="deadlock-warning">{view.deadlockWarning}</div> : null}
 
-      {view.hostReminder ? (
-        <div className="host-reminder">主持人提醒：{view.hostReminder}</div>
-      ) : null}
-      {view.adrenalineReady ? (
-        <div className="host-reminder adrenaline">肾上腺素已就绪：下一次有消耗的选择免费</div>
-      ) : null}
-      {view.skipDayActions ? <div className="host-reminder">本日无法进行常规行动</div> : null}
-      {view.deadlockWarning ? <div className="deadlock-warning">{view.deadlockWarning}</div> : null}
+          <section className={`story-panel${dayPulse ? ' day-enter' : ''}`}>
+            <Illustration illustration={view.illustration} />
+            <div className="phase-title">{view.title}</div>
+            <div className="narrative">{view.narrative}</div>
+          </section>
 
-      <section className={`story-panel${dayPulse ? ' day-enter' : ''}`}>
-        <div className="phase-title">{view.title}</div>
-        <div className="narrative">{view.narrative}</div>
-      </section>
+          {engine?.state?.pendingNearDeath ? (
+            <NearDeathBanner onAccept={() => onNearDeath(true)} onDecline={() => onNearDeath(false)} />
+          ) : view.type === 'explore_pick' ? (
+            <ExplorePick areas={view.areas} onPick={onPickExplore} />
+          ) : (
+            <ChoiceList choices={view.choices} onPick={onPickChoice} />
+          )}
+        </main>
 
-      {engine?.state?.pendingNearDeath ? (
-        <NearDeathBanner onAccept={() => onNearDeath(true)} onDecline={() => onNearDeath(false)} />
-      ) : view.type === 'explore_pick' ? (
-        <ExplorePick areas={view.areas} onPick={onPickExplore} />
-      ) : (
-        <ChoiceList choices={view.choices} onPick={onPickChoice} />
-      )}
-
-      <ChoiceLogPanel entries={view.choiceLog} />
+        <aside className="play-log">
+          <ChoiceLogPanel entries={view.choiceLog} newestFirst />
+        </aside>
+      </div>
     </>
   );
 }

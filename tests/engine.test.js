@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { GameEngine, applySavedGame, serializePlainState } from '../demo/js/engine.js';
+import { GameEngine, applySavedGame, normalizeIllustration, serializePlainState } from '../demo/js/engine.js';
 import { GameRules } from '../demo/js/rules.js';
 import { loadFixtureData } from './helpers/load-data.js';
 
@@ -1154,5 +1154,57 @@ describe('engine bug fixes (audit 2026-11)', () => {
     ).toBeTruthy();
     expect(engine.state).toBe(before);
     expect(() => engine.getView()).not.toThrow();
+  });
+});
+
+describe('day cost feedback', () => {
+  it('records supplies paid when entering a new day and clears it on next action', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 2;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 200;
+    engine._advanceDay();
+    const view = engine.getView();
+    expect(view.lastDayCost).toHaveLength(1);
+    expect(view.lastDayCost[0].day).toBe(3);
+    expect(view.lastDayCost[0].paid).toBeGreaterThan(0);
+
+    const choice = view.choices.find((c) => !c.disabled);
+    engine.pickChoice(choice.id);
+    const after = engine.getView();
+    if (after.day === 3) expect(after.lastDayCost).toBeNull();
+  });
+
+  it('records both days when an injury skip spans two days', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 40;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 500;
+    engine.state.stats.ammo = 100;
+    engine._enterEvent('airdrop', 'start');
+    engine.pickChoice('all_in');
+    expect(engine.getView().lastDayCost.map((e) => e.day)).toEqual([45, 50]);
+  });
+});
+
+describe('illustration', () => {
+  it('normalizes string and object illustration fields', () => {
+    expect(normalizeIllustration('images/a.jpg')).toEqual({ src: 'images/a.jpg', alt: '', caption: null });
+    expect(normalizeIllustration({ src: 'b.png', alt: 'x', caption: 'c' })).toEqual({ src: 'b.png', alt: 'x', caption: 'c' });
+    expect(normalizeIllustration({})).toBeNull();
+    expect(normalizeIllustration(null)).toBeNull();
+  });
+
+  it('exposes illustration from day definitions in the view', () => {
+    const data = { ...fixture, days: fixture.days.map((d) => (d.day === 3 ? { ...d, illustration: 'images/day3.jpg' } : d)) };
+    const engine = new GameEngine(data);
+    engine.state.mode = 'day';
+    engine.state.day = 3;
+    engine.state.shelter = 'villa';
+    expect(engine.getView().illustration?.src).toBe('images/day3.jpg');
+    engine.state.day = 2;
+    expect(engine.getView().illustration).toBeNull();
   });
 });

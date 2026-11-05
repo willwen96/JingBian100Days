@@ -15,6 +15,8 @@ export function useGame() {
   const [loadError, setLoadError] = useState(null);
   const [lastDay, setLastDay] = useState(null);
   const [dayPulse, setDayPulse] = useState(false);
+  /** 本步操作造成的数值变化（人性/物资/弹药），用于顶部差值提示 */
+  const [statDelta, setStatDelta] = useState(null);
 
   const refresh = useCallback(() => setTick((n) => n + 1), []);
 
@@ -51,9 +53,18 @@ export function useGame() {
   }, [view?.day, lastDay]);
 
   const run = useCallback(
-    (fn) => {
+    (fn, { trackDelta = false } = {}) => {
       if (!engine) return { error: '游戏未加载' };
+      const before = { ...engine.state.stats };
       const result = fn(engine);
+      if (trackDelta && !result?.error) {
+        const after = engine.state.stats;
+        const delta = {};
+        for (const k of ['humanity', 'supplies', 'ammo']) delta[k] = (after[k] ?? 0) - (before[k] ?? 0);
+        setStatDelta((prev) => ({ delta, key: (prev?.key ?? 0) + 1 }));
+      } else if (!trackDelta) {
+        setStatDelta(null);
+      }
       refresh();
       return result;
     },
@@ -65,6 +76,7 @@ export function useGame() {
     view,
     loadError,
     dayPulse,
+    statDelta,
     refresh,
     run,
     saveSlots: engine ? listSaveSlots() : [],

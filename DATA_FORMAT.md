@@ -140,6 +140,24 @@ const score = ((player.humanity * 10) + tagSum) * finaleMul;
 
 修改规则后无需改剧情 JSON，重启页面即可。
 
+## 插图 (`illustration`)
+
+天（`days.json`）、爆发前阶段、事件节点 / 事件、探索区域 / 区域节点都可以加 `illustration` 字段，界面会把图放在剧情正文上方。没有这个字段就不显示插图。
+
+```json
+"illustration": "images/day3.jpg"
+```
+
+或带说明文字：
+
+```json
+"illustration": { "src": "images/day3.jpg", "alt": "山中别墅的夜晚", "caption": "惊变第三天" }
+```
+
+- 图片放在 `data/images/` 下，路径相对 `data/` 目录（部署到子路径时会自动加前缀）
+- 事件节点没有插图时会用所在事件的 `illustration`；探索区域节点同理
+- 建议横图 16:9（例如 1600×900）。窄屏最高 240px，宽屏最高为屏幕高度的 36%，超出部分会居中裁切
+
 ## 实现建议
 
 1. **加载**：`fetch('/data/index.json')` 再按 `files` 字段并行加载各 JSON
