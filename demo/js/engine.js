@@ -92,6 +92,7 @@ export class GameEngine {
     this.tagsById = Object.fromEntries(data.tags.map((t) => [t.id, t]));
     this.scoring = data.scoring;
     this.rules = new GameRules(data.rules, data.partners || []);
+    this.partnersById = Object.fromEntries((data.partners || []).map((p) => [p.id, p]));
     this.companionConvert = data.companionConvert;
     this.state = createInitialState(data.meta);
     this.dayCheckpoint = null;
@@ -471,6 +472,7 @@ export class GameEngine {
       stats: { ...s.stats },
       shelter: s.shelter ? SHELTER_NAMES[s.shelter] : '—',
       partners: s.partners.map((id) => this._partnerName(id)),
+      partnerDetails: s.partners.map((id) => this.getPartnerInfo(id)),
       items: [...s.items],
       tags: [...s.tags],
       choiceOutcome: s.lastChoiceOutcome,
@@ -737,7 +739,22 @@ export class GameEngine {
 
   _partnerName(id) {
     const map = { lime: '莱姆', blake: '布莱克', luna: '露娜', evelyn: '伊芙琳', john: '约翰', baby: '婴儿' };
-    return map[id] || id;
+    return this.partnersById?.[id]?.name || map[id] || id;
+  }
+
+  /** 伙伴展示信息：名字、简介、头像、每日额外物资消耗（以 rules.json 为准） */
+  getPartnerInfo(id) {
+    const p = this.partnersById?.[id] ?? {};
+    const perDay =
+      this.rules.config?.daySuppliesCost?.partnerSuppliesPerDay?.[id] ?? p.suppliesPerDay ?? 0;
+    const portrait = normalizeIllustration(p.portrait);
+    return {
+      id,
+      name: this._partnerName(id),
+      intro: p.intro ?? '',
+      portrait: portrait ? { ...portrait, alt: portrait.alt || this._partnerName(id) } : null,
+      suppliesPerDay: perDay,
+    };
   }
 
   _getPrePhase() {

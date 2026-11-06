@@ -60,7 +60,7 @@ export default function PlayScreen({
           <StatsBar stats={view.stats} delta={statDelta?.delta} deltaKey={statDelta?.key} />
           <MetaPanel
             shelter={view.shelter}
-            partners={view.partners}
+            partners={view.partnerDetails}
             items={view.items}
             tags={view.tags}
           />

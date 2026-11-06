@@ -182,3 +182,13 @@ const score = ((player.humanity * 10) + tagSum) * finaleMul;
 - `外出探索.docx.md`
 
 如需把剩余天数展开为与第 1–5 天同等粒度的完整 `choices` 数组，告诉我优先哪几天，我可以继续补全。
+
+## 伙伴头像 (`partners.json` 的 `portrait`)
+
+每个伙伴可以加 `"portrait": "images/portraits/<id>.jpg"`，格式和 `illustration` 一样（字符串或 `{src, alt}`）。建议竖版 448×576 左右。没有头像的伙伴会显示名字首字。
+
+- 宽屏（≥1024px）：侧栏直接显示头像卡片和每日物资消耗
+- 窄屏：显示名字标签，点击弹出大图
+- 获得伙伴时自动弹窗（头像、名字、每日额外消耗、简介），3 秒后消失，点击任意位置可提前关闭
+
+每日消耗以 `rules.json` 的 `partnerSuppliesPerDay` 为准。

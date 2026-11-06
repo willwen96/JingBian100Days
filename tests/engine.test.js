@@ -1328,3 +1328,17 @@ describe('exhausted fallback (no dead ends)', () => {
     expect(engine.getView().choices.some((c) => c.id === 'explore')).toBe(false);
   });
 });
+
+describe('partner info', () => {
+  it('exposes portrait and daily cost for current partners', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 50;
+    engine.state.partners = ['evelyn', 'baby'];
+    const view = engine.getView();
+    expect(view.partnerDetails).toEqual([
+      expect.objectContaining({ id: 'evelyn', name: '伊芙琳', suppliesPerDay: 10, portrait: expect.objectContaining({ src: 'images/portraits/evelyn.jpg' }) }),
+      expect.objectContaining({ id: 'baby', name: '婴儿', suppliesPerDay: 5, portrait: null }),
+    ]);
+  });
+});

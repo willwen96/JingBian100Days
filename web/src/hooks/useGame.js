@@ -17,6 +17,8 @@ export function useGame() {
   const [dayPulse, setDayPulse] = useState(false);
   /** 本步操作造成的数值变化（人性/物资/弹药），用于顶部差值提示 */
   const [statDelta, setStatDelta] = useState(null);
+  /** 本局新获得、还没弹窗展示的伙伴 id */
+  const [newPartners, setNewPartners] = useState([]);
 
   const refresh = useCallback(() => setTick((n) => n + 1), []);
 
@@ -56,7 +58,12 @@ export function useGame() {
     (fn, { trackDelta = false } = {}) => {
       if (!engine) return { error: '游戏未加载' };
       const before = { ...engine.state.stats };
+      const partnersBefore = [...(engine.state.partners ?? [])];
       const result = fn(engine);
+      if (trackDelta && !result?.error) {
+        const gained = (engine.state.partners ?? []).filter((id) => !partnersBefore.includes(id));
+        if (gained.length) setNewPartners((q) => [...q, ...gained]);
+      }
       if (trackDelta && !result?.error) {
         const after = engine.state.stats;
         const delta = {};
@@ -71,12 +78,18 @@ export function useGame() {
     [engine, refresh]
   );
 
+  const dismissNewPartner = useCallback(() => setNewPartners((q) => q.slice(1)), []);
+  const clearNewPartners = useCallback(() => setNewPartners([]), []);
+
   return {
     engine,
     view,
     loadError,
     dayPulse,
     statDelta,
+    newPartners,
+    dismissNewPartner,
+    clearNewPartners,
     refresh,
     run,
     saveSlots: engine ? listSaveSlots() : [],

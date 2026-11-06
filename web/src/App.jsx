@@ -4,21 +4,36 @@ import DevPanel from './components/DevPanel.jsx';
 import { DemoCompleteScreen, GameOverScreen } from './components/EndScreens.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
 import AppShell, { ErrorScreen, LoadingScreen, Toast, useToast } from './components/Layout.jsx';
+import { PartnerModal } from './components/PartnerCard.jsx';
 import PlayScreen from './components/PlayScreen.jsx';
 import SaveModal from './components/SaveModal.jsx';
 import { useDevMode } from './hooks/useDevMode.js';
 import { useGame } from './hooks/useGame.js';
 
 export default function App() {
-  const { engine, view, loadError, dayPulse, statDelta, run, refresh, saveSlots, hasSavedGame } = useGame();
+  const {
+    engine,
+    view,
+    loadError,
+    dayPulse,
+    statDelta,
+    newPartners,
+    dismissNewPartner,
+    clearNewPartners,
+    run,
+    refresh,
+    saveSlots,
+    hasSavedGame,
+  } = useGame();
   const { msg, show, clear } = useToast();
   const [saveModal, setSaveModal] = useState(null);
   const [devEnabled] = useDevMode();
   const [devOpen, setDevOpen] = useState(false);
 
   const handleRestart = useCallback(() => {
+    clearNewPartners();
     run((e) => e.restart());
-  }, [run]);
+  }, [run, clearNewPartners]);
 
   const handleStart = useCallback(() => {
     run((e) => e.startGame());
@@ -146,6 +161,15 @@ export default function App() {
       ) : null}
       {devEnabled && devOpen ? (
         <DevPanel engine={engine} run={run} show={show} onClose={() => setDevOpen(false)} />
+      ) : null}
+
+      {newPartners.length && engine ? (
+        <PartnerModal
+          partner={engine.getPartnerInfo(newPartners[0])}
+          heading="获得伙伴"
+          autoCloseMs={3000}
+          onClose={dismissNewPartner}
+        />
       ) : null}
 
       <Toast message={msg} onDone={clear} />
