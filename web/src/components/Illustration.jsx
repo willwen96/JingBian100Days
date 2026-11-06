@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 /** 图片路径相对 data/ 目录；部署在子路径时自动加上 BASE_URL */
-function resolveSrc(src) {
+export function resolveSrc(src) {
   if (/^(https?:)?\/\//.test(src) || src.startsWith('data:')) return src;
   const base = import.meta.env.BASE_URL || '/';
   return `${base.replace(/\/$/, '')}/${src.replace(/^\//, '')}`;

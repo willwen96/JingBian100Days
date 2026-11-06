@@ -6,6 +6,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "audit:routes": "vitest run tests/route-audit.test.js",
+    "playtest": "node scripts/playtest.js",
     "dev:web": "vite --config web/vite.config.js",
     "build:web": "vite build --config web/vite.config.js",
     "preview:web": "vite preview --config web/vite.config.js"

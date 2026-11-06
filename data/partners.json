@@ -1,30 +1,35 @@
 [
   {
     "id": "lime",
+    "portrait": "images/portraits/lime.jpg",
     "name": "莱姆",
     "intro": "一只忠诚的伙伴！刚好庇护所里囤积了大量狗粮，因此不会消耗你的物资。",
     "suppliesPerDay": 0
   },
   {
     "id": "blake",
+    "portrait": "images/portraits/blake.jpg",
     "name": "布莱克",
     "intro": "一位富豪，别墅庇护所的主人，看起来很和善，但总觉得他的眼神里，有一丝随时都可能爆发的狠辣。",
     "suppliesPerDay": 10
   },
   {
     "id": "luna",
+    "portrait": "images/portraits/luna.jpg",
     "name": "露娜",
     "intro": "一位善良的女孩，可能会为你在末世中生存带来一丝人性的温暖。",
     "suppliesPerDay": 5
   },
   {
     "id": "evelyn",
+    "portrait": "images/portraits/evelyn.jpg",
     "name": "伊芙琳",
     "intro": "如果可以死的很帅的话，我愿意付出生命，无意义的生存与丧尸并无区别。——伊芙琳",
     "suppliesPerDay": 10
   },
   {
     "id": "john",
+    "portrait": "images/portraits/john.jpg",
     "name": "约翰",
     "intro": "一个引领人类文明前进的科研人员，末世之下，他与救世主无异。",
     "suppliesPerDay": 0

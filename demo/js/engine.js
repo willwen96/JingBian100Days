@@ -76,6 +76,8 @@ export function createInitialState(meta) {
   };
 }
 
+export const EXHAUSTED_CHOICE_ID = '__exhausted';
+
 export class GameEngine {
   constructor(data) {
     this.meta = data.meta;
@@ -90,6 +92,7 @@ export class GameEngine {
     this.tagsById = Object.fromEntries(data.tags.map((t) => [t.id, t]));
     this.scoring = data.scoring;
     this.rules = new GameRules(data.rules, data.partners || []);
+    this.partnersById = Object.fromEntries((data.partners || []).map((p) => [p.id, p]));
     this.companionConvert = data.companionConvert;
     this.state = createInitialState(data.meta);
     this.dayCheckpoint = null;
@@ -177,6 +180,12 @@ export class GameEngine {
   }
 
   pickChoice(choiceId) {
+    if (choiceId === EXHAUSTED_CHOICE_ID) {
+      if (!this._needsExhaustedFallback(this.getView().choices?.filter((c) => c.id !== EXHAUSTED_CHOICE_ID))) {
+        return { error: '还有可用的选项' };
+      }
+      return this._pickExhaustedFallback();
+    }
     const located = this._locateChoice(choiceId);
     if (located.error) return { error: located.error };
     if (located.choice.input?.type === 'number') return { error: '该选项需要输入数值' };
@@ -371,6 +380,51 @@ export class GameEngine {
   }
 
   getView() {
+    const view = this._buildView();
+    if (view.type === 'play' && this._needsExhaustedFallback(view.choices)) {
+      view.choices = [...(view.choices || []), this._exhaustedChoiceView()];
+    }
+    return view;
+  }
+
+  /** 所有选项都不可用（通常是弹尽粮绝）时，兜底给一个「进入濒死」的选项，避免死局 */
+  _needsExhaustedFallback(mappedChoices) {
+    const s = this.state;
+    if (s.pendingNearDeath || s.gameOver || s.demoComplete) return false;
+    if (!['pre', 'day', 'event', 'explore'].includes(s.mode)) return false;
+    if (s.mode === 'day' && this.rules.shouldSkipDayActions(s)) return false;
+    return !(mappedChoices || []).some((c) => !c.disabled);
+  }
+
+  _exhaustedChoiceView() {
+    return {
+      id: EXHAUSTED_CHOICE_ID,
+      text: '弹尽粮绝，无力应对',
+      input: null,
+      disabled: false,
+      hint: `进入濒死：消耗 ${this.rules.nearDeathCost} 物资可脱离并跳过本天`,
+      special: false,
+      specialLabel: null,
+    };
+  }
+
+  _pickExhaustedFallback() {
+    const label = this._choiceLogContextTitle();
+    const text = '你已经没有能力应对眼前的局面，陷入了濒死状态。';
+    this.state.lastDayCost = null;
+    this._log(`${label}：弹尽粮绝，陷入濒死`);
+    this._setChoiceOutcome(text, null);
+    this._appendChoiceLog({
+      context: label,
+      choiceText: '弹尽粮绝，无力应对',
+      resultText: text,
+      effects: null,
+      costLog: null,
+    });
+    return this._triggerNearDeath('exhausted');
+  }
+
+  _buildView() {
     const s = this.state;
 
     if (s.mode === 'intro') {
@@ -418,6 +472,7 @@ export class GameEngine {
       stats: { ...s.stats },
       shelter: s.shelter ? SHELTER_NAMES[s.shelter] : '—',
       partners: s.partners.map((id) => this._partnerName(id)),
+      partnerDetails: s.partners.map((id) => this.getPartnerInfo(id)),
       items: [...s.items],
       tags: [...s.tags],
       choiceOutcome: s.lastChoiceOutcome,
@@ -684,7 +739,22 @@ export class GameEngine {
 
   _partnerName(id) {
     const map = { lime: '莱姆', blake: '布莱克', luna: '露娜', evelyn: '伊芙琳', john: '约翰', baby: '婴儿' };
-    return map[id] || id;
+    return this.partnersById?.[id]?.name || map[id] || id;
+  }
+
+  /** 伙伴展示信息：名字、简介、头像、每日额外物资消耗（以 rules.json 为准） */
+  getPartnerInfo(id) {
+    const p = this.partnersById?.[id] ?? {};
+    const perDay =
+      this.rules.config?.daySuppliesCost?.partnerSuppliesPerDay?.[id] ?? p.suppliesPerDay ?? 0;
+    const portrait = normalizeIllustration(p.portrait);
+    return {
+      id,
+      name: this._partnerName(id),
+      intro: p.intro ?? '',
+      portrait: portrait ? { ...portrait, alt: portrait.alt || this._partnerName(id) } : null,
+      suppliesPerDay: perDay,
+    };
   }
 
   _getPrePhase() {
@@ -756,6 +826,14 @@ export class GameEngine {
     return null;
   }
 
+  /** 跳到「选探索区域」的选项（goto explore，或 exploreArea 不带 areaId） */
+  _isGenericExploreChoice(choice) {
+    const resolved = this._resolveChoiceOutcome(choice);
+    const goto = resolved.goto ?? choice.goto;
+    if (!goto) return false;
+    return goto.type === 'explore' || (goto.type === 'exploreArea' && !goto.areaId);
+  }
+
   _getChoiceExploreAreaTarget(choice) {
     const resolved = this._resolveChoiceOutcome(choice);
     if (resolved.goto?.type === 'exploreArea' && resolved.goto.areaId) {
@@ -768,6 +846,9 @@ export class GameEngine {
   }
 
   _isExploreAreaChoiceUnavailable(choice) {
+    if (this._isGenericExploreChoice(choice)) {
+      return this._getAvailableExploreAreas().length === 0;
+    }
     const areaId = this._getChoiceExploreAreaTarget(choice);
     if (!areaId) return false;
     if (this.state.closedExploreAreas.includes(areaId)) return true;
@@ -976,11 +1057,7 @@ export class GameEngine {
       return null;
     }
 
-    const choices = this._getRawChoicesForCurrentContext();
-    const enabled = this._mapChoices(choices).filter((c) => !c.disabled);
-    if (!enabled.length) {
-      return '当前没有可用选项，可能无法继续推进。请尝试读档或重新开启当天。';
-    }
+    // 其余画面在所有选项不可用时会自动出现「弹尽粮绝」兜底选项，不会卡死
     return null;
   }
 
