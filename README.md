@@ -17,6 +17,15 @@ npm run dev:web
 npm test
 ```
 
+### 自动试玩
+
+```bash
+npm run playtest            # 1000 局随机 + 各策略 × 爆发前组合的有目的试玩
+npm run playtest -- 10000   # 自定义局数（第二个参数是起始种子）
+```
+
+不改资源，按策略一路点到结局或游戏结束，报告结果分布、路线、结束原因、事件/区域覆盖率。出现死局（没结束却无选项可点）、死循环或引擎报错时会列出种子和最后几步，退出码为 1。`npm test` 里也会跑一个 300 局的小样本。
+
 ## 通过 GitHub Pages 部署
 
 本仓库已包含 [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)。推送到 `main` 分支后会自动构建并发布 React 版。

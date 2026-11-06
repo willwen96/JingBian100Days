@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { GameEngine, applySavedGame, normalizeIllustration, serializePlainState } from '../demo/js/engine.js';
+import { EXHAUSTED_CHOICE_ID, GameEngine, applySavedGame, normalizeIllustration, serializePlainState } from '../demo/js/engine.js';
 import { GameRules } from '../demo/js/rules.js';
 import { loadFixtureData } from './helpers/load-data.js';
 
@@ -1272,5 +1272,59 @@ describe('developer mode', () => {
     expect(c.events.some((e) => e.id === 'airdrop')).toBe(true);
     expect(c.flags).toContain('airdropCompleted');
     expect(c.tags.length).toBeGreaterThan(10);
+  });
+});
+
+describe('exhausted fallback (no dead ends)', () => {
+  function atChurchBroke() {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 15;
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 5;
+    engine.state.stats.ammo = 0;
+    engine.pickChoice('explore');
+    engine.pickExploreArea('church');
+    return engine;
+  }
+
+  it('offers an "exhausted" choice when every option is unaffordable', () => {
+    const engine = atChurchBroke();
+    const view = engine.getView();
+    expect(view.choices.filter((c) => !c.disabled).map((c) => c.id)).toEqual([EXHAUSTED_CHOICE_ID]);
+  });
+
+  it('picking it enters near-death and follows the normal near-death rules', () => {
+    const engine = atChurchBroke();
+    expect(engine.pickChoice(EXHAUSTED_CHOICE_ID)).toMatchObject({ nearDeath: true });
+    expect(engine.state.pendingNearDeath).toBe(true);
+    engine.resolveNearDeath(true); // 只有 5 物资，付不起 30
+    expect(engine.state.mode).toBe('gameover');
+  });
+
+  it('with enough supplies near-death skips to the next day', () => {
+    const engine = atChurchBroke();
+    engine.state.stats.supplies = 40; // 够濒死（30），但每个选项都要至少 1 弹药
+    engine.pickChoice(EXHAUSTED_CHOICE_ID);
+    engine.resolveNearDeath(true);
+    expect(engine.state.mode).toBe('day');
+    expect(engine.state.day).toBeGreaterThan(15);
+    expect(engine.state.stats.supplies).toBe(10);
+  });
+
+  it('is not offered (and is rejected) while a real option is available', () => {
+    const engine = atChurchBroke();
+    engine.state.stats.ammo = 1;
+    expect(engine.getView().choices.some((c) => c.id === EXHAUSTED_CHOICE_ID)).toBe(false);
+    expect(engine.pickChoice(EXHAUSTED_CHOICE_ID)).toHaveProperty('error');
+  });
+
+  it('hides "外出探索" when no explore area is left', () => {
+    const engine = createEngine();
+    engine.state.mode = 'day';
+    engine.state.day = 15;
+    engine.state.stats.supplies = 999;
+    engine.state.closedExploreAreas = Object.keys(engine.exploration);
+    expect(engine.getView().choices.some((c) => c.id === 'explore')).toBe(false);
   });
 });
