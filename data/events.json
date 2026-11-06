@@ -1,6 +1,7 @@
 [
   {
     "id": "blake",
+    "illustration": "images/blake.jpg",
     "title": "布莱克事件",
     "shelter": "villa",
     "nodes": [
@@ -99,6 +100,7 @@
   },
   {
     "id": "luna",
+    "illustration": "images/luna.jpg",
     "title": "露娜事件",
     "shelter": "bunker",
     "nodes": [
@@ -216,6 +218,7 @@
   },
   {
     "id": "lime",
+    "illustration": "images/lime.jpg",
     "title": "莱姆事件",
     "nodes": [
       {
@@ -263,6 +266,7 @@
   },
   {
     "id": "dawn_camp",
+    "illustration": "images/dawn_camp.jpg",
     "title": "黎明者营地",
     "nodes": [
       {
@@ -319,6 +323,7 @@
   },
   {
     "id": "day30_truth",
+    "illustration": "images/day30_truth.jpg",
     "title": "惊变三十天·真相调查",
     "nodes": [
       {
@@ -362,6 +367,7 @@
   },
   {
     "id": "evelyn",
+    "illustration": "images/evelyn.jpg",
     "title": "伊芙琳事件",
     "nodes": [
       {
@@ -488,6 +494,7 @@
   },
   {
     "id": "luna_day38",
+    "illustration": "images/luna_day38.jpg",
     "title": "惊变三十八天·军事基地",
     "shelter": "bunker",
     "noSuppliesCost": true,
@@ -557,6 +564,7 @@
   },
   {
     "id": "airdrop",
+    "illustration": "images/airdrop.jpg",
     "title": "空投事件",
     "nodes": [
       {
@@ -676,6 +684,7 @@
   },
   {
     "id": "chris",
+    "illustration": "images/chris.jpg",
     "title": "克里斯事件",
     "nodes": [
       {
@@ -752,6 +761,7 @@
   },
   {
     "id": "hero_camp",
+    "illustration": "images/hero_camp.jpg",
     "title": "英雄营地事件",
     "nodes": [
       {
@@ -797,6 +807,7 @@
   },
   {
     "id": "day80_john",
+    "illustration": "images/day80_base.jpg",
     "title": "惊变八十天·救博士",
     "nodes": [
       {
@@ -832,6 +843,7 @@
   },
   {
     "id": "savior_pre",
+    "illustration": "images/day80_base.jpg",
     "title": "救世主结局前置",
     "nodes": [
       {
@@ -862,6 +874,7 @@
   },
   {
     "id": "savior_zombie_arc",
+    "illustration": "images/savior_zombie_arc.jpg",
     "title": "救世主线·穿越者因果",
     "nodes": [
       {
@@ -937,6 +950,7 @@
   },
   {
     "id": "savior_day90",
+    "illustration": "images/savior_day90.jpg",
     "title": "惊变九十天·血清",
     "nodes": [
       {
@@ -1051,6 +1065,7 @@
   },
   {
     "id": "adam_eve_90",
+    "illustration": "images/adam_eve_90.jpg",
     "title": "亚当夏娃·九十天",
     "nodes": [
       {
@@ -1077,6 +1092,7 @@
   },
   {
     "id": "adam_eve_100",
+    "illustration": "images/adam_eve_100.jpg",
     "title": "亚当夏娃·100天",
     "nodes": [
       {
@@ -1112,6 +1128,7 @@
   },
   {
     "id": "lone_wolf_100",
+    "illustration": "images/lone_wolf_100.jpg",
     "title": "独狼·100天",
     "nodes": [
       {

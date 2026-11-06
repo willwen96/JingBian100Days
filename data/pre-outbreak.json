@@ -3,6 +3,7 @@
   "days": [
     {
       "phase": "pre_5h",
+      "illustration": "images/pre_5h.jpg",
       "title": "末世爆发前5小时",
       "openingText": "时间紧迫，不足以囤积大量物资。由于你有着前世的记忆，你决定优先找一处带着物资的庇护所。你记得有两处相对安全的地点，请选择其中一处：",
       "choices": [
@@ -26,6 +27,7 @@
     },
     {
       "phase": "pre_2h",
+      "illustration": "images/pre_2h.jpg",
       "title": "末世爆发还有2小时",
       "openingText": "你决定再做一些准备……",
       "choices": [
@@ -55,6 +57,7 @@
     },
     {
       "phase": "outbreak_mall",
+      "illustration": "images/outbreak_mall.jpg",
       "title": "商场遇丧尸与受伤的狗",
       "openingText": "你打算继续囤积必备品时，商场里传来惨叫。几只丧尸正在啃咬路人。你知道末世爆发了。你急忙开车赶回庇护所。街道上乱作一团。你走神时撞到了一只带着项圈、无法行走的狗。",
       "choices": [
