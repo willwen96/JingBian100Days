@@ -1208,3 +1208,69 @@ describe('illustration', () => {
     expect(engine.getView().illustration).toBeNull();
   });
 });
+
+describe('developer mode', () => {
+  it('edits stats, lists and flags and marks the run as modified', () => {
+    const engine = createEngine();
+    engine.startGame();
+    expect(engine.devSetStat('supplies', 321).ok).toBe(true);
+    expect(engine.state.stats.supplies).toBe(321);
+    expect(engine.devSetStat('ammo', -5).ok).toBe(true);
+    expect(engine.state.stats.ammo).toBe(0);
+    expect(engine.devSetStat('foo', 1).error).toBeTruthy();
+    engine.devToggle('partners', 'blake');
+    expect(engine.state.partners).toContain('blake');
+    engine.devToggle('partners', 'blake');
+    expect(engine.state.partners).not.toContain('blake');
+    engine.devSetFlag('airdropCompleted', true);
+    expect(engine.state.flags.airdropCompleted).toBe(true);
+    engine.devSetFlag('airdropCompleted', false);
+    expect(engine.state.flags.airdropCompleted).toBeUndefined();
+    expect(engine.getView().devModified).toBe(true);
+  });
+
+  it('jumps to a day without charging supplies and recovers from game over', () => {
+    const engine = createEngine();
+    engine.startGame();
+    engine.state.shelter = 'villa';
+    engine.state.stats.supplies = 50;
+    engine._triggerGameOver('test');
+    expect(engine.devJumpToDay(40).ok).toBe(true);
+    expect(engine.state.mode).toBe('day');
+    expect(engine.state.day).toBe(40);
+    expect(engine.state.gameOver).toBe(false);
+    expect(engine.getView().type).toBe('play');
+    expect(engine.devJumpToDay(999).error).toBeTruthy();
+  });
+
+  it('enters an event node and clears pending near-death', () => {
+    const engine = createEngine();
+    engine.startGame();
+    engine.state.pendingNearDeath = true;
+    expect(engine.devEnterEvent('airdrop', 'start').ok).toBe(true);
+    expect(engine.state.mode).toBe('event');
+    expect(engine.state.pendingNearDeath).toBe(false);
+    expect(engine.devEnterEvent('airdrop', 'nope').error).toBeTruthy();
+    expect(engine.devEnterEvent('nope').error).toBeTruthy();
+  });
+
+  it('round-trips state through export/import', () => {
+    const engine = createEngine();
+    engine.startGame();
+    engine.devSetStat('humanity', 77);
+    const json = engine.devExportState();
+    const other = createEngine();
+    expect(other.devImportState(json).ok).toBe(true);
+    expect(other.state.stats.humanity).toBe(77);
+    expect(other.state.onceUsed).toBeInstanceOf(Set);
+    expect(other.devImportState('{bad').error).toBeTruthy();
+  });
+
+  it('catalog lists days, events, partners, tags and flags', () => {
+    const c = createEngine().devCatalog();
+    expect(c.days.length).toBeGreaterThan(10);
+    expect(c.events.some((e) => e.id === 'airdrop')).toBe(true);
+    expect(c.flags).toContain('airdropCompleted');
+    expect(c.tags.length).toBeGreaterThan(10);
+  });
+});

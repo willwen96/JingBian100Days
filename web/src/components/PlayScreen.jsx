@@ -52,6 +52,7 @@ export default function PlayScreen({
       <header className={`page-header${dayPulse ? ' day-pulse' : ''}`}>
         <h1>惊变100天</h1>
         <p className="subtitle">{dayLabel}</p>
+        {view.devModified ? <span className="dev-badge">开发者模式已修改</span> : null}
       </header>
 
       <div className="play-layout">
