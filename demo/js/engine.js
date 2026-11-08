@@ -424,7 +424,26 @@ export class GameEngine {
     return this._triggerNearDeath('exhausted');
   }
 
+  /**
+   * 当前应播放的背景音乐 id（meta.music.tracks 里的键）。
+   * explicit 是节点/事件/天上写的 music 字段；没写或写 "auto" 时按天数取 meta.music.byDay。
+   */
+  _musicFor(explicit) {
+    const cfg = this.meta?.music;
+    if (!cfg) return null;
+    if (explicit && explicit !== 'auto') return explicit;
+    const day = this.state.day ?? 0;
+    const rule = (cfg.byDay || []).find((r) => day <= r.upTo);
+    return rule?.track ?? null;
+  }
+
   _buildView() {
+    const view = this._buildViewInner();
+    if (view.music === undefined) view.music = this._musicFor(null);
+    return view;
+  }
+
+  _buildViewInner() {
     const s = this.state;
 
     if (s.mode === 'intro') {
@@ -433,12 +452,14 @@ export class GameEngine {
         intro: this.meta.intro,
         hostOpening: this.meta.hostOpening,
         titleImage: normalizeIllustration(this.meta.titleImage),
+        music: this.meta.music?.intro ?? null,
       };
     }
     if (s.mode === 'gameover') {
       return {
         type: 'gameover',
         reason: s.gameOverReason || '物资耗尽或死亡',
+        music: this.meta.music?.gameover ?? null,
         choiceOutcome: s.lastChoiceOutcome,
         lastResult: this._choiceOutcomeMessage(),
         lastEffectSummary: s.lastChoiceOutcome?.effects ?? null,
@@ -452,6 +473,7 @@ export class GameEngine {
       return {
         type: 'demo_complete',
         state: s,
+        music: this.meta.music?.ending ?? null,
         tags: this.tagsById,
         endingScore: s.endingScore,
         finaleTitle: s.endingScore?.finaleTag?.name ?? '大结局',
@@ -501,6 +523,7 @@ export class GameEngine {
         title: phase.title,
         narrative: phase.openingText,
         illustration: normalizeIllustration(phase.illustration),
+        music: this._musicFor(phase.music),
         choices: this._mapChoices(phase.choices),
       };
     }
@@ -513,6 +536,7 @@ export class GameEngine {
         title: dayDef?.title || `第 ${s.day} 天`,
         narrative: this._resolveDayOpeningText(dayDef),
         illustration: normalizeIllustration(dayDef?.illustration),
+        music: this._musicFor(dayDef?.music),
         choices: this._mapChoices(this._resolveDayChoices(dayDef)),
         hostNote: dayDef?.hostNote,
         route: s.route,
@@ -541,6 +565,7 @@ export class GameEngine {
         title: ev?.title || '事件',
         narrative: this._resolveNodeText(node),
         illustration: normalizeIllustration(node?.illustration ?? ev?.illustration),
+        music: this._musicFor(node?.music ?? ev?.music),
         choices: this._mapChoices(node?.choices || []),
       };
     }
@@ -569,6 +594,7 @@ export class GameEngine {
           title: area.name,
           narrative: node.narrative || area.openingText,
           illustration: normalizeIllustration(node.illustration ?? area.illustration),
+          music: this._musicFor(node.music ?? area.music),
           choices: this._mapChoices(node.choices || []),
         };
       }
@@ -578,6 +604,7 @@ export class GameEngine {
         title: area.name,
         narrative: area.openingText,
         illustration: normalizeIllustration(area.illustration),
+        music: this._musicFor(area.music),
         choices: this._mapChoices(area.choices || []),
       };
     }

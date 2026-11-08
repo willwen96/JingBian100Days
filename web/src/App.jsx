@@ -9,6 +9,7 @@ import PlayScreen from './components/PlayScreen.jsx';
 import SaveModal from './components/SaveModal.jsx';
 import { useDevMode } from './hooks/useDevMode.js';
 import { useGame } from './hooks/useGame.js';
+import { useMusic } from './hooks/useMusic.js';
 
 export default function App() {
   const {
@@ -29,6 +30,7 @@ export default function App() {
   const [saveModal, setSaveModal] = useState(null);
   const [devEnabled] = useDevMode();
   const [devOpen, setDevOpen] = useState(false);
+  const { muted, toggleMuted } = useMusic(view?.music ?? null, engine?.meta?.music?.tracks);
 
   const handleRestart = useCallback(() => {
     clearNewPartners();
@@ -153,6 +155,18 @@ export default function App() {
           }}
         />
       )}
+
+      {engine.meta?.music ? (
+        <button
+          type="button"
+          className={`music-toggle${muted ? ' is-muted' : ''}`}
+          onClick={toggleMuted}
+          aria-pressed={!muted}
+          title={muted ? '打开背景音乐' : '关闭背景音乐'}
+        >
+          {muted ? '♪ 音乐：关' : '♪ 音乐：开'}
+        </button>
+      ) : null}
 
       {devEnabled && !devOpen ? (
         <button type="button" className="dev-fab" onClick={() => setDevOpen(true)} title="开发者模式">

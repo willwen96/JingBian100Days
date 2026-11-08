@@ -71,6 +71,7 @@
       },
       {
         "id": "D",
+        "music": "tense",
         "narrative": "你放过了他。晚上休息时突然头晕目眩——布莱克用新风系统迷烟暗算你。「砰砰砰砰」",
         "choices": [
           { "id": "near_death", "text": "（自动）", "effects": { "nearDeath": true }, "goto": { "type": "nearDeath" }, "hostNote": "濒死，消耗30物资跳过" }
@@ -343,6 +344,7 @@
       },
       {
         "id": "cliff_scene",
+        "music": "tense",
         "narrative": "你驾车来到上一世跳崖的位置，发现有很多丧尸正在追赶一个人。你定睛一看那人居然是「你」。「你」绝望地看着尸群，随后跳下悬崖。你大声呐喊想要阻止，但「你」还是跳了下去。呐喊声吸引了一部分丧尸，你废了好大力气才解决掉它们，但后方的尸潮又即将涌来。看着跳崖的自己，你突然想到了什么……",
         "choices": [
           {
@@ -372,6 +374,7 @@
     "nodes": [
       {
         "id": "mall",
+        "music": "tense",
         "narrative": "你决定去最危险的商场探索物资。果然，你得到了大量的物资与药品。临走时，你不慎弄响了商场的警报器，大量丧尸被声音吸引。你飞速逃离，但商场内的另一处传来了枪响：一个女人被大群丧尸围在绝境。你知道，是因为你弄响警报器害的。",
         "onEnterEffects": { "supplies": 30 },
         "onEnterResultText": "你得到了大量的物资与药品。",
@@ -405,6 +408,7 @@
       },
       {
         "id": "rescue_zombies",
+        "music": "tense",
         "narrative": "面前还有至少10只丧尸，你看了看自己的弹药，你决定帮助她击杀……（每只消耗1弹药，击杀后获得弹药=击杀数×2）",
         "choices": [
           {
@@ -436,6 +440,7 @@
       },
       {
         "id": "after_rescue",
+        "music": "auto",
         "narrative": "「感谢帮忙了。」商场安全区外，女人感谢道。\n你们交谈后得知，女人名叫伊芙琳，是一名流浪者，也就是开车到处搜刮物资，吃住全在车上的人。你见女人身手了得，于是……",
         "choices": [
           {
@@ -494,6 +499,7 @@
   },
   {
     "id": "luna_day38",
+    "music": "tense",
     "illustration": "images/luna_day38.jpg",
     "title": "惊变三十八天·军事基地",
     "shelter": "bunker",
@@ -564,6 +570,7 @@
   },
   {
     "id": "airdrop",
+    "music": "tense",
     "illustration": "images/airdrop.jpg",
     "title": "空投事件",
     "nodes": [
@@ -620,6 +627,7 @@
       },
       {
         "id": "blake_after_partial",
+        "music": "auto",
         "narrative": "回到家后，布莱克见你伤势严重，便打算主动照顾你。\n你决定……",
         "choices": [
           {
@@ -646,6 +654,7 @@
       },
       {
         "id": "blake_after_all_in",
+        "music": "auto",
         "narrative": "碍于尼奥看起来很强大，布莱克“委曲求全”的与尼奥一同生活在别墅里。但布莱克一直在等机会，等一个可以杀死尼奥夺回本就属于自己的别墅的机会。终于，他在阳台上看着远处奄奄一息往家赶的尼奥，知道自己的机会来了。“砰！”一声枪响打破了山腰的宁静。尼奥不可置信的看着自己的肩膀处，又看向了阳台上的布莱克，急忙重新上车，驾车逃离。“可惜了，没能杀死他。”布莱克暗叹。等尼奥养好伤势，重新回到别墅时，布莱克与物资早已不见了踪影。",
         "choices": [
           {
@@ -761,6 +770,7 @@
   },
   {
     "id": "hero_camp",
+    "music": "warm",
     "illustration": "images/hero_camp.jpg",
     "title": "英雄营地事件",
     "nodes": [
@@ -807,6 +817,7 @@
   },
   {
     "id": "day80_john",
+    "music": "tense",
     "illustration": "images/day80_evelyn.jpg",
     "title": "惊变八十天·救博士",
     "nodes": [
@@ -843,6 +854,7 @@
   },
   {
     "id": "savior_pre",
+    "music": "tense",
     "illustration": "images/day80_base.jpg",
     "title": "救世主结局前置",
     "nodes": [
@@ -994,6 +1006,7 @@
       },
       {
         "id": "city",
+        "music": "victory",
         "narrative": "虽然有了血清，但能制作的数量有限，你们决定召集所有幸存者，一起组建末世下第一个属于「人类」的城市。你带着博士去之前发现的超市里拿走了所有物资。约翰觉得庇护所的位置就足够优渥，可以以此延展，作为城市的地基。",
         "onEnterEffects": { "supplies": 10000 },
         "choices": [
@@ -1065,6 +1078,7 @@
   },
   {
     "id": "adam_eve_90",
+    "music": "warm",
     "illustration": "images/adam_eve_90.jpg",
     "title": "亚当夏娃·九十天",
     "nodes": [
@@ -1092,6 +1106,7 @@
   },
   {
     "id": "adam_eve_100",
+    "music": "tense",
     "illustration": "images/adam_eve_100.jpg",
     "title": "亚当夏娃·100天",
     "nodes": [
@@ -1193,6 +1208,7 @@
       },
       {
         "id": "death",
+        "music": "tense",
         "narrative": "它没有向其他丧尸那样无意识的徘徊或冲撞，好像它是有明确目的一般找上了你。它的脸上覆盖着一块肮脏的破布，将它的容貌完全隐藏。你开枪驱逐他，可他并没有倒下或逃离。你听到它吃力的发出了两个模糊不清的字“因……果……”还没等你反应过来，它竟快速的冲了过来袭击了你。你倒了下去，视线开始变得模糊，最后看到的是那个仿佛完成使命般转身离去的身影。你感觉到你的身影开始逐渐消失……",
         "choices": [
           {

@@ -158,6 +158,33 @@ const score = ((player.humanity * 10) + tagSum) * finaleMul;
 - 事件节点没有插图时会用所在事件的 `illustration`；探索区域节点同理
 - 建议横图 16:9（例如 1600×900）。窄屏最高 240px，宽屏最高为屏幕高度的 36%，超出部分会居中裁切
 
+## 背景音乐 (`music`)
+
+曲目在 `meta.json` 的 `music` 里登记，音频文件放在 `data/audio/` 下：
+
+```json
+"music": {
+  "tracks": {
+    "early": "audio/bgm_early.mp3",
+    "victory": { "src": "audio/bgm_victory.mp3", "loop": false, "next": "warm" }
+  },
+  "byDay": [
+    { "upTo": 0, "track": "pre_outbreak" },
+    { "upTo": 20, "track": "early" }
+  ],
+  "intro": "title",
+  "gameover": "early",
+  "ending": "victory"
+}
+```
+
+- `tracks`：曲目 id → 文件。写字符串就是循环播放；写对象可以设 `"loop": false`（只播一次），`next` 是播完后接着放的曲目
+- `byDay`：按天数选剧情曲，取第一条 `天数 <= upTo` 的规则（爆发前是第 0 天）
+- `intro` / `gameover` / `ending`：标题页、游戏结束页、结局页的曲目
+- 爆发前阶段、天、事件、事件节点、探索区域、区域节点都可以写 `"music": "tense"` 临时换曲；节点的优先于所在事件 / 区域。写 `"auto"` 表示回到按天数的剧情曲（用来让事件里的某个节点不继承事件的曲目）
+- 同一首曲目在场景之间不会重头播放，换曲时交叉淡入淡出约 1.2 秒。左下角有开关，玩家的选择记在浏览器里
+- 没有 `music` 配置时不播放音乐，也不显示开关
+
 ## 实现建议
 
 1. **加载**：`fetch('/data/index.json')` 再按 `files` 字段并行加载各 JSON
