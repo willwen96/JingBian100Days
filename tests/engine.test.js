@@ -1209,6 +1209,62 @@ describe('illustration', () => {
   });
 });
 
+describe('background music', () => {
+  it('picks the stage track by day and lets events/nodes override it', () => {
+    const engine = createEngine();
+    expect(engine.getView().music).toBe('title');
+    engine.startGame();
+    expect(engine.getView().music).toBe('pre_outbreak');
+
+    engine.state.mode = 'day';
+    engine.state.shelter = 'villa';
+    for (const [day, track] of [[1, 'early'], [20, 'early'], [21, 'mid'], [60, 'mid'], [61, 'late'], [99, 'late']]) {
+      engine.state.day = day;
+      expect(engine.getView().music, `day ${day}`).toBe(track);
+    }
+
+    engine.state.day = 45;
+    engine._enterEvent('airdrop', 'start');
+    expect(engine.getView().music).toBe('tense');
+    engine.state.event.nodeId = 'blake_after_partial';
+    expect(engine.getView().music).toBe('mid');
+
+    engine._enterEvent('evelyn', 'mall');
+    expect(engine.getView().music).toBe('tense');
+    engine.state.event.nodeId = 'invite_talk';
+    expect(engine.getView().music).toBe('mid');
+  });
+
+  it('uses the configured tracks for end screens and nothing when music is not configured', () => {
+    const engine = createEngine();
+    engine.state.mode = 'gameover';
+    expect(engine.getView().music).toBe('early');
+    engine.state.mode = 'demo_complete';
+    expect(engine.getView().music).toBe('victory');
+
+    const silent = new GameEngine({ ...fixture, meta: { ...fixture.meta, music: undefined } });
+    expect(silent.getView().music).toBeNull();
+    silent.startGame();
+    expect(silent.getView().music).toBeNull();
+  });
+
+  it('only references tracks that exist', () => {
+    const tracks = fixture.meta.music.tracks;
+    const used = new Set(Object.values(fixture.meta.music).filter((v) => typeof v === 'string'));
+    fixture.meta.music.byDay.forEach((r) => used.add(r.track));
+    const collect = (o) => {
+      if (Array.isArray(o)) return o.forEach(collect);
+      if (!o || typeof o !== 'object') return;
+      if (typeof o.music === 'string' && o.music !== 'auto') used.add(o.music);
+      Object.values(o).forEach(collect);
+    };
+    collect([fixture.days, fixture.events, fixture.exploration, fixture.preOutbreak]);
+    for (const id of used) expect(tracks[id], id).toBeTruthy();
+    const next = Object.values(tracks).map((t) => t?.next).filter(Boolean);
+    for (const id of next) expect(tracks[id], id).toBeTruthy();
+  });
+});
+
 describe('developer mode', () => {
   it('edits stats, lists and flags and marks the run as modified', () => {
     const engine = createEngine();

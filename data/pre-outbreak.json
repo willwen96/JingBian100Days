@@ -57,6 +57,7 @@
     },
     {
       "phase": "outbreak_mall",
+      "music": "tense",
       "illustration": "images/outbreak_mall.jpg",
       "title": "商场遇丧尸与受伤的狗",
       "openingText": "你打算继续囤积必备品时，商场里传来惨叫。几只丧尸正在啃咬路人。你知道末世爆发了。你急忙开车赶回庇护所。街道上乱作一团。你走神时撞到了一只带着项圈、无法行走的狗。",

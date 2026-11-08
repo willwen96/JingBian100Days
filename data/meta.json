@@ -2,6 +2,27 @@
   "title": "惊变100天",
   "subtitle": "纯文字互动生存游戏",
   "titleImage": { "src": "images/title.jpg", "alt": "重生的尼奥站在悬崖上，俯瞰末世中燃烧的城市" },
+  "music": {
+    "tracks": {
+      "title": "audio/bgm_title.mp3",
+      "pre_outbreak": "audio/bgm_pre_outbreak.mp3",
+      "early": "audio/bgm_early.mp3",
+      "mid": "audio/bgm_mid.mp3",
+      "late": "audio/bgm_late.mp3",
+      "tense": "audio/bgm_tense.mp3",
+      "warm": "audio/bgm_warm.mp3",
+      "victory": { "src": "audio/bgm_victory.mp3", "loop": false, "next": "warm" }
+    },
+    "byDay": [
+      { "upTo": 0, "track": "pre_outbreak" },
+      { "upTo": 20, "track": "early" },
+      { "upTo": 60, "track": "mid" },
+      { "upTo": 100, "track": "late" }
+    ],
+    "intro": "title",
+    "gameover": "early",
+    "ending": "victory"
+  },
   "intro": [
     "上一世，丧尸病毒爆发。你苟延残喘地生存到正好一个月时，遭遇亲人背叛。尸潮把你追堵在绝境，你为了不被感染，跳下悬崖结束了生命。",
     "没想到你重生了，回到了丧尸病毒爆发前的6小时。冥冥之中有一种直觉，「一定要生存到第80天。」",

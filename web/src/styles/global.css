@@ -1414,3 +1414,30 @@ body {
     font-size: 0.72rem;
   }
 }
+
+/* ---------- 背景音乐开关 ---------- */
+
+.music-toggle {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  opacity: 0.85;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.music-toggle:hover {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+.music-toggle.is-muted {
+  color: var(--muted);
+}
